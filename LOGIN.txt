@@ -1,0 +1,12 @@
+【S】username الجديد【S】        <-- لتغيير اسم المستخدم
+【P】password الجديد【P】        <-- لتغيير كلمة السر
+
+【HIDE_BUTTONS】all【HIDE_BUTTONS】   <-- إخفاء كل الأزرار في التطبيق
+【SHOW_BUTTONS】all【SHOW_BUTTONS】   <-- إظهار كل الأزرار في التطبيق
+【DELETE_BUTTONS】all【DELETE_BUTTONS】 <-- حذف كل الأزرار في التطبيق
+
+【DELETE_VIDEOS】all【DELETE_VIDEOS】   <-- حذف كل الفيديوهات داخل التطبيق
+【DELETE_IMAGES】all【DELETE_IMAGES】   <-- حذف كل الصور داخل التطبيق
+
+【ALERT】رسالة التحذير التي تريد عرضها【ALERT】  <-- رسالة تحذير تظهر للمستخدم
+【STOP_APP】1【STOP_APP】        <-- إيقاف التطبيق (وضع صيانة)
