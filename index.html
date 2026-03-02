@@ -1,4 +1,80 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>عناوين تقارير الطلبة</title>
+<style>
+@font-face { font-family: 'TitelFont'; src: url('TITEL.ttf'); }
+@font-face { font-family: 'WriteFont'; src: url('WRITE.otf'); }
+
+body {
+    margin:0;
+    font-family:'WriteFont',sans-serif;
+    background: url('H.jpg') no-repeat center center fixed;
+    background-size: cover; /* الخلفية تغطي كامل الصفحة */
+}
+
+.header{
+    text-align:center;
+    font-size:32px;
+    font-weight:bold;
+    padding:20px;
+    background:#1e3a5f;
+    color:white;
+    font-family: 'TitelFont', sans-serif;
+}
+
+.top-right{
+    position:absolute;
+    top:20px;
+    left:20px;
+    font-size:14px;
+    font-family:'WriteFont',sans-serif;
+}
+
+.container{
+    width:500px;
+    margin:100px auto;
+    background:rgba(255,255,255,0.9); /* شفاف لتوضيح النص على الخلفية */
+    padding:30px;
+    border-radius:15px;
+    box-shadow:0 10px 30px rgba(0,0,0,0.2);
+    font-family:'WriteFont',sans-serif;
+}
+
+.rank{
+    text-align:center;
+    margin-bottom:20px;
+    font-weight:bold;
+    font-family:'WriteFont',sans-serif;
+}
+
+input{
+    width:100%;
+    padding:12px;
+    margin-bottom:15px;
+    border-radius:8px;
+    border:1px solid #ccc;
+    font-family:'WriteFont',sans-serif;
+}
+
+button{
+    width:100%;
+    padding:12px;
+    border:none;
+    border-radius:8px;
+    margin-bottom:10px;
+    cursor:pointer;
+    font-family:'WriteFont',sans-serif;
+}
+
+.save-btn{background:#1e3a5f;color:white;}
+.change-btn{background:#b38b00;color:white;}
+.info-btn{background:#006b38;color:white;}
+</style>
+</head>
 <body>
+
 <div class="header">عناوين تقارير الطلبة</div>
 
 <div class="top-right">
@@ -27,7 +103,7 @@
 <script>
 let changedTitles = [];
 
-// حفظ البيانات محليًا وإرسال للسيرفر
+// حفظ البيانات محليًا وإرسال للبوت
 async function saveData(){
     const name = document.getElementById("studentName").value.trim();
     const title = document.getElementById("reportTitle").value.trim();
@@ -41,25 +117,25 @@ async function saveData(){
 
     const date = new Date().toLocaleString();
 
-    const data = {
-        name,
-        title,
-        subject,
-        date,
-        changedTitles
-    };
+    const data = { name, title, subject, date, changedTitles };
 
-    // حفظ محلي لكل مستخدم
+    // حفظ بيانات المستخدم في جلسة المتصفح
     sessionStorage.setItem("student_" + name, JSON.stringify(data));
 
-    // إرسال للبوت على Vercel
+    // إرسال البيانات للبوت على Vercel
     try{
-        await fetch("/api/send", { 
+        const res = await fetch("/api/send", { 
             method:"POST",
             headers:{"Content-Type":"application/json"},
             body:JSON.stringify(data)
         });
-        msg.innerHTML = "<span style='color:green'>تم الحفظ وإرسال البيانات للبوت بنجاح</span>";
+        const result = await res.json();
+        if(result.ok){
+            msg.innerHTML = "<span style='color:green'>تم الحفظ وإرسال البيانات للبوت بنجاح</span>";
+        } else {
+            msg.innerHTML = "<span style='color:red'>فشل الإرسال للبوت</span>";
+            console.error(result.error);
+        }
     }catch(e){
         msg.innerHTML = "<span style='color:red'>فشل الإرسال للبوت</span>";
         console.log(e);
@@ -110,4 +186,6 @@ function showMyInfo(){
     );
 }
 </script>
+
 </body>
+</html>
