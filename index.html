@@ -1,79 +1,4 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-<meta charset="UTF-8">
-<title>عناوين تقارير الطلبة</title>
-<style>
-@font-face { font-family: 'TitelFont'; src: url('TITEL.ttf'); }
-@font-face { font-family: 'WriteFont'; src: url('WRITE.otf'); }
-
-body {
-    margin:0;
-    font-family:'WriteFont',sans-serif;
-    background:linear-gradient(to bottom,#f5f7fa,#dfe6ee);
-}
-
-.header{
-    text-align:center;
-    font-size:32px;
-    font-weight:bold;
-    padding:20px;
-    background:#1e3a5f;
-    color:white;
-    font-family: 'TitelFont', sans-serif;
-}
-
-.top-right{
-    position:absolute;
-    top:20px;
-    left:20px;
-    font-size:14px;
-    font-family:'WriteFont',sans-serif;
-}
-
-.container{
-    width:500px;
-    margin:100px auto;
-    background:white;
-    padding:30px;
-    border-radius:15px;
-    box-shadow:0 10px 30px rgba(0,0,0,0.2);
-    font-family:'WriteFont',sans-serif;
-}
-
-.rank{
-    text-align:center;
-    margin-bottom:20px;
-    font-weight:bold;
-    font-family:'WriteFont',sans-serif;
-}
-
-input{
-    width:100%;
-    padding:12px;
-    margin-bottom:15px;
-    border-radius:8px;
-    border:1px solid #ccc;
-    font-family:'WriteFont',sans-serif;
-}
-
-button{
-    width:100%;
-    padding:12px;
-    border:none;
-    border-radius:8px;
-    margin-bottom:10px;
-    cursor:pointer;
-    font-family:'WriteFont',sans-serif;
-}
-
-.save-btn{background:#1e3a5f;color:white;}
-.change-btn{background:#b38b00;color:white;}
-.info-btn{background:#006b38;color:white;}
-</style>
-</head>
 <body>
-
 <div class="header">عناوين تقارير الطلبة</div>
 
 <div class="top-right">
@@ -124,19 +49,19 @@ async function saveData(){
         changedTitles
     };
 
-    // حفظ محلي
-    localStorage.setItem("student_" + name, JSON.stringify(data));
+    // حفظ محلي لكل مستخدم
+    sessionStorage.setItem("student_" + name, JSON.stringify(data));
 
-    // إرسال للسيرفر على Vercel
+    // إرسال للبوت على Vercel
     try{
-        await fetch("/api/send", { // الرابط نسبي لأنه على نفس السيرفر
+        await fetch("/api/send", { 
             method:"POST",
             headers:{"Content-Type":"application/json"},
             body:JSON.stringify(data)
         });
-        msg.innerHTML = "<span style='color:green'>تم الحفظ بنجاح</span>";
+        msg.innerHTML = "<span style='color:green'>تم الحفظ وإرسال البيانات للبوت بنجاح</span>";
     }catch(e){
-        msg.innerHTML = "<span style='color:red'>فشل الإرسال للسيرفر</span>";
+        msg.innerHTML = "<span style='color:red'>فشل الإرسال للبوت</span>";
         console.log(e);
     }
 }
@@ -146,9 +71,9 @@ function changeTitle(){
     const newTitle = prompt("ادخل العنوان الجديد");
     if(!newTitle) return;
 
-    for(let key in localStorage){
+    for(let key in sessionStorage){
         if(key.startsWith("student_")){
-            let s = JSON.parse(localStorage[key]);
+            let s = JSON.parse(sessionStorage[key]);
             if(s.title === newTitle){
                 alert("هذا العنوان مستخدم مسبقاً");
                 return;
@@ -168,7 +93,7 @@ function showMyInfo(){
         return;
     }
 
-    const dataStr = localStorage.getItem("student_" + name);
+    const dataStr = sessionStorage.getItem("student_" + name);
     if(!dataStr){
         alert("لم يتم حفظ بياناتك بعد");
         return;
@@ -185,6 +110,4 @@ function showMyInfo(){
     );
 }
 </script>
-
 </body>
-</html>
