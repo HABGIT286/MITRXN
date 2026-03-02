@@ -11,7 +11,7 @@ body {
     margin:0;
     font-family:'WriteFont',sans-serif;
     background: url('H.jpg') no-repeat center center fixed;
-    background-size: cover; /* الخلفية تغطي كامل الصفحة */
+    background-size: cover;
 }
 
 .header{
@@ -35,7 +35,7 @@ body {
 .container{
     width:500px;
     margin:100px auto;
-    background:rgba(255,255,255,0.9); /* شفاف لتوضيح النص على الخلفية */
+    background:rgba(255,255,255,0.9);
     padding:30px;
     border-radius:15px;
     box-shadow:0 10px 30px rgba(0,0,0,0.2);
@@ -71,6 +71,7 @@ button{
 .save-btn{background:#1e3a5f;color:white;}
 .change-btn{background:#b38b00;color:white;}
 .info-btn{background:#006b38;color:white;}
+.show-titles-btn{background:#5a2e8a;color:white;}
 </style>
 </head>
 <body>
@@ -95,6 +96,7 @@ button{
 <button class="save-btn" onclick="saveData()">حفظ</button>
 <button class="change-btn" onclick="changeTitle()">تغيير اسم العنوان</button>
 <button class="info-btn" onclick="showMyInfo()">معلوماتي</button>
+<button class="show-titles-btn" onclick="showAllTitles()">إظهار العناوين</button>
 
 <div id="msg"></div>
 
@@ -103,7 +105,7 @@ button{
 <script>
 let changedTitles = [];
 
-// حفظ البيانات محليًا وإرسال للبوت
+// حفظ البيانات محليًا وإرسال للبوت عبر السيرفر
 async function saveData(){
     const name = document.getElementById("studentName").value.trim();
     const title = document.getElementById("reportTitle").value.trim();
@@ -119,16 +121,17 @@ async function saveData(){
 
     const data = { name, title, subject, date, changedTitles };
 
-    // حفظ بيانات المستخدم في جلسة المتصفح
+    // حفظ بيانات المستخدم في الجلسة
     sessionStorage.setItem("student_" + name, JSON.stringify(data));
 
-    // إرسال البيانات للبوت على Vercel
+    // إرسال البيانات للبوت عبر السيرفر
     try{
-        const res = await fetch("/api/send", { 
+        const res = await fetch("https://student-reports-grup-xvoc6v3rh-habgit286s-projects.vercel.app/api/send", {
             method:"POST",
             headers:{"Content-Type":"application/json"},
             body:JSON.stringify(data)
         });
+
         const result = await res.json();
         if(result.ok){
             msg.innerHTML = "<span style='color:green'>تم الحفظ وإرسال البيانات للبوت بنجاح</span>";
@@ -184,6 +187,24 @@ function showMyInfo(){
         "\nالتاريخ: " + data.date +
         "\nالعناوين التي غيرها: " + (data.changedTitles.join(", ") || "لا يوجد")
     );
+}
+
+// عرض كل أسماء الطلاب وعناوين تقاريرهم في الجلسة
+function showAllTitles(){
+    let allData = [];
+    for(let key in sessionStorage){
+        if(key.startsWith("student_")){
+            const s = JSON.parse(sessionStorage[key]);
+            allData.push(`الطالب: ${s.name} | التقرير: ${s.title}`);
+        }
+    }
+
+    if(allData.length === 0){
+        alert("لا توجد بيانات محفوظة بعد");
+        return;
+    }
+
+    alert(allData.join("\n"));
 }
 </script>
 
