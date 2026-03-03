@@ -1,9 +1,6 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
 <meta charset="UTF-8">
 <title>عناوين تقارير الطلبة</title>
 
@@ -11,25 +8,81 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/supabase.min.js"></script>
 
 <style>
-body{margin:0;font-family:'WriteFont',sans-serif;background:url('H.jpg') no-repeat center center fixed;background-size:cover}
-.header{text-align:center;font-size:32px;font-weight:bold;padding:20px;background:#1e3a5f;color:white;font-family:'TitelFont',sans-serif}
-.top-right{position:absolute;top:20px;left:20px;font-size:14px}
-.container{width:500px;margin:100px auto;background:rgba(255,255,255,0.95);padding:30px;border-radius:15px;box-shadow:0 10px 30px rgba(0,0,0,0.2)}
-.rank{text-align:center;margin-bottom:20px;font-weight:bold}
-input{width:100%;padding:12px;margin-bottom:15px;border-radius:8px;border:1px solid #ccc}
-button{width:100%;padding:12px;border:none;border-radius:8px;margin-bottom:10px;cursor:pointer}
-.save-btn{background:#1e3a5f;color:white}
-.change-btn{background:#b38b00;color:white}
-.info-btn{background:#006b38;color:white}
-.show-titles-btn{background:#5a2e8a;color:white}
-#msg{margin-top:10px;font-weight:bold}
+@font-face { font-family: 'TitelFont'; src: url('TITEL.ttf'); }
+@font-face { font-family: 'WriteFont'; src: url('WRITE.otf'); }
+
+body {
+    margin: 0;
+    font-family: 'WriteFont', sans-serif;
+    background: url('H.jpg') no-repeat center center fixed;
+    background-size: cover;
+}
+
+.header {
+    text-align: center;
+    font-size: 32px;
+    font-weight: bold;
+    padding: 20px;
+    background: #1e3a5f;
+    color: white;
+    font-family: 'TitelFont', sans-serif;
+}
+
+.top-right {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    font-size: 14px;
+}
+
+.container {
+    width: 500px;
+    margin: 100px auto;
+    background: rgba(255,255,255,0.95);
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+.rank {
+    text-align: center;
+    margin-bottom: 20px;
+    font-weight: bold;
+}
+
+input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+}
+
+button {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    cursor: pointer;
+}
+
+.save-btn { background:#1e3a5f; color:white; }
+.change-btn { background:#b38b00; color:white; }
+.info-btn { background:#006b38; color:white; }
+.show-titles-btn { background:#5a2e8a; color:white; }
+
+#msg { margin-top:10px; font-weight:bold; }
 </style>
 </head>
 <body>
 
 <div class="header">عناوين تقارير الطلبة</div>
 <div class="top-right">
-قسم إدارة الأعمال<br>طلبة المرحلة الثانية<br>الدراسة مسائي<br>قاعة (ب)
+قسم إدارة الأعمال<br>
+طلبة المرحلة الثانية<br>
+الدراسة مسائي<br>
+قاعة (ب)
 </div>
 
 <div class="container">
@@ -48,7 +101,7 @@ button{width:100%;padding:12px;border:none;border-radius:8px;margin-bottom:10px;
 </div>
 
 <script>
-// ربط Supabase
+// إعداد Supabase
 const SUPABASE_URL = "https://nbaedfesrclwvywsiqhr.supabase.co";
 const SUPABASE_KEY = "sb_publishable_4J1oDyuUqBbgNXaoNgJ08g_hhzJTBX8";
 const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
@@ -57,87 +110,81 @@ const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 const TELEGRAM_FN_URL = "https://nbaedfesrclwvywsiqhr.supabase.co/functions/v1/send_tele";
 
 // حفظ بيانات الطالب
-async function saveData(){
+async function saveData() {
     const name = document.getElementById("studentName").value.trim();
     const title = document.getElementById("reportTitle").value.trim();
     const subject = document.getElementById("subjectName").value.trim();
     const msg = document.getElementById("msg");
 
-    if(!name || !title || !subject){
+    if (!name || !title || !subject) {
         msg.innerHTML = "<span style='color:red'>املأ جميع الحقول</span>";
         return;
     }
 
-    // التحقق من عدم تكرار العنوان
+    // تحقق من عدم تكرار العنوان
     const { data: existing } = await supabase
         .from('students')
         .select('id')
         .eq('title', title);
 
-    if(existing.length > 0){
+    if (existing.length > 0) {
         msg.innerHTML = "<span style='color:red'>هذا العنوان مستخدم مسبقاً</span>";
         return;
     }
 
+    // إدخال البيانات
     const { error } = await supabase
         .from('students')
         .insert([{ name, title, subject }]);
 
-    if(error){
+    if (error) {
         msg.innerHTML = `<span style='color:red'>خطأ: ${error.message}</span>`;
         return;
     }
 
     msg.innerHTML = "<span style='color:green'>تم الحفظ بنجاح</span>";
 
-    // إرسال البيانات للبوت عبر Edge Function
+    // إرسال البيانات للبوت
     try {
         await fetch(TELEGRAM_FN_URL, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ name, title, subject })
         });
-    } catch(e){
+    } catch(e) {
         console.log("خطأ في إرسال Telegram:", e);
     }
 }
 
 // تغيير العنوان
-async function changeTitle(){
+async function changeTitle() {
     const newTitle = prompt("ادخل العنوان الجديد");
     if(!newTitle) return;
 
     const name = document.getElementById("studentName").value.trim();
-    if(!name){
-        alert("ادخل اسمك أولاً");
-        return;
-    }
+    if(!name) { alert("ادخل اسمك أولاً"); return; }
 
     const { data: existing } = await supabase
         .from('students')
         .select('id')
         .eq('title', newTitle);
 
-    if(existing.length > 0){
-        alert("هذا العنوان مستخدم مسبقاً");
-        return;
-    }
+    if(existing.length > 0) { alert("هذا العنوان مستخدم مسبقاً"); return; }
 
     const { error } = await supabase
         .from('students')
         .update({ title: newTitle })
         .eq('name', name);
 
-    if(error){
-        alert("خطأ: " + error.message);
-    } else {
+    if(error) { alert("خطأ: " + error.message); }
+    else {
         document.getElementById("reportTitle").value = newTitle;
         alert("تم تغيير العنوان");
     }
 }
 
 // عرض بيانات الطالب
-async function showMyInfo(){
+async function showMyInfo() {
     const name = document.getElementById("studentName").value.trim();
     if(!name){ alert("ادخل اسمك أولاً"); return; }
 
@@ -147,24 +194,18 @@ async function showMyInfo(){
         .eq('name', name)
         .single();
 
-    if(error){
-        alert("لم يتم تسجيلك بعد");
-        return;
-    }
+    if(error){ alert("لم يتم تسجيلك بعد"); return; }
 
     alert(`اسم الطالب: ${student.name}\nعنوان التقرير: ${student.title}\nالمادة: ${student.subject}\nالتاريخ: ${student.created_at}`);
 }
 
 // عرض جميع الطلاب
-async function showAllTitles(){
+async function showAllTitles() {
     const { data: students, error } = await supabase
         .from('students')
         .select('*');
 
-    if(error || students.length === 0){
-        alert("لا توجد بيانات بعد");
-        return;
-    }
+    if(error || students.length === 0){ alert("لا توجد بيانات بعد"); return; }
 
     const list = students.map(s => `👤 ${s.name} | 📝 ${s.title}`).join("\n");
     alert(list);
