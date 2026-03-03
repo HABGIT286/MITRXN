@@ -3,11 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <title>عناوين تقارير الطلبة</title>
+
 <style>
 @font-face { font-family: 'TitelFont'; src: url('TITEL.ttf'); }
 @font-face { font-family: 'WriteFont'; src: url('WRITE.otf'); }
 
-body {
+body{
     margin:0;
     font-family:'WriteFont',sans-serif;
     background: url('H.jpg') no-repeat center center fixed;
@@ -21,7 +22,7 @@ body {
     padding:20px;
     background:#1e3a5f;
     color:white;
-    font-family: 'TitelFont', sans-serif;
+    font-family:'TitelFont',sans-serif;
 }
 
 .top-right{
@@ -29,24 +30,21 @@ body {
     top:20px;
     left:20px;
     font-size:14px;
-    font-family:'WriteFont',sans-serif;
 }
 
 .container{
     width:500px;
     margin:100px auto;
-    background:rgba(255,255,255,0.9);
+    background:rgba(255,255,255,0.95);
     padding:30px;
     border-radius:15px;
     box-shadow:0 10px 30px rgba(0,0,0,0.2);
-    font-family:'WriteFont',sans-serif;
 }
 
 .rank{
     text-align:center;
     margin-bottom:20px;
     font-weight:bold;
-    font-family:'WriteFont',sans-serif;
 }
 
 input{
@@ -55,7 +53,6 @@ input{
     margin-bottom:15px;
     border-radius:8px;
     border:1px solid #ccc;
-    font-family:'WriteFont',sans-serif;
 }
 
 button{
@@ -65,13 +62,14 @@ button{
     border-radius:8px;
     margin-bottom:10px;
     cursor:pointer;
-    font-family:'WriteFont',sans-serif;
 }
 
 .save-btn{background:#1e3a5f;color:white;}
 .change-btn{background:#b38b00;color:white;}
 .info-btn{background:#006b38;color:white;}
 .show-titles-btn{background:#5a2e8a;color:white;}
+
+#msg{margin-top:10px;font-weight:bold;}
 </style>
 </head>
 <body>
@@ -103,9 +101,8 @@ button{
 </div>
 
 <script>
-let changedTitles = [];
 
-// حفظ البيانات محليًا وإرسال للبوت عبر السيرفر
+// حفظ البيانات في السيرفر
 async function saveData(){
     const name = document.getElementById("studentName").value.trim();
     const title = document.getElementById("reportTitle").value.trim();
@@ -117,95 +114,112 @@ async function saveData(){
         return;
     }
 
-    const date = new Date().toLocaleString();
-
-    const data = { name, title, subject, date, changedTitles };
-
-    // حفظ بيانات المستخدم في الجلسة
-    sessionStorage.setItem("student_" + name, JSON.stringify(data));
-
-    // إرسال البيانات للبوت عبر السيرفر
     try{
-        const res = await fetch("https://student-reports-grup-xvoc6v3rh-habgit286s-projects.vercel.app/api/send", {
+        const res = await fetch("/api/students",{
             method:"POST",
             headers:{"Content-Type":"application/json"},
-            body:JSON.stringify(data)
+            body: JSON.stringify({ name, title, subject })
         });
 
         const result = await res.json();
+
         if(result.ok){
-            msg.innerHTML = "<span style='color:green'>تم الحفظ وإرسال البيانات للبوت بنجاح</span>";
-        } else {
-            msg.innerHTML = "<span style='color:red'>فشل الإرسال للبوت</span>";
-            console.error(result.error);
+            msg.innerHTML = "<span style='color:green'>تم الحفظ بنجاح</span>";
+        }else{
+            msg.innerHTML = `<span style='color:red'>${result.message}</span>`;
         }
+
     }catch(e){
-        msg.innerHTML = "<span style='color:red'>فشل الإرسال للبوت</span>";
-        console.log(e);
+        msg.innerHTML = "<span style='color:red'>خطأ في الاتصال بالسيرفر</span>";
     }
 }
 
-// تغيير العنوان مع منع التكرار
-function changeTitle(){
+
+// تغيير العنوان (يرسل تحديث للسيرفر)
+async function changeTitle(){
     const newTitle = prompt("ادخل العنوان الجديد");
     if(!newTitle) return;
 
-    for(let key in sessionStorage){
-        if(key.startsWith("student_")){
-            let s = JSON.parse(sessionStorage[key]);
-            if(s.title === newTitle){
-                alert("هذا العنوان مستخدم مسبقاً");
-                return;
-            }
-        }
+    const name = document.getElementById("studentName").value.trim();
+    const subject = document.getElementById("subjectName").value.trim();
+
+    if(!name || !subject){
+        alert("ادخل اسمك والمادة أولاً");
+        return;
     }
 
-    changedTitles.push(newTitle);
-    document.getElementById("reportTitle").value = newTitle;
+    try{
+        const res = await fetch("/api/students",{
+            method:"POST",
+            headers:{"Content-Type":"application/json"},
+            body: JSON.stringify({ name, title:newTitle, subject })
+        });
+
+        const result = await res.json();
+
+        if(result.ok){
+            document.getElementById("reportTitle").value = newTitle;
+            alert("تم تغيير العنوان");
+        }else{
+            alert(result.message);
+        }
+
+    }catch(e){
+        alert("خطأ في الاتصال بالسيرفر");
+    }
 }
 
-// عرض معلومات المستخدم الحالية
-function showMyInfo(){
+
+// عرض معلومات الطالب
+async function showMyInfo(){
     const name = document.getElementById("studentName").value.trim();
     if(!name){
         alert("ادخل اسمك أولاً");
         return;
     }
 
-    const dataStr = sessionStorage.getItem("student_" + name);
-    if(!dataStr){
-        alert("لم يتم حفظ بياناتك بعد");
+    const res = await fetch("/api/students");
+    const result = await res.json();
+
+    if(!result.ok){
+        alert("خطأ في جلب البيانات");
         return;
     }
 
-    const data = JSON.parse(dataStr);
+    const student = result.students.find(s => s.name === name);
+
+    if(!student){
+        alert("لم يتم تسجيلك بعد");
+        return;
+    }
 
     alert(
-        "اسم الطالب: " + data.name +
-        "\nعنوان التقرير: " + data.title +
-        "\nالمادة: " + data.subject +
-        "\nالتاريخ: " + data.date +
-        "\nالعناوين التي غيرها: " + (data.changedTitles.join(", ") || "لا يوجد")
+        "اسم الطالب: " + student.name +
+        "\nعنوان التقرير: " + student.title +
+        "\nالمادة: " + student.subject +
+        "\nالتاريخ: " + student.date
     );
 }
 
-// عرض كل أسماء الطلاب وعناوين تقاريرهم في الجلسة
-function showAllTitles(){
-    let allData = [];
-    for(let key in sessionStorage){
-        if(key.startsWith("student_")){
-            const s = JSON.parse(sessionStorage[key]);
-            allData.push(`الطالب: ${s.name} | التقرير: ${s.title}`);
-        }
-    }
 
-    if(allData.length === 0){
-        alert("لا توجد بيانات محفوظة بعد");
+// عرض جميع الطلبة
+async function showAllTitles(){
+
+    const res = await fetch("/api/students");
+    const result = await res.json();
+
+    if(!result.ok || result.students.length === 0){
+        alert("لا توجد بيانات بعد");
         return;
     }
 
-    alert(allData.join("\n"));
+    let list = result.students
+        .map(s => `👤 ${s.name} | 📝 ${s.title}`)
+        .join("\n");
+
+    alert(list);
 }
+
 </script>
 
 </body>
