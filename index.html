@@ -47,10 +47,9 @@ button{width:100%;padding:12px;border:none;border-radius:8px;margin-bottom:10px;
 
 <script>
 // ربط Supabase
-const SUPABASE_URL = "https://nbaedfesrclwvywsiqhr.supabase.co"; // ضع رابط مشروعك هنا
-const SUPABASE_KEY = "sb_publishable_4J1oDyuUqBbgNXaoNgJ08g_hhzJTBX8"; // ضع مفتاحك العام هنا
+const SUPABASE_URL = "https://nbaedfesrclwvywsiqhr.supabase.co";
+const SUPABASE_KEY = "sb_publishable_4J1oDyuUqBbgNXaoNgJ08g_hhzJTBX8";
 const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
 // حفظ بيانات الطالب
 async function saveData(){
     const name = document.getElementById("studentName").value.trim();
