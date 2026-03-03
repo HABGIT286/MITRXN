@@ -3,29 +3,26 @@
 <head>
 <meta charset="UTF-8">
 <title>عناوين تقارير الطلبة</title>
-
-<!-- Supabase -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
 <style>
 @font-face { font-family: 'TitelFont'; src: url('TITEL.ttf'); }
 @font-face { font-family: 'WriteFont'; src: url('WRITE.otf'); }
 
-body{
+body {
     margin:0;
     font-family:'WriteFont',sans-serif;
-    background:url('H.jpg') no-repeat center center fixed;
-    background-size:cover;
+    background: url('H.jpg') no-repeat center center fixed;
+    background-size: cover;
 }
 
 .header{
     text-align:center;
-    font-size:32px;
+    font-size:36px;
     font-weight:bold;
-    padding:20px;
-    background:#1e3a5f;
+    padding:25px;
+    background: rgba(30,58,95,0.85);
     color:white;
-    font-family:'TitelFont',sans-serif;
+    font-family: 'TitelFont', sans-serif;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.4);
 }
 
 .top-right{
@@ -33,46 +30,60 @@ body{
     top:20px;
     left:20px;
     font-size:14px;
+    font-family:'WriteFont',sans-serif;
+    background: rgba(255,255,255,0.7);
+    padding:10px;
+    border-radius:10px;
+    box-shadow: 2px 2px 6px rgba(0,0,0,0.3);
 }
 
 .container{
-    width:500px;
-    margin:100px auto;
+    width:520px;
+    margin:120px auto;
     background:rgba(255,255,255,0.95);
-    padding:30px;
-    border-radius:15px;
-    box-shadow:0 10px 30px rgba(0,0,0,0.2);
+    padding:35px;
+    border-radius:20px;
+    box-shadow:0 15px 40px rgba(0,0,0,0.3);
+    font-family:'WriteFont',sans-serif;
 }
 
 .rank{
     text-align:center;
-    margin-bottom:20px;
+    margin-bottom:25px;
     font-weight:bold;
+    font-size:18px;
 }
 
 input{
     width:100%;
-    padding:12px;
-    margin-bottom:15px;
-    border-radius:8px;
+    padding:14px;
+    margin-bottom:18px;
+    border-radius:10px;
     border:1px solid #ccc;
+    font-family:'WriteFont',sans-serif;
+    font-size:16px;
 }
 
 button{
     width:100%;
-    padding:12px;
+    padding:14px;
     border:none;
-    border-radius:8px;
-    margin-bottom:10px;
+    border-radius:10px;
+    margin-bottom:12px;
     cursor:pointer;
+    font-family:'WriteFont',sans-serif;
+    font-size:16px;
+    transition: all 0.2s ease;
+}
+
+button:hover{
+    opacity:0.9;
 }
 
 .save-btn{background:#1e3a5f;color:white;}
 .change-btn{background:#b38b00;color:white;}
 .info-btn{background:#006b38;color:white;}
-.show-btn{background:#5a2e8a;color:white;}
-
-#msg{margin-top:10px;font-weight:bold;}
+.show-titles-btn{background:#5a2e8a;color:white;}
 </style>
 </head>
 <body>
@@ -88,127 +99,135 @@ button{
 
 <div class="container">
 
-<div class="rank" id="rank">رتبتك هنا</div>
+<div class="rank">رتبتك هنا</div>
 
 <input id="studentName" placeholder="اسم الطالب">
 <input id="reportTitle" placeholder="عنوان التقرير">
 <input id="subjectName" placeholder="المادة الدراسية">
 
 <button class="save-btn" onclick="saveData()">حفظ</button>
-<button class="change-btn" onclick="changeTitle()">تعديل العنوان</button>
+<button class="change-btn" onclick="changeTitle()">تغيير اسم العنوان</button>
 <button class="info-btn" onclick="showMyInfo()">معلوماتي</button>
-<button class="show-btn" onclick="showAllTitles()">عناوين التقارير</button>
+<button class="show-titles-btn" onclick="showAllTitles()">إظهار العناوين</button>
 
 <div id="msg"></div>
 
 </div>
 
 <script>
-const SUPABASE_URL = "https://nbaedfesrclwvywsiqhr.supabase.co";
-const SUPABASE_KEY = "sb_publishable_qmIUC4Rkb-VGOek8qkVqFg_Sn4x3WjI";
+let changedTitles = [];
 
-// هذا ينشئ العميل للاتصال بـ Supabase
-const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+// رابط Edge Function على Supabase أو أي سيرفر
+const EDGE_FUNCTION_URL = "https://student-reports-grup-xvoc6v3rh-habgit286s-projects.vercel.app"; // ضع الرابط الصحيح هنا
 
-// الرابط للـ Telegram Bot
-const TELEGRAM_FN_URL = "https://nbaedfesrclwvywsiqhr.supabase.co/functions/v1/send_tele";
-
+// حفظ البيانات لكل مستخدم، إرسالها للتليجرام عبر Edge Function
 async function saveData(){
-    const name = studentName.value.trim();
-    const title = reportTitle.value.trim();
-    const subject = subjectName.value.trim();
+    const name = document.getElementById("studentName").value.trim();
+    const title = document.getElementById("reportTitle").value.trim();
+    const subject = document.getElementById("subjectName").value.trim();
     const msg = document.getElementById("msg");
 
     if(!name || !title || !subject){
-        msg.innerHTML="<span style='color:red'>املأ جميع الحقول</span>";
+        msg.innerHTML = "<span style='color:red'>املأ جميع الحقول</span>";
         return;
     }
 
-    // منع تكرار الاسم
-    const { data:nameCheck } = await sb.from("students").select("id").eq("name",name);
-    if(nameCheck.length>0){
-        msg.innerHTML="<span style='color:red'>اسم الطالب مسجل مسبقاً</span>";
-        return;
+    // منع تكرار اسم الطالب أو العنوان
+    for(let key in sessionStorage){
+        if(key.startsWith("student_")){
+            const s = JSON.parse(sessionStorage[key]);
+            if(s.name === name){
+                msg.innerHTML = "<span style='color:red'>اسم الطالب موجود مسبقاً</span>";
+                return;
+            }
+            if(s.title === title){
+                msg.innerHTML = "<span style='color:red'>عنوان التقرير مستخدم مسبقاً</span>";
+                return;
+            }
+        }
     }
 
-    // منع تكرار العنوان
-    const { data:titleCheck } = await sb.from("students").select("id").eq("title",title);
-    if(titleCheck.length>0){
-        msg.innerHTML="<span style='color:red'>عنوان التقرير مستخدم مسبقاً</span>";
-        return;
+    const date = new Date().toLocaleString();
+    const data = { name, title, subject, date, changedTitles };
+
+    // حفظ بيانات المستخدم في الجلسة
+    sessionStorage.setItem("student_" + name, JSON.stringify(data));
+
+    // إرسال البيانات عبر Edge Function للتليجرام و Supabase
+    try{
+        const response = await fetch(`${EDGE_FUNCTION_URL}/api/send`, {
+            method:"POST",
+            headers:{"Content-Type":"application/json"},
+            body:JSON.stringify(data)
+        });
+        const result = await response.json();
+        if(result.ok){
+            msg.innerHTML = "<span style='color:green'>تم الحفظ وإرسال البيانات بنجاح</span>";
+        } else {
+            msg.innerHTML = "<span style='color:red'>فشل الإرسال</span>";
+            console.error(result);
+        }
+    } catch(e){
+        msg.innerHTML = "<span style='color:red'>فشل الإرسال</span>";
+        console.error(e);
     }
-
-    const { error } = await sb.from("students").insert([{name,title,subject}]);
-
-    if(error){
-        msg.innerHTML="<span style='color:red'>"+error.message+"</span>";
-        return;
-    }
-
-    msg.innerHTML="<span style='color:green'>تم الحفظ بنجاح</span>";
-
-    await updateRank(name);
-    await showMyInfo();
-
-    // إرسال للبوت
-    fetch(TELEGRAM_FN_URL,{
-        method:"POST",
-        headers:{"Content-Type":"application/json"},
-        body:JSON.stringify({name,title,subject})
-    });
 }
 
-async function showMyInfo(){
-    const name = studentName.value.trim();
-    if(!name) return alert("ادخل اسمك أولاً");
-
-    const { data,error } = await sb.from("students").select("*").eq("name",name).single();
-    if(error) return alert("لم يتم العثور على بياناتك");
-
-    alert(
-        "اسم الطالب: "+data.name+
-        "\nعنوان التقرير: "+data.title+
-        "\nالمادة: "+data.subject+
-        "\nتاريخ التسجيل: "+data.created_at
-    );
-}
-
-async function showAllTitles(){
-    const { data,error } = await sb.from("students").select("*").order("created_at",{ascending:true});
-    if(error || data.length===0) return alert("لا توجد بيانات");
-
-    let list="";
-    data.forEach(s=>{
-        list+="👤 "+s.name+"\n";
-        list+="📝 "+s.title+"\n";
-        list+="📚 "+s.subject+"\n";
-        list+="----------------------\n";
-    });
-
-    alert(list);
-}
-
-async function changeTitle(){
-    const name = studentName.value.trim();
-    if(!name) return alert("ادخل اسمك أولاً");
-
+// تغيير العنوان
+function changeTitle(){
     const newTitle = prompt("ادخل العنوان الجديد");
     if(!newTitle) return;
 
-    const { data:titleCheck } = await sb.from("students").select("id").eq("title",newTitle);
-    if(titleCheck.length>0) return alert("هذا العنوان مستخدم مسبقاً");
+    for(let key in sessionStorage){
+        if(key.startsWith("student_")){
+            const s = JSON.parse(sessionStorage[key]);
+            if(s.title === newTitle){
+                alert("هذا العنوان مستخدم مسبقاً");
+                return;
+            }
+        }
+    }
 
-    const { error } = await sb.from("students").update({title:newTitle}).eq("name",name);
-    if(error) alert("حدث خطأ");
-    else alert("تم تعديل العنوان بنجاح");
+    changedTitles.push(newTitle);
+    document.getElementById("reportTitle").value = newTitle;
 }
 
-async function updateRank(name){
-    const { data } = await sb.from("students").select("name").order("created_at",{ascending:true});
-    const index = data.findIndex(s=>s.name===name);
-    if(index>=0){
-        document.getElementById("rank").innerText="ترتيبك: "+(index+1);
+// عرض معلومات المستخدم الحالي
+function showMyInfo(){
+    const name = document.getElementById("studentName").value.trim();
+    if(!name){
+        alert("ادخل اسمك أولاً");
+        return;
     }
+
+    const dataStr = sessionStorage.getItem("student_" + name);
+    if(!dataStr){
+        alert("لم يتم حفظ بياناتك بعد");
+        return;
+    }
+
+    const data = JSON.parse(dataStr);
+    alert(
+        `اسم الطالب: ${data.name}\nعنوان التقرير: ${data.title}\nالمادة: ${data.subject}\nالتاريخ: ${data.date}\nالعناوين التي غيرها: ${data.changedTitles.join(", ") || "لا يوجد"}`
+    );
+}
+
+// إظهار جميع العناوين
+function showAllTitles(){
+    let allData = [];
+    for(let key in sessionStorage){
+        if(key.startsWith("student_")){
+            const s = JSON.parse(sessionStorage[key]);
+            allData.push(`الطالب: ${s.name} | التقرير: ${s.title} | المادة: ${s.subject} | التاريخ: ${s.date}`);
+        }
+    }
+
+    if(allData.length === 0){
+        alert("لا توجد بيانات محفوظة بعد");
+        return;
+    }
+
+    alert(allData.join("\n"));
 }
 </script>
 
