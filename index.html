@@ -105,9 +105,12 @@ button{
 
 <script>
 const SUPABASE_URL = "https://nbaedfesrclwvywsiqhr.supabase.co";
-const SUPABASE_KEY = "ضع_المفتاح_هنا";
+const SUPABASE_KEY = "sb_publishable_qmIUC4Rkb-VGOek8qkVqFg_Sn4x3WjI";
+
+// هذا ينشئ العميل للاتصال بـ Supabase
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
+// الرابط للـ Telegram Bot
 const TELEGRAM_FN_URL = "https://nbaedfesrclwvywsiqhr.supabase.co/functions/v1/send_tele";
 
 async function saveData(){
