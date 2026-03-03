@@ -16,13 +16,12 @@ body {
 
 .header{
     text-align:center;
-    font-size:36px;
+    font-size:32px;
     font-weight:bold;
-    padding:25px;
-    background: rgba(30,58,95,0.85);
+    padding:20px;
+    background:rgba(30,58,95,0.9);
     color:white;
     font-family: 'TitelFont', sans-serif;
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.4);
 }
 
 .top-right{
@@ -31,59 +30,50 @@ body {
     left:20px;
     font-size:14px;
     font-family:'WriteFont',sans-serif;
-    background: rgba(255,255,255,0.7);
-    padding:10px;
-    border-radius:10px;
-    box-shadow: 2px 2px 6px rgba(0,0,0,0.3);
+    color:white;
 }
 
 .container{
-    width:520px;
+    width:500px;
     margin:120px auto;
     background:rgba(255,255,255,0.95);
-    padding:35px;
-    border-radius:20px;
-    box-shadow:0 15px 40px rgba(0,0,0,0.3);
+    padding:30px;
+    border-radius:15px;
+    box-shadow:0 10px 30px rgba(0,0,0,0.3);
     font-family:'WriteFont',sans-serif;
 }
 
 .rank{
     text-align:center;
-    margin-bottom:25px;
+    margin-bottom:20px;
     font-weight:bold;
-    font-size:18px;
+    font-family:'WriteFont',sans-serif;
 }
 
 input{
     width:100%;
-    padding:14px;
-    margin-bottom:18px;
-    border-radius:10px;
+    padding:12px;
+    margin-bottom:15px;
+    border-radius:8px;
     border:1px solid #ccc;
     font-family:'WriteFont',sans-serif;
-    font-size:16px;
 }
 
 button{
     width:100%;
-    padding:14px;
+    padding:12px;
     border:none;
-    border-radius:10px;
-    margin-bottom:12px;
+    border-radius:8px;
+    margin-bottom:10px;
     cursor:pointer;
     font-family:'WriteFont',sans-serif;
-    font-size:16px;
-    transition: all 0.2s ease;
-}
-
-button:hover{
-    opacity:0.9;
 }
 
 .save-btn{background:#1e3a5f;color:white;}
 .change-btn{background:#b38b00;color:white;}
 .info-btn{background:#006b38;color:white;}
-.show-titles-btn{background:#5a2e8a;color:white;}
+.show-btn{background:#8b0000;color:white;}
+#msg{margin-top:10px; text-align:center; font-weight:bold;}
 </style>
 </head>
 <body>
@@ -108,19 +98,24 @@ button:hover{
 <button class="save-btn" onclick="saveData()">حفظ</button>
 <button class="change-btn" onclick="changeTitle()">تغيير اسم العنوان</button>
 <button class="info-btn" onclick="showMyInfo()">معلوماتي</button>
-<button class="show-titles-btn" onclick="showAllTitles()">إظهار العناوين</button>
+<button class="show-btn" onclick="showAll()">إظهار العناوين</button>
 
 <div id="msg"></div>
+<div id="allTitles"></div>
 
-</div>
+<script type="module">
+// Supabase client
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
 
-<script>
+const SUPABASE_URL = 'https://mcwemgjmqwbgxoyiwant.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_qmIUC4Rkb-VGOek8qkVqFg_Sn4x3WjI';
+const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+const EDGE_FUNCTION_URL = 'https://student-reports-grup-xvoc6v3rh-habgit286s-projects.vercel.app/api/send';
+
 let changedTitles = [];
 
-// رابط Edge Function على Supabase أو أي سيرفر
-const EDGE_FUNCTION_URL = "https://student-reports-grup-xvoc6v3rh-habgit286s-projects.vercel.app"; // ضع الرابط الصحيح هنا
-
-// حفظ البيانات لكل مستخدم، إرسالها للتليجرام عبر Edge Function
+// حفظ البيانات
 async function saveData(){
     const name = document.getElementById("studentName").value.trim();
     const title = document.getElementById("reportTitle").value.trim();
@@ -132,44 +127,48 @@ async function saveData(){
         return;
     }
 
-    // منع تكرار اسم الطالب أو العنوان
-    for(let key in sessionStorage){
-        if(key.startsWith("student_")){
-            const s = JSON.parse(sessionStorage[key]);
-            if(s.name === name){
-                msg.innerHTML = "<span style='color:red'>اسم الطالب موجود مسبقاً</span>";
-                return;
-            }
-            if(s.title === title){
-                msg.innerHTML = "<span style='color:red'>عنوان التقرير مستخدم مسبقاً</span>";
-                return;
-            }
-        }
+    // التحقق من عدم تكرار الاسم أو العنوان
+    const { data: existing } = await supabase
+        .from('student_reports')
+        .select('*')
+        .or(`name.eq.${name},title.eq.${title}`);
+
+    if(existing.length > 0){
+        alert('اسم الطالب أو عنوان التقرير موجود مسبقاً');
+        return;
     }
 
     const date = new Date().toLocaleString();
-    const data = { name, title, subject, date, changedTitles };
 
-    // حفظ بيانات المستخدم في الجلسة
-    sessionStorage.setItem("student_" + name, JSON.stringify(data));
+    const dataObj = { name, title, subject, date, changedTitles };
 
-    // إرسال البيانات عبر Edge Function للتليجرام و Supabase
+    // حفظ في Supabase
+    const { error } = await supabase.from('student_reports').insert([dataObj]);
+    if(error){
+        msg.innerHTML = "<span style='color:red'>فشل الحفظ في قاعدة البيانات</span>";
+        console.log(error);
+        return;
+    }
+
+    // حفظ جلسة محلية
+    sessionStorage.setItem("student_" + name, JSON.stringify(dataObj));
+
+    // إرسال للبوت عبر Edge Function
     try{
-        const response = await fetch(`${EDGE_FUNCTION_URL}/api/send`, {
+        const resp = await fetch(EDGE_FUNCTION_URL, {
             method:"POST",
             headers:{"Content-Type":"application/json"},
-            body:JSON.stringify(data)
+            body:JSON.stringify(dataObj)
         });
-        const result = await response.json();
+        const result = await resp.json();
         if(result.ok){
-            msg.innerHTML = "<span style='color:green'>تم الحفظ وإرسال البيانات بنجاح</span>";
+            msg.innerHTML = "<span style='color:green'>تم الحفظ وإرسال البيانات للبوت بنجاح</span>";
         } else {
-            msg.innerHTML = "<span style='color:red'>فشل الإرسال</span>";
-            console.error(result);
+            msg.innerHTML = "<span style='color:red'>تم الحفظ لكن فشل الإرسال للبوت</span>";
         }
-    } catch(e){
-        msg.innerHTML = "<span style='color:red'>فشل الإرسال</span>";
-        console.error(e);
+    }catch(e){
+        msg.innerHTML = "<span style='color:red'>تم الحفظ لكن فشل الإرسال للبوت</span>";
+        console.log(e);
     }
 }
 
@@ -178,9 +177,10 @@ function changeTitle(){
     const newTitle = prompt("ادخل العنوان الجديد");
     if(!newTitle) return;
 
+    // تحقق من عدم تكرار العنوان
     for(let key in sessionStorage){
         if(key.startsWith("student_")){
-            const s = JSON.parse(sessionStorage[key]);
+            let s = JSON.parse(sessionStorage[key]);
             if(s.title === newTitle){
                 alert("هذا العنوان مستخدم مسبقاً");
                 return;
@@ -192,7 +192,7 @@ function changeTitle(){
     document.getElementById("reportTitle").value = newTitle;
 }
 
-// عرض معلومات المستخدم الحالي
+// عرض معلومات المستخدم
 function showMyInfo(){
     const name = document.getElementById("studentName").value.trim();
     if(!name){
@@ -207,29 +207,31 @@ function showMyInfo(){
     }
 
     const data = JSON.parse(dataStr);
+
     alert(
-        `اسم الطالب: ${data.name}\nعنوان التقرير: ${data.title}\nالمادة: ${data.subject}\nالتاريخ: ${data.date}\nالعناوين التي غيرها: ${data.changedTitles.join(", ") || "لا يوجد"}`
+        "اسم الطالب: " + data.name +
+        "\nعنوان التقرير: " + data.title +
+        "\nالمادة: " + data.subject +
+        "\nالتاريخ: " + data.date +
+        "\nالعناوين التي غيرها: " + (data.changedTitles.join(", ") || "لا يوجد")
     );
 }
 
-// إظهار جميع العناوين
-function showAllTitles(){
-    let allData = [];
-    for(let key in sessionStorage){
-        if(key.startsWith("student_")){
-            const s = JSON.parse(sessionStorage[key]);
-            allData.push(`الطالب: ${s.name} | التقرير: ${s.title} | المادة: ${s.subject} | التاريخ: ${s.date}`);
-        }
-    }
+// عرض جميع العناوين
+async function showAll(){
+    const { data, error } = await supabase.from('student_reports').select('*');
+    const container = document.getElementById("allTitles");
+    if(error){ container.innerHTML = "<span style='color:red'>فشل جلب البيانات</span>"; return; }
 
-    if(allData.length === 0){
-        alert("لا توجد بيانات محفوظة بعد");
-        return;
-    }
-
-    alert(allData.join("\n"));
+    let html = "<h3>جميع التقارير:</h3><ul>";
+    data.forEach(d => {
+        html += `<li>${d.name} - ${d.title} - ${d.subject} - ${d.date}</li>`;
+    });
+    html += "</ul>";
+    container.innerHTML = html;
 }
 </script>
 
+<script type="module" src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm"></script>
 </body>
 </html>
