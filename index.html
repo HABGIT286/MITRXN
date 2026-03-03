@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
 <meta charset="UTF-8">
 <title>عناوين تقارير الطلبة</title>
 
@@ -8,7 +11,6 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/supabase.min.js"></script>
 
 <style>
-/* نفس الستايل السابق */
 body{margin:0;font-family:'WriteFont',sans-serif;background:url('H.jpg') no-repeat center center fixed;background-size:cover}
 .header{text-align:center;font-size:32px;font-weight:bold;padding:20px;background:#1e3a5f;color:white;font-family:'TitelFont',sans-serif}
 .top-right{position:absolute;top:20px;left:20px;font-size:14px}
@@ -50,6 +52,10 @@ button{width:100%;padding:12px;border:none;border-radius:8px;margin-bottom:10px;
 const SUPABASE_URL = "https://nbaedfesrclwvywsiqhr.supabase.co";
 const SUPABASE_KEY = "sb_publishable_4J1oDyuUqBbgNXaoNgJ08g_hhzJTBX8";
 const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+// رابط Edge Function لإرسال Telegram
+const TELEGRAM_FN_URL = "https://nbaedfesrclwvywsiqhr.supabase.co/functions/v1/send_tele";
+
 // حفظ بيانات الطالب
 async function saveData(){
     const name = document.getElementById("studentName").value.trim();
@@ -79,8 +85,20 @@ async function saveData(){
 
     if(error){
         msg.innerHTML = `<span style='color:red'>خطأ: ${error.message}</span>`;
-    } else {
-        msg.innerHTML = "<span style='color:green'>تم الحفظ بنجاح</span>";
+        return;
+    }
+
+    msg.innerHTML = "<span style='color:green'>تم الحفظ بنجاح</span>";
+
+    // إرسال البيانات للبوت عبر Edge Function
+    try {
+        await fetch(TELEGRAM_FN_URL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ name, title, subject })
+        });
+    } catch(e){
+        console.log("خطأ في إرسال Telegram:", e);
     }
 }
 
@@ -95,7 +113,6 @@ async function changeTitle(){
         return;
     }
 
-    // تحقق عدم وجود عنوان جديد مكرر
     const { data: existing } = await supabase
         .from('students')
         .select('id')
