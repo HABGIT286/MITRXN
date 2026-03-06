@@ -73,7 +73,9 @@ button{
 .change-btn{background:#b38b00;color:white;}
 .info-btn{background:#006b38;color:white;}
 .show-btn{background:#8b0000;color:white;}
+.delete-btn{background:#aa0000;color:white;}
 #msg{margin-top:10px; text-align:center; font-weight:bold;}
+#allTitles{margin-top:15px;}
 </style>
 </head>
 <body>
@@ -99,6 +101,7 @@ button{
 <button class="change-btn" onclick="changeTitle()">تغيير اسم العنوان</button>
 <button class="info-btn" onclick="showMyInfo()">معلوماتي</button>
 <button class="show-btn" onclick="showAll()">إظهار العناوين</button>
+<button class="delete-btn" onclick="deleteMyData()">حذف بياناتي</button>
 
 <div id="msg"></div>
 <div id="allTitles"></div>
@@ -122,33 +125,34 @@ async function saveData(){
     const subject = document.getElementById("subjectName").value.trim();
     const msg = document.getElementById("msg");
 
+    // التحقق من الاسم الثلاثي
+    if(name.split(" ").length < 3){
+        msg.innerHTML = "<span style='color:red'>الاسم يجب أن يكون ثلاثياً على الأقل</span>";
+        return;
+    }
+
     if(!name || !title || !subject){
         msg.innerHTML = "<span style='color:red'>املأ جميع الحقول</span>";
         return;
     }
 
-    // التحقق من عدم تكرار الاسم أو العنوان
+    // تحقق من عدم تكرار الاسم أو العنوان
     const { data: existing } = await supabase
         .from('student_reports')
         .select('*')
         .or(`name.eq.${name},title.eq.${title}`);
 
     if(existing.length > 0){
-        alert('اسم الطالب أو عنوان التقرير موجود مسبقاً');
+        msg.innerHTML = "<span style='color:red'>اسم الطالب أو عنوان التقرير موجود مسبقاً</span>";
         return;
     }
 
     const date = new Date().toLocaleString();
-
     const dataObj = { name, title, subject, date, changedTitles };
 
     // حفظ في Supabase
     const { error } = await supabase.from('student_reports').insert([dataObj]);
-    if(error){
-        msg.innerHTML = "<span style='color:red'>فشل الحفظ في قاعدة البيانات</span>";
-        console.log(error);
-        return;
-    }
+    if(error){ msg.innerHTML = "<span style='color:red'>فشل الحفظ في قاعدة البيانات</span>"; console.log(error); return; }
 
     // حفظ جلسة محلية
     sessionStorage.setItem("student_" + name, JSON.stringify(dataObj));
@@ -177,7 +181,6 @@ function changeTitle(){
     const newTitle = prompt("ادخل العنوان الجديد");
     if(!newTitle) return;
 
-    // تحقق من عدم تكرار العنوان
     for(let key in sessionStorage){
         if(key.startsWith("student_")){
             let s = JSON.parse(sessionStorage[key]);
@@ -195,25 +198,14 @@ function changeTitle(){
 // عرض معلومات المستخدم
 function showMyInfo(){
     const name = document.getElementById("studentName").value.trim();
-    if(!name){
-        alert("ادخل اسمك أولاً");
-        return;
-    }
+    if(!name){ alert("ادخل اسمك أولاً"); return; }
 
     const dataStr = sessionStorage.getItem("student_" + name);
-    if(!dataStr){
-        alert("لم يتم حفظ بياناتك بعد");
-        return;
-    }
+    if(!dataStr){ alert("لم يتم حفظ بياناتك بعد"); return; }
 
     const data = JSON.parse(dataStr);
-
     alert(
-        "اسم الطالب: " + data.name +
-        "\nعنوان التقرير: " + data.title +
-        "\nالمادة: " + data.subject +
-        "\nالتاريخ: " + data.date +
-        "\nالعناوين التي غيرها: " + (data.changedTitles.join(", ") || "لا يوجد")
+        `اسم الطالب: ${data.name}\nعنوان التقرير: ${data.title}\nالمادة: ${data.subject}\nالتاريخ: ${data.date}\nالعناوين التي غيرها: ${data.changedTitles.join(", ") || "لا يوجد"}`
     );
 }
 
@@ -224,11 +216,24 @@ async function showAll(){
     if(error){ container.innerHTML = "<span style='color:red'>فشل جلب البيانات</span>"; return; }
 
     let html = "<h3>جميع التقارير:</h3><ul>";
-    data.forEach(d => {
-        html += `<li>${d.name} - ${d.title} - ${d.subject} - ${d.date}</li>`;
+    data.forEach((d,i) => {
+        html += `<li>${i+1}. ${d.name} - ${d.title} - ${d.subject} - ${d.date}</li>`;
     });
     html += "</ul>";
     container.innerHTML = html;
+}
+
+// حذف بيانات المستخدم
+async function deleteMyData(){
+    const name = document.getElementById("studentName").value.trim();
+    if(!name){ alert("ادخل اسمك أولاً"); return; }
+
+    const { error } = await supabase.from('student_reports').delete().eq('name', name);
+    if(error){ alert("فشل الحذف"); console.log(error); return; }
+
+    sessionStorage.removeItem("student_" + name);
+    document.getElementById("msg").innerHTML = "<span style='color:green'>تم حذف بياناتك بنجاح</span>";
+    document.getElementById("allTitles").innerHTML = "";
 }
 </script>
 
