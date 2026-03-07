@@ -3,7 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <title>عناوين تقارير الطلبة</title>
-
 <style>
 @font-face { font-family: 'TitelFont'; src: url('TITEL.ttf'); }
 @font-face { font-family: 'WriteFont'; src: url('WRITE.otf'); }
@@ -17,9 +16,10 @@ body{
 
 .header{
     text-align:center;
-    font-size:30px;
+    font-size:32px;
+    font-weight:bold;
     padding:20px;
-    background:#1e3a5f;
+    background:rgba(30,58,95,0.9);
     color:white;
     font-family:'TitelFont',sans-serif;
 }
@@ -71,7 +71,6 @@ button{
 }
 </style>
 </head>
-
 <body>
 
 <div class="header">عناوين تقارير الطلبة</div>
@@ -102,52 +101,37 @@ const supabase = createClient(SUPABASE_URL, SUPABASE_KEY)
 
 // حفظ البيانات
 async function saveData(){
-    const name=document.getElementById("studentName").value.trim()
-    const title=document.getElementById("reportTitle").value.trim()
-    const subject=document.getElementById("subjectName").value.trim()
-    const msg=document.getElementById("msg")
+    const name = document.getElementById("studentName").value.trim()
+    const title = document.getElementById("reportTitle").value.trim()
+    const subject = document.getElementById("subjectName").value.trim()
+    const msg = document.getElementById("msg")
 
-    if(name.split(" ").length<3){
-        msg.innerHTML="الاسم يجب أن يكون ثلاثي"
-        return
-    }
+    if(name.split(" ").length<3){ msg.innerHTML="الاسم يجب أن يكون ثلاثي"; return }
+    if(!name||!title||!subject){ msg.innerHTML="املأ جميع الحقول"; return }
 
-    if(!name||!title||!subject){
-        msg.innerHTML="املأ جميع الحقول"
-        return
-    }
-
-    // التحقق من الاسم أو العنوان المكرر
+    // التحقق من التكرار
     const {data:check} = await supabase
         .from("student_reports")
         .select("*")
         .or(`name.eq.${name},title.eq.${title}`)
 
-    if(check && check.length>0){
-        msg.innerHTML="الاسم أو العنوان مستخدم مسبقاً"
-        return
-    }
+    if(check && check.length>0){ msg.innerHTML="الاسم أو العنوان مستخدم مسبقاً"; return }
 
-    // حفظ البيانات، التاريخ يتم إضافته تلقائياً في Supabase (timestamp)
+    // حفظ البيانات مع timestamp تلقائي
     const {error} = await supabase
         .from("student_reports")
         .insert([{name,title,subject}])
 
-    if(error){
-        msg.innerHTML="فشل الحفظ"
-        console.log(error)
-        return
-    }
+    if(error){ msg.innerHTML="فشل الحفظ"; console.log(error); return }
 
     msg.innerHTML="تم حفظ البيانات بنجاح"
 }
 
 // تغيير العنوان
 async function changeTitle(){
-    const name=document.getElementById("studentName").value.trim()
+    const name = document.getElementById("studentName").value.trim()
     if(!name){ alert("ادخل اسمك"); return }
-
-    const newTitle=prompt("ادخل العنوان الجديد")
+    const newTitle = prompt("ادخل العنوان الجديد")
     if(!newTitle) return
 
     const {error} = await supabase
@@ -160,9 +144,9 @@ async function changeTitle(){
     document.getElementById("msg").innerHTML="تم تغيير العنوان"
 }
 
-// عرض معلوماتي
+// عرض معلومات الطالب
 async function showMyInfo(){
-    const name=document.getElementById("studentName").value.trim()
+    const name = document.getElementById("studentName").value.trim()
     if(!name){ alert("ادخل اسمك"); return }
 
     const {data,error} = await supabase
@@ -181,27 +165,27 @@ async function showMyInfo(){
     )
 }
 
-// عرض كل العناوين
+// عرض كل الطلاب
 async function showAll(){
     const {data,error} = await supabase
         .from("student_reports")
         .select("*")
         .order("id",{ascending:true})
 
-    const container=document.getElementById("allTitles")
+    const container = document.getElementById("allTitles")
     if(error){ container.innerHTML="فشل تحميل البيانات"; return }
 
-    let html="<h3>جميع العناوين</h3><ul>"
+    let html = "<h3>جميع العناوين</h3><ul>"
     data.forEach(d=>{
         html+=`<li>${d.id} - ${d.name} | ${d.title} | ${d.subject} | ${d.date}</li>`
     })
     html+="</ul>"
-    container.innerHTML=html
+    container.innerHTML = html
 }
 
-// حذف بيانات المستخدم
+// حذف بيانات الطالب
 async function deleteMyData(){
-    const name=document.getElementById("studentName").value.trim()
+    const name = document.getElementById("studentName").value.trim()
     if(!name){ alert("ادخل اسمك"); return }
 
     const {error} = await supabase
@@ -214,7 +198,7 @@ async function deleteMyData(){
     document.getElementById("msg").innerHTML="تم حذف بياناتك"
 }
 
-// ربط الوظائف بالـ window
+// ربط الوظائف
 window.saveData=saveData
 window.changeTitle=changeTitle
 window.showMyInfo=showMyInfo
