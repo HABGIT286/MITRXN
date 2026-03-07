@@ -74,6 +74,21 @@ button{
     max-height:350px;
     overflow-y:auto;
     font-family:'WriteFont',sans-serif;
+    transition: all 0.4s ease;
+}
+
+#infoBox.warning{
+    border:2px solid red;
+    background: rgba(255,200,200,0.8);
+    animation: shake 0.4s;
+}
+
+@keyframes shake{
+    0% {transform: translateX(0px);}
+    25% {transform: translateX(-5px);}
+    50% {transform: translateX(5px);}
+    75% {transform: translateX(-5px);}
+    100% {transform: translateX(0px);}
 }
 
 #allTitles ul{list-style:none;padding:0;margin:0;}
@@ -89,7 +104,7 @@ button{
     color:#555;
     font-size:12px;
     flex-shrink:0;
-    direction:ltr; /* اجعل الوقت من اليسار لليمين */
+    direction:ltr;
 }
 
 #allTitles li span.info{
@@ -132,7 +147,6 @@ const SUPABASE_URL = "https://mcwemgjmqwbgxoyiwant.supabase.co"
 const SUPABASE_KEY = "sb_publishable_qmIUC4Rkb-VGOek8qkVqFg_Sn4x3WjI"
 const supabase = createClient(SUPABASE_URL, SUPABASE_KEY)
 
-// دالة لتنسيق التاريخ hh:mm:ss(yyyy-m-d) من عمود date
 function formatDate(ts){
     if(!ts) return ""
     const d = new Date(ts)
@@ -142,40 +156,42 @@ function formatDate(ts){
     return `${h}:${m}:${s}(${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()})`
 }
 
-// حفظ البيانات مع timestamp حقيقي
 async function saveData(){
     const name = document.getElementById("studentName").value.trim()
     const title = document.getElementById("reportTitle").value.trim()
     const subject = document.getElementById("subjectName").value.trim()
     const msg = document.getElementById("msg")
     const infoBox = document.getElementById("infoBox")
+    infoBox.classList.remove("warning")
 
-    if(name.split(" ").length<3){ msg.innerHTML="الاسم يجب أن يكون ثلاثي"; return }
-    if(!name||!title||!subject){ msg.innerHTML="املأ جميع الحقول"; return }
+    if(name.split(" ").length<3){ showWarning("الاسم يجب أن يكون ثلاثي"); return }
+    if(!name||!title||!subject){ showWarning("املأ جميع الحقول"); return }
 
     const {data:check} = await supabase
         .from("student_reports")
         .select("*")
         .or(`name.eq.${name},title.eq.${title}`)
 
-    if(check && check.length>0){ msg.innerHTML="الاسم أو العنوان مستخدم مسبقاً"; return }
+    if(check && check.length>0){ showWarning("الاسم أو العنوان مستخدم مسبقاً"); return }
 
     const now = new Date().toISOString()
     const {error} = await supabase
         .from("student_reports")
         .insert([{name,title,subject,date:now}])
 
-    if(error){ msg.innerHTML="فشل الحفظ"; console.log(error); return }
+    if(error){ showWarning("فشل الحفظ"); console.log(error); return }
+
+    // حفظ محلي
+    localStorage.setItem("studentName", name)
 
     msg.innerHTML="تم حفظ البيانات بنجاح"
     infoBox.innerHTML = ""
     await showAll()
 }
 
-// تغيير العنوان وتحديث التاريخ تلقائي
 async function changeTitle(){
     const name = document.getElementById("studentName").value.trim()
-    if(!name){ alert("ادخل اسمك"); return }
+    if(!name){ showWarning("ادخل اسمك"); return }
     const newTitle = prompt("ادخل العنوان الجديد")
     if(!newTitle) return
 
@@ -185,17 +201,30 @@ async function changeTitle(){
         .update({title:newTitle,date:now})
         .eq("name",name)
 
-    if(error){ alert("فشل التحديث"); console.log(error); return }
+    if(error){ showWarning("فشل التحديث"); console.log(error); return }
 
     document.getElementById("msg").innerHTML="تم تغيير العنوان"
     await showAll()
 }
 
-// عرض معلومات الطالب
-async function showMyInfo(){
-    const name = document.getElementById("studentName").value.trim()
+function showWarning(text){
     const infoBox = document.getElementById("infoBox")
-    if(!name){ alert("ادخل اسمك"); return }
+    infoBox.classList.add("warning")
+    infoBox.innerHTML = text
+    setTimeout(()=>{ infoBox.classList.remove("warning") },2000)
+}
+
+async function showMyInfo(){
+    const infoBox = document.getElementById("infoBox")
+    infoBox.classList.remove("warning")
+
+    let name = document.getElementById("studentName").value.trim()
+    if(!name){
+        // جرب جلب الاسم من localStorage
+        name = localStorage.getItem("studentName")
+        if(!name){ showWarning("اضف بياناتك أولاً"); return }
+        document.getElementById("studentName").value = name
+    }
 
     const {data,error} = await supabase
         .from("student_reports")
@@ -203,7 +232,7 @@ async function showMyInfo(){
         .eq("name",name)
         .single()
 
-    if(error || !data){ alert("لا توجد بيانات"); return }
+    if(error || !data){ showWarning("لا توجد بيانات"); return }
 
     infoBox.innerHTML = `<h4>معلومات الطالب</h4>
         <p><strong>الاسم:</strong> ${data.name}</p>
@@ -212,7 +241,6 @@ async function showMyInfo(){
         <p><strong>التاريخ:</strong> ${formatDate(data.date)}</p>`
 }
 
-// عرض جميع الطلاب مع التاريخ من عمود date
 async function showAll(){
     const {data,error} = await supabase
         .from("student_reports")
@@ -222,7 +250,7 @@ async function showAll(){
     const container = document.getElementById("allTitles")
     if(error){ container.innerHTML="فشل تحميل البيانات"; return }
 
-    const currentName = document.getElementById("studentName").value.trim()
+    const currentName = localStorage.getItem("studentName") || ""
 
     let html = "<h3>جميع العناوين</h3><ul>"
     data.forEach((d,i)=>{
@@ -236,27 +264,30 @@ async function showAll(){
     container.innerHTML = html
 }
 
-// حذف بيانات الطالب فقط
 async function deleteMyData(){
-    const name = document.getElementById("studentName").value.trim()
-    const msg = document.getElementById("msg")
     const infoBox = document.getElementById("infoBox")
+    const msg = document.getElementById("msg")
+    infoBox.classList.remove("warning")
 
-    if(!name){ alert("ادخل اسمك"); return }
+    let name = document.getElementById("studentName").value.trim()
+    if(!name){
+        name = localStorage.getItem("studentName")
+        if(!name){ showWarning("اضف بياناتك أولاً"); return }
+    }
 
     const {error} = await supabase
         .from("student_reports")
         .delete()
         .eq("name",name)
 
-    if(error){ alert("فشل الحذف"); console.log(error); return }
+    if(error){ showWarning("فشل الحذف"); console.log(error); return }
 
+    localStorage.removeItem("studentName")
     msg.innerHTML="تم حذف بياناتك"
     infoBox.innerHTML = ""
     await showAll()
 }
 
-// ربط الوظائف
 window.saveData = saveData
 window.changeTitle = changeTitle
 window.showAll = showAll
