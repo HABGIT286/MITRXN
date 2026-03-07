@@ -7,13 +7,12 @@
 @font-face { font-family: 'TitelFont'; src: url('TITEL.ttf'); }
 @font-face { font-family: 'WriteFont'; src: url('WRITE.otf'); }
 
-/* الخلفية فيديو */
 body{
     margin:0;
     font-family:'WriteFont',sans-serif;
     overflow: hidden;
     position: relative;
-    background: #000; /* للعرض عند تحميل الفيديو */
+    background: #000;
 }
 
 #bgVideo{
@@ -28,7 +27,6 @@ body{
     object-fit: cover;
 }
 
-/* العنوان */
 .header{
     text-align:center;
     font-size:32px;
@@ -40,11 +38,10 @@ body{
     text-shadow: 2px 2px 8px rgba(0,0,0,0.7);
 }
 
-/* الحاوية */
 .container{
     width:650px;
     margin:80px auto;
-    background: rgba(255,255,255,0.8); /* شبه شفافة */
+    background: rgba(255,255,255,0.8);
     padding:30px;
     border-radius:15px;
     box-shadow: 0 8px 25px rgba(0,0,0,0.6);
@@ -52,7 +49,6 @@ body{
     backdrop-filter: blur(5px);
 }
 
-/* الحقول */
 input{
     width:100%;
     padding:12px;
@@ -64,7 +60,6 @@ input{
     box-shadow: inset 0 2px 5px rgba(0,0,0,0.2);
 }
 
-/* الأزرار ثلاثية الأبعاد وشفافة */
 button{
     width:100%;
     padding:14px;
@@ -97,7 +92,6 @@ button:active{
 .show{background: rgba(139,0,0,0.8);}
 .delete{background: rgba(170,0,0,0.8);}
 
-/* الرسائل والمعلومات */
 #msg{
     margin-top:10px;
     font-weight:bold;
@@ -148,7 +142,6 @@ button:active{
 </head>
 <body>
 
-<!-- فيديو الخلفية -->
 <video autoplay muted loop id="bgVideo">
     <source src="V.mp4" type="video/mp4">
     متصفحك لا يدعم عرض الفيديو.
@@ -174,7 +167,6 @@ button:active{
 
 <script type="module">
 import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
-
 const SUPABASE_URL = "https://mcwemgjmqwbgxoyiwant.supabase.co"
 const SUPABASE_KEY = "sb_publishable_qmIUC4Rkb-VGOek8qkVqFg_Sn4x3WjI"
 const supabase = createClient(SUPABASE_URL, SUPABASE_KEY)
@@ -188,7 +180,11 @@ function formatDate(ts){
     return `${h}:${m}:${s}(${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()})`
 }
 
-// حفظ البيانات مع رمز رقمي لأول مرة
+// توليد رمز تلقائي
+function generateCode(){
+    return Math.floor(1000 + Math.random()*9000).toString() // 4 أرقام
+}
+
 async function saveData(){
     const name = document.getElementById("studentName").value.trim()
     const title = document.getElementById("reportTitle").value.trim()
@@ -199,23 +195,18 @@ async function saveData(){
     if(name.split(" ").length<3){ msg.innerHTML="الاسم يجب أن يكون ثلاثي"; return }
     if(!name||!title||!subject){ msg.innerHTML="املأ جميع الحقول"; return }
 
-    // التحقق من الاسم أو العنوان مستخدم مسبقاً
     const {data:check} = await supabase.from("student_reports").select("*").or(`name.eq.${name},title.eq.${title}`)
     if(check && check.length>0){ msg.innerHTML="الاسم أو العنوان مستخدم مسبقاً"; return }
 
-    // أول مرة: ادخل رمز رقمي
+    // رمز الطالب
     let code = localStorage.getItem("studentCode")
     if(!code){
-        code = prompt("ادخل رمزك الرقمي (أرقام فقط)")
-        if(!code || isNaN(code)){ msg.innerHTML="الرمز غير صالح"; return }
-
-        // التحقق من عدم تكرار الرمز
-        const {data:codeCheck} = await supabase.from("student_reports").select("*").eq("code", code)
-        if(codeCheck && codeCheck.length>0){
-            msg.innerHTML="الرمز مستخدم مسبقاً، اختر رمز آخر"; 
-            return
+        let unique = false
+        while(!unique){
+            code = generateCode()
+            const {data:codeCheck} = await supabase.from("student_reports").select("*").eq("code", code)
+            if(!codeCheck || codeCheck.length===0) unique = true
         }
-
         localStorage.setItem("studentCode", code)
     }
 
@@ -224,32 +215,32 @@ async function saveData(){
     if(error){ msg.innerHTML="فشل الحفظ"; console.log(error); return }
 
     msg.innerHTML="تم حفظ البيانات بنجاح"
-    infoBox.innerHTML = ""
+    await showMyInfo()
     await showAll()
 }
 
-// تغيير العنوان
 async function changeTitle(){
     const name = document.getElementById("studentName").value.trim()
-    if(!name){ alert("ادخل اسمك"); return }
+    const msg = document.getElementById("msg")
+    if(!name){ msg.innerHTML="ادخل اسمك"; return }
     const newTitle = prompt("ادخل العنوان الجديد")
     if(!newTitle) return
     const now = new Date().toISOString()
-    const {error} = await supabase.from("student_reports").update({title:newTitle,date:now}).eq("name",name)
-    if(error){ alert("فشل التحديث"); console.log(error); return }
-    document.getElementById("msg").innerHTML="تم تغيير العنوان"
+    const code = localStorage.getItem("studentCode")
+    const {error} = await supabase.from("student_reports").update({title:newTitle,date:now}).eq("code", code)
+    if(error){ msg.innerHTML="فشل التحديث"; console.log(error); return }
+    msg.innerHTML="تم تغيير العنوان"
+    await showMyInfo()
     await showAll()
 }
 
-// عرض معلومات الطالب حسب الرمز المخزن
 async function showMyInfo(){
-    const infoBox = document.getElementById("infoBox")
     const code = localStorage.getItem("studentCode")
-    if(!code){ alert("لم يتم إدخال رمزك بعد"); return }
-
+    const infoBox = document.getElementById("infoBox")
+    const msg = document.getElementById("msg")
+    if(!code){ msg.innerHTML="لم يتم إدخال بياناتك بعد"; return }
     const {data,error} = await supabase.from("student_reports").select("*").eq("code", code).single()
-    if(error || !data){ alert("لا توجد بيانات لهذا الرمز"); return }
-
+    if(error || !data){ msg.innerHTML="لا توجد بيانات"; return }
     infoBox.innerHTML = `<h4>معلومات الطالب</h4>
         <p><strong>الاسم:</strong> ${data.name}</p>
         <p><strong>العنوان:</strong> ${data.title}</p>
@@ -257,12 +248,11 @@ async function showMyInfo(){
         <p><strong>التاريخ:</strong> ${formatDate(data.date)}</p>`
 }
 
-// عرض جميع الطلاب
 async function showAll(){
     const {data,error} = await supabase.from("student_reports").select("*").order("id",{ascending:true})
     const container = document.getElementById("allTitles")
-    if(error){ container.innerHTML="فشل تحميل البيانات"; return }
     const code = localStorage.getItem("studentCode")
+    if(error){ container.innerHTML="فشل تحميل البيانات"; return }
     let html = "<h3>جميع العناوين</h3><ul>"
     data.forEach((d,i)=>{
         const highlight = d.code===code ? "highlight" : ""
@@ -275,21 +265,19 @@ async function showAll(){
     container.innerHTML = html
 }
 
-// حذف بيانات الطالب حسب الرمز المخزن
 async function deleteMyData(){
+    const code = localStorage.getItem("studentCode")
     const msg = document.getElementById("msg")
     const infoBox = document.getElementById("infoBox")
-    const code = localStorage.getItem("studentCode")
-    if(!code){ alert("لم يتم إدخال رمزك بعد"); return }
+    if(!code){ msg.innerHTML="لم يتم إدخال بياناتك بعد"; return }
     const {error} = await supabase.from("student_reports").delete().eq("code",code)
-    if(error){ alert("فشل الحذف"); console.log(error); return }
+    if(error){ msg.innerHTML="فشل الحذف"; console.log(error); return }
     msg.innerHTML="تم حذف بياناتك"
     infoBox.innerHTML = ""
     localStorage.removeItem("studentCode")
     await showAll()
 }
 
-// ربط الوظائف
 window.saveData = saveData
 window.changeTitle = changeTitle
 window.showAll = showAll
