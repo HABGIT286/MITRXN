@@ -3,55 +3,56 @@
 <head>
 <meta charset="UTF-8">
 <title>عناوين تقارير الطلبة</title>
+
 <style>
+
 @font-face { font-family: 'TitelFont'; src: url('TITEL.ttf'); }
 @font-face { font-family: 'WriteFont'; src: url('WRITE.otf'); }
 
 body{
-    margin:0;
-    font-family:'WriteFont',sans-serif;
-    background: url('H.jpg') no-repeat center center fixed;
-    background-size: cover;
+margin:0;
+font-family:'WriteFont',sans-serif;
+background: url('H.jpg') no-repeat center center fixed;
+background-size: cover;
 }
 
 .header{
-    text-align:center;
-    font-size:32px;
-    font-weight:bold;
-    padding:20px;
-    background:rgba(30,58,95,0.9);
-    color:white;
-    font-family:'TitelFont',sans-serif;
+text-align:center;
+font-size:32px;
+font-weight:bold;
+padding:20px;
+background:rgba(30,58,95,0.9);
+color:white;
+font-family:'TitelFont',sans-serif;
 }
 
 .container{
-    width:650px;
-    margin:80px auto;
-    background:rgba(255,255,255,0.95);
-    padding:30px;
-    border-radius:10px;
-    box-shadow:0 0 15px rgba(0,0,0,0.3);
-    font-family:'WriteFont',sans-serif;
+width:650px;
+margin:80px auto;
+background:rgba(255,255,255,0.95);
+padding:30px;
+border-radius:10px;
+box-shadow:0 0 15px rgba(0,0,0,0.3);
 }
 
 input{
-    width:100%;
-    padding:12px;
-    margin-bottom:15px;
-    border-radius:6px;
-    border:1px solid #ccc;
-    font-family:'WriteFont',sans-serif;
+width:100%;
+padding:12px;
+margin-bottom:15px;
+border-radius:6px;
+border:1px solid #ccc;
+font-family:'WriteFont',sans-serif;
 }
 
 button{
-    width:100%;
-    padding:12px;
-    margin-bottom:10px;
-    border:none;
-    border-radius:6px;
-    cursor:pointer;
-    font-size:15px;
-    font-family:'WriteFont',sans-serif;
+width:100%;
+padding:12px;
+margin-bottom:10px;
+border:none;
+border-radius:6px;
+cursor:pointer;
+font-size:15px;
+font-family:'WriteFont',sans-serif;
 }
 
 .save{background:#1e3a5f;color:white;}
@@ -61,55 +62,57 @@ button{
 .delete{background:#aa0000;color:white;}
 
 #msg{
-    margin-top:10px;
-    font-weight:bold;
-    text-align:center;
+margin-top:10px;
+font-weight:bold;
+text-align:center;
 }
 
-#infoBox, #allTitles{
-    margin-top:20px;
-    padding:15px;
-    background:rgba(240,240,240,0.95);
-    border-radius:8px;
-    max-height:350px;
-    overflow-y:auto;
-    font-family:'WriteFont',sans-serif;
+#infoBox,#allTitles{
+margin-top:20px;
+padding:15px;
+background:rgba(240,240,240,0.95);
+border-radius:8px;
+max-height:350px;
+overflow-y:auto;
 }
 
 #allTitles ul{list-style:none;padding:0;margin:0;}
+
 #allTitles li{
-    padding:8px 10px;
-    border-bottom:1px solid #ccc;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
+padding:8px 10px;
+border-bottom:1px solid #ccc;
+display:flex;
+justify-content:space-between;
+align-items:center;
 }
 
 #allTitles li span.time{
-    color:#555;
-    font-size:12px;
-    flex-shrink:0;
-    direction:ltr; /* اجعل الوقت من اليسار لليمين */
+color:#555;
+font-size:12px;
+direction:ltr;
 }
 
 #allTitles li span.info{
-    margin-right:10px;
-    flex-grow:1;
+margin-right:10px;
+flex-grow:1;
 }
 
 .highlight{
-    background: rgba(255,255,0,0.3);
-    border-left:4px solid #ff0;
-    padding-left:4px;
-    border-radius:3px;
+background:rgba(255,255,0,0.3);
+border-left:4px solid #ff0;
+padding-left:4px;
+border-radius:3px;
 }
+
 </style>
 </head>
+
 <body>
 
 <div class="header">عناوين تقارير الطلبة</div>
 
 <div class="container">
+
 <input id="studentName" placeholder="اسم الطالب الثلاثي">
 <input id="reportTitle" placeholder="عنوان التقرير">
 <input id="subjectName" placeholder="المادة الدراسية">
@@ -123,150 +126,191 @@ button{
 <div id="msg"></div>
 <div id="infoBox"></div>
 <div id="allTitles"></div>
+
 </div>
 
 <script type="module">
+
 import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
 
 const SUPABASE_URL = "https://mcwemgjmqwbgxoyiwant.supabase.co"
 const SUPABASE_KEY = "sb_publishable_qmIUC4Rkb-VGOek8qkVqFg_Sn4x3WjI"
+
 const supabase = createClient(SUPABASE_URL, SUPABASE_KEY)
 
-// دالة لتنسيق التاريخ hh:mm:ss(yyyy-m-d) من عمود date
 function formatDate(ts){
-    if(!ts) return ""
-    const d = new Date(ts)
-    const h = String(d.getHours()).padStart(2,'0')
-    const m = String(d.getMinutes()).padStart(2,'0')
-    const s = String(d.getSeconds()).padStart(2,'0')
-    return `${h}:${m}:${s}(${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()})`
+if(!ts) return ""
+const d=new Date(ts)
+
+const h=String(d.getHours()).padStart(2,'0')
+const m=String(d.getMinutes()).padStart(2,'0')
+const s=String(d.getSeconds()).padStart(2,'0')
+
+return `${h}:${m}:${s}(${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()})`
 }
 
-// حفظ البيانات مع timestamp حقيقي
 async function saveData(){
-    const name = document.getElementById("studentName").value.trim()
-    const title = document.getElementById("reportTitle").value.trim()
-    const subject = document.getElementById("subjectName").value.trim()
-    const msg = document.getElementById("msg")
-    const infoBox = document.getElementById("infoBox")
 
-    if(name.split(" ").length<3){ msg.innerHTML="الاسم يجب أن يكون ثلاثي"; return }
-    if(!name||!title||!subject){ msg.innerHTML="املأ جميع الحقول"; return }
+const name=document.getElementById("studentName").value.trim()
+const title=document.getElementById("reportTitle").value.trim()
+const subject=document.getElementById("subjectName").value.trim()
+const msg=document.getElementById("msg")
 
-    const {data:check} = await supabase
-        .from("student_reports")
-        .select("*")
-        .or(`name.eq.${name},title.eq.${title}`)
-
-    if(check && check.length>0){ msg.innerHTML="الاسم أو العنوان مستخدم مسبقاً"; return }
-
-    const now = new Date().toISOString()
-    const {error} = await supabase
-        .from("student_reports")
-        .insert([{name,title,subject,date:now}])
-
-    if(error){ msg.innerHTML="فشل الحفظ"; console.log(error); return }
-
-    msg.innerHTML="تم حفظ البيانات بنجاح"
-    infoBox.innerHTML = ""
-    await showAll()
+if(name.split(" ").length<3){
+msg.innerHTML="الاسم يجب أن يكون ثلاثي"
+return
 }
 
-// تغيير العنوان وتحديث التاريخ تلقائي
+if(!name||!title||!subject){
+msg.innerHTML="املأ جميع الحقول"
+return
+}
+
+const {data:check}=await supabase
+.from("student_reports")
+.select("*")
+.or(`name.eq.${name},title.eq.${title}`)
+
+if(check && check.length>0){
+msg.innerHTML="الاسم أو العنوان مستخدم مسبقاً"
+return
+}
+
+const now=new Date().toISOString()
+
+const {error}=await supabase
+.from("student_reports")
+.insert([{name,title,subject,date:now}])
+
+if(error){
+msg.innerHTML="فشل الحفظ"
+return
+}
+
+msg.innerHTML="تم حفظ البيانات بنجاح"
+
+}
+
 async function changeTitle(){
-    const name = document.getElementById("studentName").value.trim()
-    if(!name){ alert("ادخل اسمك"); return }
-    const newTitle = prompt("ادخل العنوان الجديد")
-    if(!newTitle) return
 
-    const now = new Date().toISOString()
-    const {error} = await supabase
-        .from("student_reports")
-        .update({title:newTitle,date:now})
-        .eq("name",name)
+const name=document.getElementById("studentName").value.trim()
 
-    if(error){ alert("فشل التحديث"); console.log(error); return }
-
-    document.getElementById("msg").innerHTML="تم تغيير العنوان"
-    await showAll()
+if(!name){
+alert("ادخل اسمك")
+return
 }
 
-// عرض معلومات الطالب
+const newTitle=prompt("ادخل العنوان الجديد")
+
+if(!newTitle) return
+
+const now=new Date().toISOString()
+
+await supabase
+.from("student_reports")
+.update({title:newTitle,date:now})
+.eq("name",name)
+
+document.getElementById("msg").innerHTML="تم تغيير العنوان"
+
+}
+
 async function showMyInfo(){
-    const name = document.getElementById("studentName").value.trim()
-    const infoBox = document.getElementById("infoBox")
-    if(!name){ alert("ادخل اسمك"); return }
 
-    const {data,error} = await supabase
-        .from("student_reports")
-        .select("*")
-        .eq("name",name)
-        .single()
+const name=document.getElementById("studentName").value.trim()
 
-    if(error || !data){ alert("لا توجد بيانات"); return }
-
-    infoBox.innerHTML = `<h4>معلومات الطالب</h4>
-        <p><strong>الاسم:</strong> ${data.name}</p>
-        <p><strong>العنوان:</strong> ${data.title}</p>
-        <p><strong>المادة:</strong> ${data.subject}</p>
-        <p><strong>التاريخ:</strong> ${formatDate(data.date)}</p>`
+if(!name){
+alert("ادخل اسمك")
+return
 }
 
-// عرض جميع الطلاب مع التاريخ من عمود date
+const {data,error}=await supabase
+.from("student_reports")
+.select("*")
+.eq("name",name)
+.single()
+
+if(error||!data){
+alert("لا توجد بيانات")
+return
+}
+
+document.getElementById("infoBox").innerHTML=
+`
+<h4>معلومات الطالب</h4>
+<p><strong>الاسم:</strong> ${data.name}</p>
+<p><strong>العنوان:</strong> ${data.title}</p>
+<p><strong>المادة:</strong> ${data.subject}</p>
+<p><strong>التاريخ:</strong> ${formatDate(data.date)}</p>
+`
+
+}
+
 async function showAll(){
-    const {data,error} = await supabase
-        .from("student_reports")
-        .select("*")
-        .order("id",{ascending:true})
 
-    const container = document.getElementById("allTitles")
-    if(error){ container.innerHTML="فشل تحميل البيانات"; return }
+const {data,error}=await supabase
+.from("student_reports")
+.select("*")
+.order("id",{ascending:true})
 
-    const currentName = document.getElementById("studentName").value.trim()
+const container=document.getElementById("allTitles")
 
-    let html = "<h3>جميع العناوين</h3><ul>"
-    data.forEach((d,i)=>{
-        const highlight = d.name===currentName ? "highlight" : ""
-        html+=`<li class="${highlight}">
-            <span class="time">${formatDate(d.date)}</span>
-            <span class="info">${i+1}. ${d.name} | ${d.title} | ${d.subject}</span>
-        </li>`
-    })
-    html+="</ul>"
-    container.innerHTML = html
+if(error){
+container.innerHTML="فشل تحميل البيانات"
+return
 }
 
-// حذف بيانات الطالب فقط
+const currentName=document.getElementById("studentName").value.trim()
+
+let html="<h3>جميع العناوين</h3><ul>"
+
+data.forEach((d,i)=>{
+
+const highlight=d.name===currentName?"highlight":""
+
+html+=`
+<li class="${highlight}">
+<span class="time">${formatDate(d.date)}</span>
+<span class="info">${i+1}. ${d.name} | ${d.title} | ${d.subject}</span>
+</li>
+`
+
+})
+
+html+="</ul>"
+
+container.innerHTML=html
+
+}
+
 async function deleteMyData(){
-    const name = document.getElementById("studentName").value.trim()
-    const msg = document.getElementById("msg")
-    const infoBox = document.getElementById("infoBox")
 
-    if(!name){ alert("ادخل اسمك"); return }
+const name=document.getElementById("studentName").value.trim()
 
-    const {error} = await supabase
-        .from("student_reports")
-        .delete()
-        .eq("name",name)
+if(!name){
+alert("ادخل اسمك")
+return
+}
 
-    if(error){ alert("فشل الحذف"); console.log(error); return }
+await supabase
+.from("student_reports")
+.delete()
+.eq("name",name)
 
-    msg.innerHTML="تم حذف بياناتك"
-    infoBox.innerHTML = ""
+document.getElementById("msg").innerHTML="تم حذف بياناتك"
+
+document.getElementById("infoBox").innerHTML=""
+document.getElementById("allTitles").innerHTML=""
 
 }
 
-// ربط الوظائف
-window.saveData = saveData
-window.changeTitle = changeTitle
-window.showAll = showAll
-window.showMyInfo = showMyInfo
-window.deleteMyData = deleteMyData
+window.saveData=saveData
+window.changeTitle=changeTitle
+window.showAll=showAll
+window.showMyInfo=showMyInfo
+window.deleteMyData=deleteMyData
 
-// عرض جميع البيانات تلقائي عند تحميل الصفحة
-showAll()
 </script>
 
 </body>
 </html>
-
