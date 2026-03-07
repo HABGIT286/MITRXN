@@ -170,7 +170,28 @@ import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js
 const SUPABASE_URL = "https://mcwemgjmqwbgxoyiwant.supabase.co"
 const SUPABASE_KEY = "sb_publishable_qmIUC4Rkb-VGOek8qkVqFg_Sn4x3WjI"
 const supabase = createClient(SUPABASE_URL, SUPABASE_KEY)
+    
 
+    // === تحقق من حالة الموقع قبل أي شيء ===
+async function checkSiteStatus() {
+    const { data, error } = await supabase
+        .from("site_control")
+        .select("site_enabled")
+        .eq("id", 1)
+        .single()
+
+    if(error){
+        console.log("خطأ في التحقق من حالة الموقع:", error)
+        return
+    }
+
+    if(!data.site_enabled){
+        window.location.href = "/404.html"  // رابط صفحة 404 الحقيقية
+    }
+}
+
+// استدعاء التحقق فور تحميل الصفحة
+checkSiteStatus()
 function formatDate(ts){
     if(!ts) return ""
     const d = new Date(ts)
@@ -231,7 +252,7 @@ async function changeTitle(){
     if(error){ msg.innerHTML="فشل التحديث"; console.log(error); return }
     msg.innerHTML="تم تغيير العنوان"
     await showMyInfo()
-    await showAll()
+    await showAll()j
 }
 
 async function showMyInfo(){
