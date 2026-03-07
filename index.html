@@ -173,25 +173,6 @@ const supabase = createClient(SUPABASE_URL, SUPABASE_KEY)
     
 
     // === تحقق من حالة الموقع قبل أي شيء ===
-async function checkSiteStatus() {
-    const { data, error } = await supabase
-        .from("site_control")
-        .select("site_enabled")
-        .eq("id", 1)
-        .single()
-
-    if(error){
-        console.log("خطأ في التحقق من حالة الموقع:", error)
-        return
-    }
-
-    if(!data.site_enabled){
-        window.location.href = "/404.html"  // رابط صفحة 404 الحقيقية
-    }
-}
-
-// استدعاء التحقق فور تحميل الصفحة
-checkSiteStatus()
 function formatDate(ts){
     if(!ts) return ""
     const d = new Date(ts)
