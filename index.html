@@ -2,241 +2,326 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<title>عناوين تقارير الطلبة</title>
-<style>
-@font-face { font-family: 'TitelFont'; src: url('TITEL.ttf'); }
-@font-face { font-family: 'WriteFont'; src: url('WRITE.otf'); }
 
-body {
-    margin:0;
-    font-family:'WriteFont',sans-serif;
-    background: url('H.jpg') no-repeat center center fixed;
-    background-size: cover;
+<title>عناوين تقارير الطلبة</title>
+
+<style>
+
+body{
+margin:0;
+font-family:Arial;
+background:#f2f2f2;
 }
 
 .header{
-    text-align:center;
-    font-size:32px;
-    font-weight:bold;
-    padding:20px;
-    background:rgba(30,58,95,0.9);
-    color:white;
-    font-family: 'TitelFont', sans-serif;
-}
-
-.top-right{
-    position:absolute;
-    top:20px;
-    left:20px;
-    font-size:14px;
-    font-family:'WriteFont',sans-serif;
-    color:white;
+text-align:center;
+font-size:30px;
+padding:20px;
+background:#1e3a5f;
+color:white;
 }
 
 .container{
-    width:500px;
-    margin:120px auto;
-    background:rgba(255,255,255,0.95);
-    padding:30px;
-    border-radius:15px;
-    box-shadow:0 10px 30px rgba(0,0,0,0.3);
-    font-family:'WriteFont',sans-serif;
-}
-
-.rank{
-    text-align:center;
-    margin-bottom:20px;
-    font-weight:bold;
-    font-family:'WriteFont',sans-serif;
+width:500px;
+margin:80px auto;
+background:white;
+padding:30px;
+border-radius:10px;
+box-shadow:0 0 15px rgba(0,0,0,0.2);
 }
 
 input{
-    width:100%;
-    padding:12px;
-    margin-bottom:15px;
-    border-radius:8px;
-    border:1px solid #ccc;
-    font-family:'WriteFont',sans-serif;
+width:100%;
+padding:12px;
+margin-bottom:15px;
+border-radius:6px;
+border:1px solid #ccc;
 }
 
 button{
-    width:100%;
-    padding:12px;
-    border:none;
-    border-radius:8px;
-    margin-bottom:10px;
-    cursor:pointer;
-    font-family:'WriteFont',sans-serif;
+width:100%;
+padding:12px;
+margin-bottom:10px;
+border:none;
+border-radius:6px;
+cursor:pointer;
+font-size:15px;
 }
 
-.save-btn{background:#1e3a5f;color:white;}
-.change-btn{background:#b38b00;color:white;}
-.info-btn{background:#006b38;color:white;}
-.show-btn{background:#8b0000;color:white;}
-.delete-btn{background:#aa0000;color:white;}
-#msg{margin-top:10px; text-align:center; font-weight:bold;}
-#allTitles{margin-top:15px;}
+.save{background:#1e3a5f;color:white;}
+.change{background:#b38b00;color:white;}
+.info{background:#006b38;color:white;}
+.show{background:#8b0000;color:white;}
+.delete{background:#aa0000;color:white;}
+
+#msg{
+margin-top:10px;
+font-weight:bold;
+text-align:center;
+}
+
+#allTitles{
+margin-top:20px;
+}
+
 </style>
 </head>
+
 <body>
 
 <div class="header">عناوين تقارير الطلبة</div>
 
-<div class="top-right">
-قسم إدارة الأعمال<br>
-طلبة المرحلة الثانية<br>
-الدراسة مسائي<br>
-قاعة (ب)
-</div>
-
 <div class="container">
 
-<div class="rank">رتبتك هنا</div>
-
-<input id="studentName" placeholder="اسم الطالب">
+<input id="studentName" placeholder="اسم الطالب الثلاثي">
 <input id="reportTitle" placeholder="عنوان التقرير">
 <input id="subjectName" placeholder="المادة الدراسية">
 
-<button class="save-btn" onclick="saveData()">حفظ</button>
-<button class="change-btn" onclick="changeTitle()">تغيير اسم العنوان</button>
-<button class="info-btn" onclick="showMyInfo()">معلوماتي</button>
-<button class="show-btn" onclick="showAll()">إظهار العناوين</button>
-<button class="delete-btn" onclick="deleteMyData()">حذف بياناتي</button>
+<button class="save" onclick="saveData()">حفظ</button>
+
+<button class="change" onclick="changeTitle()">تغيير عنوان التقرير</button>
+
+<button class="info" onclick="showMyInfo()">معلوماتي</button>
+
+<button class="show" onclick="showAll()">عناوين الطلبة</button>
+
+<button class="delete" onclick="deleteMyData()">حذف معلوماتي</button>
 
 <div id="msg"></div>
+
 <div id="allTitles"></div>
 
+</div>
+
 <script type="module">
-// Supabase client
+
 import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
 
-const SUPABASE_URL = 'https://mcwemgjmqwbgxoyiwant.supabase.co';
-const SUPABASE_KEY = 'sb_publishable_qmIUC4Rkb-VGOek8qkVqFg_Sn4x3WjI'; 
-const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+const SUPABASE_URL = "https://mcwemgjmqwbgxoyiwant.supabase.co"
 
-const EDGE_FUNCTION_URL = 'https://mcwemgjmqwbgxoyiwant.supabase.co/functions/v1/swift-api';
+const SUPABASE_KEY = "sb_publishable_qmIUC4Rkb-VGOek8qkVqFg_Sn4x3WjI"
 
-let changedTitles = [];
+const supabase = createClient(SUPABASE_URL, SUPABASE_KEY)
 
-// حفظ البيانات
 async function saveData(){
-    const name = document.getElementById("studentName").value.trim();
-    const title = document.getElementById("reportTitle").value.trim();
-    const subject = document.getElementById("subjectName").value.trim();
-    const msg = document.getElementById("msg");
 
-    // التحقق من الاسم الثلاثي
-    if(name.split(" ").length < 3){
-        msg.innerHTML = "<span style='color:red'>الاسم يجب أن يكون ثلاثياً على الأقل</span>";
-        return;
-    }
+const name=document.getElementById("studentName").value.trim()
+const title=document.getElementById("reportTitle").value.trim()
+const subject=document.getElementById("subjectName").value.trim()
 
-    if(!name || !title || !subject){
-        msg.innerHTML = "<span style='color:red'>املأ جميع الحقول</span>";
-        return;
-    }
+const msg=document.getElementById("msg")
 
-    // تحقق من عدم تكرار الاسم أو العنوان
-    const { data: existing } = await supabase
-        .from('student_reports')
-        .select('*')
-        .or(`name.eq.${name},title.eq.${title}`);
+if(name.split(" ").length<3){
 
-    if(existing.length > 0){
-        msg.innerHTML = "<span style='color:red'>اسم الطالب أو عنوان التقرير موجود مسبقاً</span>";
-        return;
-    }
+msg.innerHTML="الاسم يجب ان يكون ثلاثي"
 
-    const date = new Date().toLocaleString();
-    const dataObj = { name, title, subject, date, changedTitles };
+return
 
-    // حفظ في Supabase
-    const { error } = await supabase.from('student_reports').insert([dataObj]);
-    if(error){ msg.innerHTML = "<span style='color:red'>فشل الحفظ في قاعدة البيانات</span>"; console.log(error); return; }
-
-    // حفظ جلسة محلية
-    sessionStorage.setItem("student_" + name, JSON.stringify(dataObj));
-
-    // إرسال للبوت عبر Edge Function
-    try{
-        const resp = await fetch(EDGE_FUNCTION_URL, {
-            method:"POST",
-            headers:{"Content-Type":"application/json"},
-            body:JSON.stringify(dataObj)
-        });
-        const result = await resp.json();
-        if(result.ok){
-            msg.innerHTML = "<span style='color:green'>تم الحفظ وإرسال البيانات للبوت بنجاح</span>";
-        } else {
-            msg.innerHTML = "<span style='color:red'>تم الحفظ لكن فشل الإرسال للبوت</span>";
-        }
-    }catch(e){
-        msg.innerHTML = "<span style='color:red'>تم الحفظ لكن فشل الإرسال للبوت</span>";
-        console.log(e);
-    }
 }
 
-// تغيير العنوان
-function changeTitle(){
-    const newTitle = prompt("ادخل العنوان الجديد");
-    if(!newTitle) return;
+if(!name||!title||!subject){
 
-    for(let key in sessionStorage){
-        if(key.startsWith("student_")){
-            let s = JSON.parse(sessionStorage[key]);
-            if(s.title === newTitle){
-                alert("هذا العنوان مستخدم مسبقاً");
-                return;
-            }
-        }
-    }
+msg.innerHTML="املأ جميع الحقول"
 
-    changedTitles.push(newTitle);
-    document.getElementById("reportTitle").value = newTitle;
+return
+
 }
 
-// عرض معلومات المستخدم
-function showMyInfo(){
-    const name = document.getElementById("studentName").value.trim();
-    if(!name){ alert("ادخل اسمك أولاً"); return; }
+const {data:check}=await supabase
 
-    const dataStr = sessionStorage.getItem("student_" + name);
-    if(!dataStr){ alert("لم يتم حفظ بياناتك بعد"); return; }
+.from("student_reports")
 
-    const data = JSON.parse(dataStr);
-    alert(
-        `اسم الطالب: ${data.name}\nعنوان التقرير: ${data.title}\nالمادة: ${data.subject}\nالتاريخ: ${data.date}\nالعناوين التي غيرها: ${data.changedTitles.join(", ") || "لا يوجد"}`
-    );
+.select("*")
+
+.or(`name.eq.${name},title.eq.${title}`)
+
+if(check&&check.length>0){
+
+msg.innerHTML="الاسم او العنوان مستخدم مسبقاً"
+
+return
+
 }
 
-// عرض جميع العناوين
+const date=new Date().toLocaleString()
+
+const {error}=await supabase
+
+.from("student_reports")
+
+.insert([{name,title,subject,date}])
+
+if(error){
+
+msg.innerHTML="فشل الحفظ"
+
+console.log(error)
+
+return
+
+}
+
+msg.innerHTML="تم حفظ البيانات بنجاح"
+
+}
+
+async function changeTitle(){
+
+const name=document.getElementById("studentName").value.trim()
+
+if(!name){
+
+alert("ادخل اسمك")
+
+return
+
+}
+
+const newTitle=prompt("ادخل العنوان الجديد")
+
+if(!newTitle)return
+
+const {error}=await supabase
+
+.from("student_reports")
+
+.update({title:newTitle})
+
+.eq("name",name)
+
+if(error){
+
+alert("فشل التحديث")
+
+console.log(error)
+
+return
+
+}
+
+document.getElementById("msg").innerHTML="تم تغيير العنوان"
+
+}
+
+async function showMyInfo(){
+
+const name=document.getElementById("studentName").value.trim()
+
+if(!name){
+
+alert("ادخل اسمك")
+
+return
+
+}
+
+const {data,error}=await supabase
+
+.from("student_reports")
+
+.select("*")
+
+.eq("name",name)
+
+.single()
+
+if(error||!data){
+
+alert("لا توجد بيانات")
+
+return
+
+}
+
+alert(
+
+"اسم الطالب: "+data.name+"\n"+
+
+"العنوان: "+data.title+"\n"+
+
+"المادة: "+data.subject+"\n"+
+
+"التاريخ: "+data.date
+
+)
+
+}
+
 async function showAll(){
-    const { data, error } = await supabase.from('student_reports').select('*');
-    const container = document.getElementById("allTitles");
-    if(error){ container.innerHTML = "<span style='color:red'>فشل جلب البيانات</span>"; return; }
 
-    let html = "<h3>جميع التقارير:</h3><ul>";
-    data.forEach((d,i) => {
-        html += `<li>${i+1}. ${d.name} - ${d.title} - ${d.subject} - ${d.date}</li>`;
-    });
-    html += "</ul>";
-    container.innerHTML = html;
+const {data,error}=await supabase
+
+.from("student_reports")
+
+.select("*")
+
+.order("id",{ascending:true})
+
+const container=document.getElementById("allTitles")
+
+if(error){
+
+container.innerHTML="فشل تحميل البيانات"
+
+return
+
 }
 
-// حذف بيانات المستخدم
+let html="<h3>جميع العناوين</h3><ul>"
+
+data.forEach(d=>{
+
+html+=`<li>${d.id} - ${d.name} | ${d.title} | ${d.subject} | ${d.date}</li>`
+
+})
+
+html+="</ul>"
+
+container.innerHTML=html
+
+}
+
 async function deleteMyData(){
-    const name = document.getElementById("studentName").value.trim();
-    if(!name){ alert("ادخل اسمك أولاً"); return; }
 
-    const { error } = await supabase.from('student_reports').delete().eq('name', name);
-    if(error){ alert("فشل الحذف"); console.log(error); return; }
+const name=document.getElementById("studentName").value.trim()
 
-    sessionStorage.removeItem("student_" + name);
-    document.getElementById("msg").innerHTML = "<span style='color:green'>تم حذف بياناتك بنجاح</span>";
-    document.getElementById("allTitles").innerHTML = "";
+if(!name){
+
+alert("ادخل اسمك")
+
+return
+
 }
+
+const {error}=await supabase
+
+.from("student_reports")
+
+.delete()
+
+.eq("name",name)
+
+if(error){
+
+alert("فشل الحذف")
+
+console.log(error)
+
+return
+
+}
+
+document.getElementById("msg").innerHTML="تم حذف بياناتك"
+
+}
+
+window.saveData=saveData
+window.changeTitle=changeTitle
+window.showMyInfo=showMyInfo
+window.showAll=showAll
+window.deleteMyData=deleteMyData
+
 </script>
 
-<script type="module" src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm"></script>
 </body>
 </html>
