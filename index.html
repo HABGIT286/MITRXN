@@ -317,7 +317,7 @@ async function deleteMyData(){
         .eq("device_id",deviceId)
     if(error){ showWarning("فشل الحذف"); console.log(error); return }
     msg.innerHTML="تم حذف بياناتك"
-    await showAll()
+
 }
 
 window.saveData = saveData
