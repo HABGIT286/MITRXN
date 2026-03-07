@@ -170,9 +170,7 @@ import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js
 const SUPABASE_URL = "https://mcwemgjmqwbgxoyiwant.supabase.co"
 const SUPABASE_KEY = "sb_publishable_qmIUC4Rkb-VGOek8qkVqFg_Sn4x3WjI"
 const supabase = createClient(SUPABASE_URL, SUPABASE_KEY)
-    
 
-    // === تحقق من حالة الموقع قبل أي شيء ===
 function formatDate(ts){
     if(!ts) return ""
     const d = new Date(ts)
@@ -233,7 +231,7 @@ async function changeTitle(){
     if(error){ msg.innerHTML="فشل التحديث"; console.log(error); return }
     msg.innerHTML="تم تغيير العنوان"
     await showMyInfo()
-    await showAll()j
+    await showAll()
 }
 
 async function showMyInfo(){
@@ -289,3 +287,4 @@ window.deleteMyData = deleteMyData
 
 </body>
 </html>
+
