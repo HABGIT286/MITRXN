@@ -16,70 +16,102 @@ body{
 
 .header{
     text-align:center;
-    font-size:32px;
+    font-size:36px;
     font-weight:bold;
-    padding:20px;
-    background:rgba(30,58,95,0.9);
+    padding:25px;
+    background:linear-gradient(145deg,#1e3a5f,#4061a3);
     color:white;
     font-family:'TitelFont',sans-serif;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
 }
 
 .container{
-    width:650px;
-    margin:80px auto;
+    width:700px;
+    margin:60px auto;
     background:rgba(255,255,255,0.95);
     padding:30px;
-    border-radius:10px;
-    box-shadow:0 0 15px rgba(0,0,0,0.3);
+    border-radius:15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.4);
     font-family:'WriteFont',sans-serif;
+    transition: all 0.3s ease;
 }
 
 input{
     width:100%;
-    padding:12px;
+    padding:14px;
     margin-bottom:15px;
-    border-radius:6px;
-    border:1px solid #ccc;
+    border-radius:8px;
+    border:1px solid #aaa;
     font-family:'WriteFont',sans-serif;
+    font-size:16px;
+    transition: all 0.3s ease;
+}
+
+input:focus{
+    border-color:#1e3a5f;
+    box-shadow: 0 0 8px rgba(30,58,95,0.5);
+    outline:none;
 }
 
 button{
     width:100%;
-    padding:12px;
-    margin-bottom:10px;
+    padding:14px;
+    margin-bottom:12px;
     border:none;
-    border-radius:6px;
+    border-radius:10px;
     cursor:pointer;
-    font-size:15px;
+    font-size:16px;
     font-family:'WriteFont',sans-serif;
+    color:white;
+    background:#1e3a5f;
+    box-shadow: 0 5px 0 #133059;
+    transition: all 0.2s ease;
 }
 
-.save{background:#1e3a5f;color:white;}
-.change{background:#b38b00;color:white;}
-.info{background:#006b38;color:white;}
-.show{background:#8b0000;color:white;}
-.delete{background:#aa0000;color:white;}
+button:hover{
+    transform: translateY(-2px);
+    box-shadow: 0 8px 0 #133059;
+}
+
+button:active{
+    transform: translateY(2px);
+    box-shadow: 0 3px 0 #133059;
+}
+
+.save{background:#1e3a5f;box-shadow:0 5px 0 #133059;}
+.change{background:#b38b00;box-shadow:0 5px 0 #6e5700;}
+.info{background:#006b38;box-shadow:0 5px 0 #004720;}
+.show{background:#8b0000;box-shadow:0 5px 0 #4d0000;}
+.delete{background:#aa0000;box-shadow:0 5px 0 #660000;}
 
 #msg{
-    margin-top:10px;
+    margin-top:12px;
     font-weight:bold;
     text-align:center;
+    font-size:16px;
 }
 
 #infoBox, #allTitles{
     margin-top:20px;
     padding:15px;
     background:rgba(240,240,240,0.95);
-    border-radius:8px;
+    border-radius:10px;
     max-height:350px;
     overflow-y:auto;
     font-family:'WriteFont',sans-serif;
-    transition: all 0.4s ease;
+    transition: all 0.4s ease, box-shadow 0.3s ease;
+    opacity:0;
+}
+
+#infoBox.visible, #allTitles.visible{
+    opacity:1;
 }
 
 #infoBox.warning{
     border:2px solid red;
-    background: rgba(255,200,200,0.8);
+    background: rgba(255,200,200,0.85);
     animation: shake 0.4s;
 }
 
@@ -98,11 +130,17 @@ button{
     display:flex;
     justify-content:space-between;
     align-items:center;
+    transition: all 0.3s ease;
+}
+
+#allTitles li:hover{
+    transform: translateX(5px);
+    background: rgba(200,230,255,0.5);
 }
 
 #allTitles li span.time{
     color:#555;
-    font-size:12px;
+    font-size:13px;
     flex-shrink:0;
     direction:ltr;
 }
@@ -116,8 +154,9 @@ button{
     background: rgba(255,255,0,0.3);
     border-left:4px solid #ff0;
     padding-left:4px;
-    border-radius:3px;
+    border-radius:4px;
 }
+
 </style>
 </head>
 <body>
@@ -147,6 +186,15 @@ const SUPABASE_URL = "https://mcwemgjmqwbgxoyiwant.supabase.co"
 const SUPABASE_KEY = "sb_publishable_qmIUC4Rkb-VGOek8qkVqFg_Sn4x3WjI"
 const supabase = createClient(SUPABASE_URL, SUPABASE_KEY)
 
+function getDeviceId(){
+    let id = localStorage.getItem("deviceId")
+    if(!id){
+        id = crypto.randomUUID()
+        localStorage.setItem("deviceId", id)
+    }
+    return id
+}
+
 function formatDate(ts){
     if(!ts) return ""
     const d = new Date(ts)
@@ -154,6 +202,13 @@ function formatDate(ts){
     const m = String(d.getMinutes()).padStart(2,'0')
     const s = String(d.getSeconds()).padStart(2,'0')
     return `${h}:${m}:${s}(${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()})`
+}
+
+function showWarning(text){
+    const infoBox = document.getElementById("infoBox")
+    infoBox.classList.add("warning","visible")
+    infoBox.innerHTML = text
+    setTimeout(()=> infoBox.classList.remove("warning"),2000)
 }
 
 async function saveData(){
@@ -167,78 +222,67 @@ async function saveData(){
     if(name.split(" ").length<3){ showWarning("الاسم يجب أن يكون ثلاثي"); return }
     if(!name||!title||!subject){ showWarning("املأ جميع الحقول"); return }
 
-    const {data:check} = await supabase
+    const deviceId = getDeviceId()
+    const now = new Date().toISOString()
+
+    const {data:existing} = await supabase
         .from("student_reports")
         .select("*")
-        .or(`name.eq.${name},title.eq.${title}`)
+        .eq("device_id",deviceId)
 
-    if(check && check.length>0){ showWarning("الاسم أو العنوان مستخدم مسبقاً"); return }
-
-    const now = new Date().toISOString()
-    const {error} = await supabase
-        .from("student_reports")
-        .insert([{name,title,subject,date:now}])
-
-    if(error){ showWarning("فشل الحفظ"); console.log(error); return }
-
-    // حفظ محلي
-    localStorage.setItem("studentName", name)
-
-    msg.innerHTML="تم حفظ البيانات بنجاح"
-    infoBox.innerHTML = ""
+    if(existing && existing.length>0){
+        // تحديث
+        const {error} = await supabase
+            .from("student_reports")
+            .update({name,title,subject,date:now})
+            .eq("device_id",deviceId)
+        if(error){ showWarning("فشل التحديث"); console.log(error); return }
+        msg.innerHTML="تم تحديث بياناتك بنجاح"
+    } else {
+        const {error} = await supabase
+            .from("student_reports")
+            .insert([{name,title,subject,date:now,device_id:deviceId}])
+        if(error){ showWarning("فشل الحفظ"); console.log(error); return }
+        msg.innerHTML="تم حفظ البيانات بنجاح"
+    }
+    infoBox.classList.remove("visible")
     await showAll()
 }
 
 async function changeTitle(){
+    const infoBox = document.getElementById("infoBox")
+    infoBox.classList.remove("warning")
     const name = document.getElementById("studentName").value.trim()
     if(!name){ showWarning("ادخل اسمك"); return }
     const newTitle = prompt("ادخل العنوان الجديد")
     if(!newTitle) return
-
+    const deviceId = getDeviceId()
     const now = new Date().toISOString()
     const {error} = await supabase
         .from("student_reports")
         .update({title:newTitle,date:now})
-        .eq("name",name)
-
+        .eq("device_id",deviceId)
     if(error){ showWarning("فشل التحديث"); console.log(error); return }
-
     document.getElementById("msg").innerHTML="تم تغيير العنوان"
     await showAll()
 }
 
-function showWarning(text){
-    const infoBox = document.getElementById("infoBox")
-    infoBox.classList.add("warning")
-    infoBox.innerHTML = text
-    setTimeout(()=>{ infoBox.classList.remove("warning") },2000)
-}
-
 async function showMyInfo(){
     const infoBox = document.getElementById("infoBox")
-    infoBox.classList.remove("warning")
-
-    let name = document.getElementById("studentName").value.trim()
-    if(!name){
-        // جرب جلب الاسم من localStorage
-        name = localStorage.getItem("studentName")
-        if(!name){ showWarning("اضف بياناتك أولاً"); return }
-        document.getElementById("studentName").value = name
-    }
-
+    infoBox.classList.remove("warning","visible")
+    const deviceId = getDeviceId()
     const {data,error} = await supabase
         .from("student_reports")
         .select("*")
-        .eq("name",name)
+        .eq("device_id",deviceId)
         .single()
-
-    if(error || !data){ showWarning("لا توجد بيانات"); return }
-
+    if(error || !data){ showWarning("اضف بياناتك أولاً"); return }
     infoBox.innerHTML = `<h4>معلومات الطالب</h4>
         <p><strong>الاسم:</strong> ${data.name}</p>
         <p><strong>العنوان:</strong> ${data.title}</p>
         <p><strong>المادة:</strong> ${data.subject}</p>
         <p><strong>التاريخ:</strong> ${formatDate(data.date)}</p>`
+    infoBox.classList.add("visible")
 }
 
 async function showAll(){
@@ -246,15 +290,12 @@ async function showAll(){
         .from("student_reports")
         .select("*")
         .order("id",{ascending:true})
-
     const container = document.getElementById("allTitles")
     if(error){ container.innerHTML="فشل تحميل البيانات"; return }
-
-    const currentName = localStorage.getItem("studentName") || ""
-
+    const deviceId = getDeviceId()
     let html = "<h3>جميع العناوين</h3><ul>"
     data.forEach((d,i)=>{
-        const highlight = d.name===currentName ? "highlight" : ""
+        const highlight = d.device_id===deviceId ? "highlight" : ""
         html+=`<li class="${highlight}">
             <span class="time">${formatDate(d.date)}</span>
             <span class="info">${i+1}. ${d.name} | ${d.title} | ${d.subject}</span>
@@ -262,29 +303,20 @@ async function showAll(){
     })
     html+="</ul>"
     container.innerHTML = html
+    container.classList.add("visible")
 }
 
 async function deleteMyData(){
     const infoBox = document.getElementById("infoBox")
     const msg = document.getElementById("msg")
-    infoBox.classList.remove("warning")
-
-    let name = document.getElementById("studentName").value.trim()
-    if(!name){
-        name = localStorage.getItem("studentName")
-        if(!name){ showWarning("اضف بياناتك أولاً"); return }
-    }
-
+    infoBox.classList.remove("warning","visible")
+    const deviceId = getDeviceId()
     const {error} = await supabase
         .from("student_reports")
         .delete()
-        .eq("name",name)
-
+        .eq("device_id",deviceId)
     if(error){ showWarning("فشل الحذف"); console.log(error); return }
-
-    localStorage.removeItem("studentName")
     msg.innerHTML="تم حذف بياناتك"
-    infoBox.innerHTML = ""
     await showAll()
 }
 
@@ -293,9 +325,6 @@ window.changeTitle = changeTitle
 window.showAll = showAll
 window.showMyInfo = showMyInfo
 window.deleteMyData = deleteMyData
-
-// عرض جميع البيانات تلقائي عند تحميل الصفحة
-showAll()
 </script>
 
 </body>
