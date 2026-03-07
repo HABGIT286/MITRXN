@@ -188,24 +188,47 @@ function formatDate(ts){
     return `${h}:${m}:${s}(${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()})`
 }
 
+// حفظ البيانات مع رمز رقمي لأول مرة
 async function saveData(){
     const name = document.getElementById("studentName").value.trim()
     const title = document.getElementById("reportTitle").value.trim()
     const subject = document.getElementById("subjectName").value.trim()
     const msg = document.getElementById("msg")
     const infoBox = document.getElementById("infoBox")
+
     if(name.split(" ").length<3){ msg.innerHTML="الاسم يجب أن يكون ثلاثي"; return }
     if(!name||!title||!subject){ msg.innerHTML="املأ جميع الحقول"; return }
+
+    // التحقق من الاسم أو العنوان مستخدم مسبقاً
     const {data:check} = await supabase.from("student_reports").select("*").or(`name.eq.${name},title.eq.${title}`)
     if(check && check.length>0){ msg.innerHTML="الاسم أو العنوان مستخدم مسبقاً"; return }
+
+    // أول مرة: ادخل رمز رقمي
+    let code = localStorage.getItem("studentCode")
+    if(!code){
+        code = prompt("ادخل رمزك الرقمي (أرقام فقط)")
+        if(!code || isNaN(code)){ msg.innerHTML="الرمز غير صالح"; return }
+
+        // التحقق من عدم تكرار الرمز
+        const {data:codeCheck} = await supabase.from("student_reports").select("*").eq("code", code)
+        if(codeCheck && codeCheck.length>0){
+            msg.innerHTML="الرمز مستخدم مسبقاً، اختر رمز آخر"; 
+            return
+        }
+
+        localStorage.setItem("studentCode", code)
+    }
+
     const now = new Date().toISOString()
-    const {error} = await supabase.from("student_reports").insert([{name,title,subject,date:now}])
+    const {error} = await supabase.from("student_reports").insert([{name,title,subject,date:now, code}])
     if(error){ msg.innerHTML="فشل الحفظ"; console.log(error); return }
+
     msg.innerHTML="تم حفظ البيانات بنجاح"
     infoBox.innerHTML = ""
     await showAll()
 }
 
+// تغيير العنوان
 async function changeTitle(){
     const name = document.getElementById("studentName").value.trim()
     if(!name){ alert("ادخل اسمك"); return }
@@ -218,12 +241,15 @@ async function changeTitle(){
     await showAll()
 }
 
+// عرض معلومات الطالب حسب الرمز المخزن
 async function showMyInfo(){
-    const name = document.getElementById("studentName").value.trim()
     const infoBox = document.getElementById("infoBox")
-    if(!name){ alert("ادخل اسمك"); return }
-    const {data,error} = await supabase.from("student_reports").select("*").eq("name",name).single()
-    if(error || !data){ alert("لا توجد بيانات"); return }
+    const code = localStorage.getItem("studentCode")
+    if(!code){ alert("لم يتم إدخال رمزك بعد"); return }
+
+    const {data,error} = await supabase.from("student_reports").select("*").eq("code", code).single()
+    if(error || !data){ alert("لا توجد بيانات لهذا الرمز"); return }
+
     infoBox.innerHTML = `<h4>معلومات الطالب</h4>
         <p><strong>الاسم:</strong> ${data.name}</p>
         <p><strong>العنوان:</strong> ${data.title}</p>
@@ -231,14 +257,15 @@ async function showMyInfo(){
         <p><strong>التاريخ:</strong> ${formatDate(data.date)}</p>`
 }
 
+// عرض جميع الطلاب
 async function showAll(){
     const {data,error} = await supabase.from("student_reports").select("*").order("id",{ascending:true})
     const container = document.getElementById("allTitles")
     if(error){ container.innerHTML="فشل تحميل البيانات"; return }
-    const currentName = document.getElementById("studentName").value.trim()
+    const code = localStorage.getItem("studentCode")
     let html = "<h3>جميع العناوين</h3><ul>"
     data.forEach((d,i)=>{
-        const highlight = d.name===currentName ? "highlight" : ""
+        const highlight = d.code===code ? "highlight" : ""
         html+=`<li class="${highlight}">
             <span class="time">${formatDate(d.date)}</span>
             <span class="info">${i+1}. ${d.name} | ${d.title} | ${d.subject}</span>
@@ -248,18 +275,21 @@ async function showAll(){
     container.innerHTML = html
 }
 
+// حذف بيانات الطالب حسب الرمز المخزن
 async function deleteMyData(){
-    const name = document.getElementById("studentName").value.trim()
     const msg = document.getElementById("msg")
     const infoBox = document.getElementById("infoBox")
-    if(!name){ alert("ادخل اسمك"); return }
-    const {error} = await supabase.from("student_reports").delete().eq("name",name)
+    const code = localStorage.getItem("studentCode")
+    if(!code){ alert("لم يتم إدخال رمزك بعد"); return }
+    const {error} = await supabase.from("student_reports").delete().eq("code",code)
     if(error){ alert("فشل الحذف"); console.log(error); return }
     msg.innerHTML="تم حذف بياناتك"
     infoBox.innerHTML = ""
+    localStorage.removeItem("studentCode")
     await showAll()
 }
 
+// ربط الوظائف
 window.saveData = saveData
 window.changeTitle = changeTitle
 window.showAll = showAll
