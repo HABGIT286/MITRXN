@@ -2,141 +2,201 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<title>عناوين تقارير الطلبة</title>
+<title>عناوين تقارير الطلبة - VIP</title>
 <style>
 @font-face { font-family: 'TitelFont'; src: url('TITEL.ttf'); }
 @font-face { font-family: 'WriteFont'; src: url('WRITE.otf'); }
 
-body{
-    margin:0;
-    font-family:'WriteFont',sans-serif;
-    overflow: hidden;
-    position: relative;
+body {
+    margin: 0;
+    font-family: 'WriteFont', sans-serif;
+    overflow-x: hidden;
     background: #000;
+    position: relative;
 }
 
-#bgVideo{
+/* خلفية الفيديو */
+#bgVideo {
     position: fixed;
-    right: 0;
-    bottom: 0;
-    min-width: 100%;
-    min-height: 100%;
-    width: auto;
-    height: auto;
-    z-index: -1;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
     object-fit: cover;
+    z-index: -1;
+    filter: brightness(0.6) contrast(1.2);
+    transition: all 1s ease-in-out;
 }
 
-.header{
-    text-align:center;
-    font-size:32px;
-    font-weight:bold;
-    padding:20px;
-    background:rgba(30,58,95,0.8);
-    color:white;
-    font-family:'TitelFont',sans-serif;
-    text-shadow: 2px 2px 8px rgba(0,0,0,0.7);
+/* الهيدر */
+.header {
+    text-align: center;
+    font-size: 38px;
+    font-weight: bold;
+    padding: 25px 15px;
+    background: linear-gradient(135deg, rgba(0,0,50,0.8), rgba(30,58,95,0.85));
+    color: #fff;
+    font-family: 'TitelFont', sans-serif;
+    text-shadow: 2px 2px 12px rgba(0,0,0,0.9);
+    letter-spacing: 1px;
+    border-bottom: 3px solid gold;
 }
 
-.container{
-    width:650px;
-    margin:80px auto;
-    background: rgba(255,255,255,0.8);
-    padding:30px;
-    border-radius:15px;
-    box-shadow: 0 8px 25px rgba(0,0,0,0.6);
-    font-family:'WriteFont',sans-serif;
-    backdrop-filter: blur(5px);
+/* الحاوية الرئيسية */
+.container {
+    width: 700px;
+    max-width: 90%;
+    margin: 70px auto;
+    background: rgba(255,255,255,0.15);
+    padding: 35px;
+    border-radius: 25px;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.7);
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(255,255,255,0.2);
+    transition: all 0.5s ease;
 }
 
-input{
-    width:100%;
-    padding:12px;
-    margin-bottom:15px;
-    border-radius:6px;
-    border:1px solid rgba(0,0,0,0.3);
-    font-family:'WriteFont',sans-serif;
-    background: rgba(255,255,255,0.6);
-    box-shadow: inset 0 2px 5px rgba(0,0,0,0.2);
+/* الحقول */
+input {
+    width: 100%;
+    padding: 15px 20px;
+    margin-bottom: 18px;
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.4);
+    font-family: 'WriteFont', sans-serif;
+    background: rgba(255,255,255,0.25);
+    box-shadow: inset 0 4px 12px rgba(0,0,0,0.2);
+    color: #fff;
+    font-size: 16px;
+    transition: all 0.3s ease;
 }
 
-button{
-    width:100%;
-    padding:14px;
-    margin-bottom:12px;
-    border:none;
-    border-radius:10px;
-    cursor:pointer;
-    font-size:16px;
-    font-family:'WriteFont',sans-serif;
-    color:white;
-    background: rgba(30,58,95,0.7);
-    box-shadow: 0 6px 15px rgba(0,0,0,0.5);
-    transition: all 0.2s ease-in-out;
+input:focus {
+    outline: none;
+    border: 1px solid gold;
+    box-shadow: inset 0 4px 15px rgba(255,215,0,0.3);
+    background: rgba(255,255,255,0.35);
+}
+
+/* الأزرار */
+button {
+    width: 100%;
+    padding: 16px;
+    margin-bottom: 15px;
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+    font-size: 17px;
+    font-family: 'WriteFont', sans-serif;
+    font-weight: bold;
+    color: #fff;
+    text-transform: uppercase;
+    background: linear-gradient(135deg, #1e3a5f, #4169e1);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.7);
+    transition: all 0.3s ease-in-out;
     perspective: 1000px;
 }
 
-button:hover{
-    transform: translateY(-3px) scale(1.02);
-    box-shadow: 0 10px 20px rgba(0,0,0,0.6);
+button:hover {
+    transform: translateY(-4px) scale(1.05) rotateX(2deg);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.8), 0 0 15px rgba(255,215,0,0.4) inset;
+    background: linear-gradient(135deg, #4169e1, #1e3a5f);
 }
 
-button:active{
-    transform: translateY(1px) scale(0.98);
-    box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+button:active {
+    transform: translateY(1px) scale(0.97);
+    box-shadow: 0 6px 15px rgba(0,0,0,0.6);
 }
 
-.save{background: rgba(30,58,95,0.8);}
-.change{background: rgba(179,139,0,0.8);}
-.info{background: rgba(0,107,56,0.8);}
-.show{background: rgba(139,0,0,0.8);}
-.delete{background: rgba(170,0,0,0.8);}
+/* ألوان خاصة للأزرار */
+.save { background: linear-gradient(145deg, #1e3a5f, #2c5aa0); }
+.change { background: linear-gradient(145deg, #b38b00, #ffd700); color: #111; }
+.info { background: linear-gradient(145deg, #006b38, #00b070); }
+.show { background: linear-gradient(145deg, #8b0000, #ff0000); }
+.delete { background: linear-gradient(145deg, #aa0000, #ff4d4d); }
 
-#msg{
-    margin-top:10px;
-    font-weight:bold;
-    text-align:center;
-    color:#222;
-    text-shadow: 1px 1px 4px rgba(255,255,255,0.7);
+/* رسالة الحالة */
+#msg {
+    margin-top: 15px;
+    font-weight: bold;
+    text-align: center;
+    color: #ffd700;
+    font-size: 16px;
+    text-shadow: 1px 1px 6px rgba(0,0,0,0.7);
 }
 
-#infoBox, #allTitles{
-    margin-top:20px;
-    padding:15px;
-    background: rgba(240,240,240,0.7);
-    border-radius:10px;
-    max-height:350px;
-    overflow-y:auto;
-    font-family:'WriteFont',sans-serif;
-    backdrop-filter: blur(5px);
+/* صناديق المعلومات والقائمة */
+#infoBox, #allTitles {
+    margin-top: 25px;
+    padding: 20px;
+    background: rgba(0,0,0,0.45);
+    border-radius: 20px;
+    max-height: 380px;
+    overflow-y: auto;
+    font-family: 'WriteFont', sans-serif;
+    backdrop-filter: blur(15px);
+    color: #fff;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+    border: 1px solid rgba(255,255,255,0.2);
+    transition: all 0.5s ease;
 }
 
-#allTitles ul{list-style:none;padding:0;margin:0;}
-#allTitles li{
-    padding:8px 10px;
-    border-bottom:1px solid rgba(0,0,0,0.2);
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
+/* قائمة العناوين */
+#allTitles ul { list-style: none; padding: 0; margin: 0; }
+
+#allTitles li {
+    padding: 12px 15px;
+    border-bottom: 1px solid rgba(255,255,255,0.2);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.3s ease;
+    border-radius: 10px;
+    background: rgba(255,255,255,0.05);
 }
 
-#allTitles li span.time{
-    color:#555;
-    font-size:12px;
-    flex-shrink:0;
-    direction:ltr;
+#allTitles li:hover {
+    transform: scale(1.02);
+    background: rgba(255,255,255,0.15);
+    box-shadow: 0 4px 12px rgba(255,215,0,0.2);
 }
 
-#allTitles li span.info{
-    margin-right:10px;
-    flex-grow:1;
+#allTitles li span.time {
+    color: #ccc;
+    font-size: 13px;
+    flex-shrink: 0;
+    direction: ltr;
 }
 
-.highlight{
-    background: rgba(255,255,0,0.3);
-    border-left:4px solid #ff0;
-    padding-left:4px;
-    border-radius:3px;
+#allTitles li span.info {
+    margin-right: 10px;
+    flex-grow: 1;
+    color: #fff;
+}
+
+.highlight {
+    background: rgba(255,215,0,0.3);
+    border-left: 5px solid gold;
+    padding-left: 8px;
+    border-radius: 5px;
+    font-weight: bold;
+    color: #fff;
+    text-shadow: 1px 1px 4px rgba(0,0,0,0.8);
+}
+
+/* Scrollbar فخم */
+#infoBox::-webkit-scrollbar, #allTitles::-webkit-scrollbar {
+    width: 10px;
+}
+
+#infoBox::-webkit-scrollbar-track, #allTitles::-webkit-scrollbar-track {
+    background: rgba(255,255,255,0.05);
+    border-radius: 10px;
+}
+
+#infoBox::-webkit-scrollbar-thumb, #allTitles::-webkit-scrollbar-thumb {
+    background: gold;
+    border-radius: 10px;
+    box-shadow: 0 0 5px rgba(0,0,0,0.3);
 }
 </style>
 </head>
@@ -147,7 +207,7 @@ button:active{
     متصفحك لا يدعم عرض الفيديو.
 </video>
 
-<div class="header">عناوين تقارير الطلبة</div>
+<div class="header">عناوين تقارير الطلبة VIP</div>
 
 <div class="container">
 <input id="studentName" placeholder="اسمك الثنائي">
@@ -177,12 +237,11 @@ function formatDate(ts){
     const h = String(d.getHours()).padStart(2,'0')
     const m = String(d.getMinutes()).padStart(2,'0')
     const s = String(d.getSeconds()).padStart(2,'0')
-    return `${h}:${m}:${s}(${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()})`
+    return `${h}:${m}:${s} (${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()})`
 }
 
-// توليد رمز تلقائي
 function generateCode(){
-    return Math.floor(1000 + Math.random()*9000).toString() // 4 أرقام
+    return Math.floor(1000 + Math.random()*9000).toString()
 }
 
 async function saveData(){
@@ -190,18 +249,11 @@ async function saveData(){
     const title = document.getElementById("reportTitle").value.trim()
     const subject = document.getElementById("subjectName").value.trim()
     const msg = document.getElementById("msg")
-    const infoBox = document.getElementById("infoBox")
-
-    if(name.trim().split(/\s+/).length < 2){
-    msg.innerHTML = "الاسم يجب أن يكون ثنائي على الأقل";
-    return;
-    }
+    if(name.trim().split(/\s+/).length < 2){ msg.innerHTML = "الاسم يجب أن يكون ثنائي على الأقل"; return; }
     if(!name||!title||!subject){ msg.innerHTML="املأ جميع الحقول"; return }
-
     const {data:check} = await supabase.from("student_reports").select("*").or(`name.eq.${name},title.eq.${title}`)
     if(check && check.length>0){ msg.innerHTML="الاسم أو العنوان مستخدم مسبقاً"; return }
 
-    // رمز الطالب
     let code = localStorage.getItem("studentCode")
     if(!code){
         let unique = false
@@ -290,4 +342,3 @@ window.deleteMyData = deleteMyData
 
 </body>
 </html>
-
