@@ -2,217 +2,141 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<title>لوحة تقارير الطلبة VIP مطورة</title>
+<title>عناوين تقارير الطلبة</title>
 <style>
 @font-face { font-family: 'TitelFont'; src: url('TITEL.ttf'); }
 @font-face { font-family: 'WriteFont'; src: url('WRITE.otf'); }
 
-body {
-    margin: 0;
-    font-family: 'WriteFont', sans-serif;
-    background: #0a0025;
-    overflow-x: hidden;
+body{
+    margin:0;
+    font-family:'WriteFont',sans-serif;
+    overflow: hidden;
+    position: relative;
+    background: #000;
 }
 
-/* فيديو الخلفية الطبيعي */
-#bgVideo {
+#bgVideo{
     position: fixed;
-    top:0; left:0;
-    width:100%;
-    height:100%;
+    right: 0;
+    bottom: 0;
+    min-width: 100%;
+    min-height: 100%;
+    width: auto;
+    height: auto;
+    z-index: -1;
     object-fit: cover;
-    z-index:-2;
 }
 
-/* Overlay بسيط */
-#overlay {
-    position: fixed;
-    top:0; left:0;
-    width:100%; height:100%;
-    background: rgba(0,0,0,0.3);
-    z-index:-1;
+.header{
+    text-align:center;
+    font-size:32px;
+    font-weight:bold;
+    padding:20px;
+    background:rgba(30,58,95,0.8);
+    color:white;
+    font-family:'TitelFont',sans-serif;
+    text-shadow: 2px 2px 8px rgba(0,0,0,0.7);
 }
 
-/* Header */
-.header {
-    text-align: center;
-    font-size: 42px;
-    font-family: 'TitelFont', sans-serif;
-    font-weight: bold;
-    padding: 30px 15px;
-    background: linear-gradient(135deg, #4b0082, #800080);
-    color: gold;
-    text-shadow: 0 0 20px rgba(255,215,0,0.8);
-    border-bottom: 4px solid gold;
-    letter-spacing: 2px;
-    animation: headerGlow 2s infinite alternate;
+.container{
+    width:650px;
+    margin:80px auto;
+    background: rgba(255,255,255,0.8);
+    padding:30px;
+    border-radius:15px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.6);
+    font-family:'WriteFont',sans-serif;
+    backdrop-filter: blur(5px);
 }
 
-@keyframes headerGlow {
-    0% {text-shadow: 0 0 20px rgba(255,215,0,0.8);}
-    50% {text-shadow: 0 0 30px rgba(255,255,0,1);}
-    100% {text-shadow: 0 0 20px rgba(255,215,0,0.8);}
+input{
+    width:100%;
+    padding:12px;
+    margin-bottom:15px;
+    border-radius:6px;
+    border:1px solid rgba(0,0,0,0.3);
+    font-family:'WriteFont',sans-serif;
+    background: rgba(255,255,255,0.6);
+    box-shadow: inset 0 2px 5px rgba(0,0,0,0.2);
 }
 
-/* الحاوية الرئيسية */
-.container {
-    width: 750px;
-    max-width: 95%;
-    margin: 60px auto;
-    padding: 45px;
-    border-radius: 25px;
-    background: rgba(0,0,0,0.35);
-    box-shadow: 0 15px 40px rgba(255,215,0,0.25);
-    backdrop-filter: blur(10px);
-    border: 2px solid rgba(255,215,0,0.3);
-    transition: all 0.5s ease;
-    animation: fadeIn 1.5s ease forwards;
+button{
+    width:100%;
+    padding:14px;
+    margin-bottom:12px;
+    border:none;
+    border-radius:10px;
+    cursor:pointer;
+    font-size:16px;
+    font-family:'WriteFont',sans-serif;
+    color:white;
+    background: rgba(30,58,95,0.7);
+    box-shadow: 0 6px 15px rgba(0,0,0,0.5);
+    transition: all 0.2s ease-in-out;
+    perspective: 1000px;
 }
 
-@keyframes fadeIn {
-    0% {opacity:0; transform: translateY(-20px);}
-    100% {opacity:1; transform: translateY(0);}
+button:hover{
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.6);
 }
 
-/* الحقول */
-input {
-    width: 100%;
-    padding: 16px 20px;
-    margin-bottom: 20px;
-    border-radius: 15px;
-    border: 1px solid rgba(255,215,0,0.4);
-    background: rgba(0,0,0,0.25);
-    color: #fff;
-    font-size: 18px;
-    font-family: 'WriteFont', sans-serif;
-    box-shadow: inset 0 4px 15px rgba(255,215,0,0.1);
-    transition: all 0.3s ease;
+button:active{
+    transform: translateY(1px) scale(0.98);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.5);
 }
 
-input:focus {
-    outline: none;
-    border: 2px solid gold;
-    box-shadow: 0 0 20px gold inset;
-    background: rgba(0,0,0,0.35);
+.save{background: rgba(30,58,95,0.8);}
+.change{background: rgba(179,139,0,0.8);}
+.info{background: rgba(0,107,56,0.8);}
+.show{background: rgba(139,0,0,0.8);}
+.delete{background: rgba(170,0,0,0.8);}
+
+#msg{
+    margin-top:10px;
+    font-weight:bold;
+    text-align:center;
+    color:#222;
+    text-shadow: 1px 1px 4px rgba(255,255,255,0.7);
 }
 
-/* أزرار VIP */
-button {
-    width: 100%;
-    padding: 18px;
-    margin-bottom: 18px;
-    border: none;
-    border-radius: 25px;
-    cursor: pointer;
-    font-size: 18px;
-    font-weight: bold;
-    color: #fff;
-    text-transform: uppercase;
-    background: linear-gradient(145deg, #4b0082, #800080);
-    box-shadow: 0 10px 40px rgba(255,215,0,0.4);
-    transition: all 0.4s ease;
+#infoBox, #allTitles{
+    margin-top:20px;
+    padding:15px;
+    background: rgba(240,240,240,0.7);
+    border-radius:10px;
+    max-height:350px;
+    overflow-y:auto;
+    font-family:'WriteFont',sans-serif;
+    backdrop-filter: blur(5px);
 }
 
-button:hover {
-    transform: translateY(-5px) scale(1.07);
-    box-shadow: 0 15px 50px rgba(255,215,0,0.7), 0 0 20px rgba(255,255,0,0.3) inset;
-    background: linear-gradient(145deg, #800080, #4b0082);
+#allTitles ul{list-style:none;padding:0;margin:0;}
+#allTitles li{
+    padding:8px 10px;
+    border-bottom:1px solid rgba(0,0,0,0.2);
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
 }
 
-button:active {
-    transform: translateY(2px) scale(0.95);
-    box-shadow: 0 6px 25px rgba(255,215,0,0.5);
+#allTitles li span.time{
+    color:#555;
+    font-size:12px;
+    flex-shrink:0;
+    direction:ltr;
 }
 
-/* ألوان خاصة */
-.save { background: linear-gradient(145deg, #4b0082, #6a0dad); }
-.change { background: linear-gradient(145deg, #b38b00, #ffd700); color:#111;}
-.info { background: linear-gradient(145deg, #006b38, #00ff7f);}
-.show { background: linear-gradient(145deg, #8b0000, #ff0000);}
-.delete { background: linear-gradient(145deg, #aa0000, #ff4d4d);}
-
-/* رسائل الحالة */
-#msg {
-    margin-top: 20px;
-    text-align: center;
-    font-weight: bold;
-    font-size: 18px;
-    color: gold;
-    text-shadow: 1px 1px 12px rgba(0,0,0,0.7);
+#allTitles li span.info{
+    margin-right:10px;
+    flex-grow:1;
 }
 
-/* صناديق المعلومات والقوائم */
-#infoBox, #allTitles {
-    margin-top: 30px;
-    padding: 25px;
-    background: rgba(0,0,0,0.4);
-    border-radius: 25px;
-    max-height: 400px;
-    overflow-y: auto;
-    color: #fff;
-    font-family: 'WriteFont', sans-serif;
-    backdrop-filter: blur(8px);
-    box-shadow: 0 12px 40px rgba(255,215,0,0.25);
-    border: 1px solid rgba(255,215,0,0.3);
-}
-
-/* قوائم الطلبة */
-#allTitles ul { list-style: none; padding: 0; margin: 0; }
-
-#allTitles li {
-    padding: 14px 18px;
-    margin-bottom: 12px;
-    border-radius: 18px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background: rgba(255,255,255,0.05);
-    transition: all 0.3s ease;
-    box-shadow: 0 0 12px rgba(255,215,0,0.1);
-}
-
-#allTitles li:hover {
-    transform: scale(1.03);
-    background: rgba(255,215,0,0.1);
-    box-shadow: 0 0 25px gold;
-}
-
-#allTitles li span.time {
-    font-size: 13px;
-    flex-shrink: 0;
-    color: #ccc;
-    direction: ltr;
-}
-
-#allTitles li span.info {
-    margin-right: 10px;
-    flex-grow: 1;
-    color: #fff;
-}
-
-.highlight {
-    background: rgba(255,215,0,0.3);
-    border-left: 6px solid gold;
-    padding-left: 10px;
-    border-radius: 8px;
-    font-weight: bold;
-    text-shadow: 1px 1px 5px rgba(0,0,0,0.8);
-}
-
-/* Scrollbar VIP */
-#infoBox::-webkit-scrollbar, #allTitles::-webkit-scrollbar {
-    width: 12px;
-}
-
-#infoBox::-webkit-scrollbar-track, #allTitles::-webkit-scrollbar-track {
-    background: rgba(255,255,255,0.05);
-    border-radius: 12px;
-}
-
-#infoBox::-webkit-scrollbar-thumb, #allTitles::-webkit-scrollbar-thumb {
-    background: gold;
-    border-radius: 12px;
-    box-shadow: 0 0 6px rgba(0,0,0,0.3);
+.highlight{
+    background: rgba(255,255,0,0.3);
+    border-left:4px solid #ff0;
+    padding-left:4px;
+    border-radius:3px;
 }
 </style>
 </head>
@@ -222,9 +146,8 @@ button:active {
     <source src="V.mp4" type="video/mp4">
     متصفحك لا يدعم عرض الفيديو.
 </video>
-<div id="overlay"></div>
 
-<div class="header">لوحة تقارير الطلبة VIP</div>
+<div class="header">عناوين تقارير الطلبة</div>
 
 <div class="container">
 <input id="studentName" placeholder="اسمك الثنائي">
@@ -254,11 +177,12 @@ function formatDate(ts){
     const h = String(d.getHours()).padStart(2,'0')
     const m = String(d.getMinutes()).padStart(2,'0')
     const s = String(d.getSeconds()).padStart(2,'0')
-    return `${h}:${m}:${s} (${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()})`
+    return `${h}:${m}:${s}(${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()})`
 }
 
+// توليد رمز تلقائي
 function generateCode(){
-    return Math.floor(1000 + Math.random()*9000).toString()
+    return Math.floor(1000 + Math.random()*9000).toString() // 4 أرقام
 }
 
 async function saveData(){
@@ -266,11 +190,18 @@ async function saveData(){
     const title = document.getElementById("reportTitle").value.trim()
     const subject = document.getElementById("subjectName").value.trim()
     const msg = document.getElementById("msg")
-    if(name.trim().split(/\s+/).length < 2){ msg.innerHTML = "الاسم يجب أن يكون ثنائي على الأقل"; return; }
+    const infoBox = document.getElementById("infoBox")
+
+    if(name.trim().split(/\s+/).length < 2){
+    msg.innerHTML = "الاسم يجب أن يكون ثنائي على الأقل";
+    return;
+    }
     if(!name||!title||!subject){ msg.innerHTML="املأ جميع الحقول"; return }
+
     const {data:check} = await supabase.from("student_reports").select("*").or(`name.eq.${name},title.eq.${title}`)
     if(check && check.length>0){ msg.innerHTML="الاسم أو العنوان مستخدم مسبقاً"; return }
 
+    // رمز الطالب
     let code = localStorage.getItem("studentCode")
     if(!code){
         let unique = false
@@ -359,3 +290,5 @@ window.deleteMyData = deleteMyData
 
 </body>
 </html>
+
+
