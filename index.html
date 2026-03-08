@@ -150,7 +150,7 @@ button:active{
 <div class="header">عناوين تقارير الطلبة</div>
 
 <div class="container">
-<input id="studentName" placeholder="اسم الطالب الثلاثي">
+<input id="studentName" placeholder="اسمك الثنائي">
 <input id="reportTitle" placeholder="عنوان التقرير">
 <input id="subjectName" placeholder="المادة الدراسية">
 
@@ -192,7 +192,10 @@ async function saveData(){
     const msg = document.getElementById("msg")
     const infoBox = document.getElementById("infoBox")
 
-    if(name.split(" ").length<3){ msg.innerHTML="الاسم يجب أن يكون ثلاثي"; return }
+    if(name.trim().split(/\s+/).length < 2){
+    msg.innerHTML = "الاسم يجب أن يكون ثنائي على الأقل";
+    return;
+    }
     if(!name||!title||!subject){ msg.innerHTML="املأ جميع الحقول"; return }
 
     const {data:check} = await supabase.from("student_reports").select("*").or(`name.eq.${name},title.eq.${title}`)
