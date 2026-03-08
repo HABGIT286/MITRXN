@@ -2,7 +2,7 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<title>عناوين تقارير الطلبة - VIP</title>
+<title>لوحة تقارير الطلبة VIP</title>
 <style>
 @font-face { font-family: 'TitelFont'; src: url('TITEL.ttf'); }
 @font-face { font-family: 'WriteFont'; src: url('WRITE.otf'); }
@@ -10,160 +10,193 @@
 body {
     margin: 0;
     font-family: 'WriteFont', sans-serif;
+    background: #0a0025;
     overflow-x: hidden;
-    background: #000;
-    position: relative;
 }
 
-/* خلفية الفيديو */
+/* فيديو الخلفية البنفسجي */
 #bgVideo {
     position: fixed;
-    top: 0; left: 0;
-    width: 100%;
-    height: 100%;
+    top:0; left:0;
+    width:100%;
+    height:100%;
     object-fit: cover;
-    z-index: -1;
-    filter: brightness(0.6) contrast(1.2);
-    transition: all 1s ease-in-out;
+    z-index:-2;
+    filter: brightness(0.7) contrast(1.2) saturate(1.5);
 }
 
-/* الهيدر */
+/* Overlay متوهج */
+#overlay {
+    position: fixed;
+    top:0; left:0;
+    width:100%; height:100%;
+    background: linear-gradient(135deg, rgba(128,0,128,0.6), rgba(75,0,130,0.6));
+    z-index:-1;
+    backdrop-filter: blur(6px);
+    animation: overlayPulse 8s infinite alternate;
+}
+
+@keyframes overlayPulse {
+    0% {background: linear-gradient(135deg, rgba(128,0,128,0.6), rgba(75,0,130,0.6));}
+    50% {background: linear-gradient(135deg, rgba(148,0,211,0.7), rgba(138,43,226,0.7));}
+    100% {background: linear-gradient(135deg, rgba(128,0,128,0.6), rgba(75,0,130,0.6));}
+}
+
+/* هيدر فخم */
 .header {
     text-align: center;
-    font-size: 38px;
-    font-weight: bold;
-    padding: 25px 15px;
-    background: linear-gradient(135deg, rgba(0,0,50,0.8), rgba(30,58,95,0.85));
-    color: #fff;
+    font-size: 44px;
     font-family: 'TitelFont', sans-serif;
-    text-shadow: 2px 2px 12px rgba(0,0,0,0.9);
-    letter-spacing: 1px;
-    border-bottom: 3px solid gold;
+    font-weight: bold;
+    padding: 30px 15px;
+    background: linear-gradient(135deg, #4b0082, #800080);
+    color: gold;
+    text-shadow: 0 0 20px rgba(255,215,0,0.8);
+    border-bottom: 4px solid gold;
+    letter-spacing: 2px;
+    animation: headerGlow 2s infinite alternate;
+}
+
+@keyframes headerGlow {
+    0% {text-shadow: 0 0 20px rgba(255,215,0,0.8);}
+    50% {text-shadow: 0 0 30px rgba(255,255,0,1);}
+    100% {text-shadow: 0 0 20px rgba(255,215,0,0.8);}
 }
 
 /* الحاوية الرئيسية */
 .container {
-    width: 700px;
-    max-width: 90%;
-    margin: 70px auto;
-    background: rgba(255,255,255,0.15);
-    padding: 35px;
-    border-radius: 25px;
-    box-shadow: 0 15px 40px rgba(0,0,0,0.7);
-    backdrop-filter: blur(10px);
-    border: 2px solid rgba(255,255,255,0.2);
+    width: 750px;
+    max-width: 95%;
+    margin: 60px auto;
+    padding: 45px;
+    border-radius: 30px;
+    background: rgba(0,0,0,0.35);
+    box-shadow: 0 15px 50px rgba(255,215,0,0.3);
+    backdrop-filter: blur(15px);
+    border: 2px solid rgba(255,215,0,0.3);
     transition: all 0.5s ease;
+    animation: fadeIn 1.5s ease forwards;
+}
+
+@keyframes fadeIn {
+    0% {opacity:0; transform: translateY(-20px);}
+    100% {opacity:1; transform: translateY(0);}
 }
 
 /* الحقول */
 input {
     width: 100%;
-    padding: 15px 20px;
-    margin-bottom: 18px;
-    border-radius: 12px;
-    border: 1px solid rgba(255,255,255,0.4);
-    font-family: 'WriteFont', sans-serif;
-    background: rgba(255,255,255,0.25);
-    box-shadow: inset 0 4px 12px rgba(0,0,0,0.2);
+    padding: 18px 22px;
+    margin-bottom: 22px;
+    border-radius: 18px;
+    border: 1px solid rgba(255,215,0,0.4);
+    background: rgba(0,0,0,0.25);
     color: #fff;
-    font-size: 16px;
+    font-size: 18px;
+    font-family: 'WriteFont', sans-serif;
+    box-shadow: inset 0 5px 20px rgba(255,215,0,0.1);
     transition: all 0.3s ease;
 }
 
 input:focus {
     outline: none;
-    border: 1px solid gold;
-    box-shadow: inset 0 4px 15px rgba(255,215,0,0.3);
-    background: rgba(255,255,255,0.35);
+    border: 2px solid gold;
+    box-shadow: 0 0 25px gold inset;
+    background: rgba(0,0,0,0.35);
 }
 
-/* الأزرار */
+/* أزرار VIP */
 button {
     width: 100%;
-    padding: 16px;
-    margin-bottom: 15px;
+    padding: 20px;
+    margin-bottom: 18px;
     border: none;
-    border-radius: 15px;
+    border-radius: 25px;
     cursor: pointer;
-    font-size: 17px;
-    font-family: 'WriteFont', sans-serif;
+    font-size: 18px;
     font-weight: bold;
     color: #fff;
     text-transform: uppercase;
-    background: linear-gradient(135deg, #1e3a5f, #4169e1);
-    box-shadow: 0 8px 25px rgba(0,0,0,0.7);
-    transition: all 0.3s ease-in-out;
-    perspective: 1000px;
+    background: linear-gradient(145deg, #4b0082, #800080);
+    box-shadow: 0 10px 40px rgba(255,215,0,0.4);
+    transition: all 0.4s ease;
+    animation: btnFadeIn 1.2s ease forwards;
+}
+
+@keyframes btnFadeIn {
+    0% {opacity:0; transform: translateY(30px);}
+    100% {opacity:1; transform: translateY(0);}
 }
 
 button:hover {
-    transform: translateY(-4px) scale(1.05) rotateX(2deg);
-    box-shadow: 0 15px 35px rgba(0,0,0,0.8), 0 0 15px rgba(255,215,0,0.4) inset;
-    background: linear-gradient(135deg, #4169e1, #1e3a5f);
+    transform: translateY(-6px) scale(1.08);
+    box-shadow: 0 15px 50px rgba(255,215,0,0.7), 0 0 25px rgba(255,255,0,0.5) inset;
+    background: linear-gradient(145deg, #800080, #4b0082);
 }
 
 button:active {
-    transform: translateY(1px) scale(0.97);
-    box-shadow: 0 6px 15px rgba(0,0,0,0.6);
+    transform: translateY(2px) scale(0.95);
+    box-shadow: 0 6px 20px rgba(255,215,0,0.5);
 }
 
-/* ألوان خاصة للأزرار */
-.save { background: linear-gradient(145deg, #1e3a5f, #2c5aa0); }
-.change { background: linear-gradient(145deg, #b38b00, #ffd700); color: #111; }
-.info { background: linear-gradient(145deg, #006b38, #00b070); }
-.show { background: linear-gradient(145deg, #8b0000, #ff0000); }
-.delete { background: linear-gradient(145deg, #aa0000, #ff4d4d); }
+/* ألوان خاصة */
+.save { background: linear-gradient(145deg, #4b0082, #6a0dad); }
+.change { background: linear-gradient(145deg, #b38b00, #ffd700); color:#111;}
+.info { background: linear-gradient(145deg, #006b38, #00ff7f);}
+.show { background: linear-gradient(145deg, #8b0000, #ff0000);}
+.delete { background: linear-gradient(145deg, #aa0000, #ff4d4d);}
 
-/* رسالة الحالة */
+/* رسائل الحالة */
 #msg {
-    margin-top: 15px;
-    font-weight: bold;
+    margin-top: 20px;
     text-align: center;
-    color: #ffd700;
-    font-size: 16px;
-    text-shadow: 1px 1px 6px rgba(0,0,0,0.7);
+    font-weight: bold;
+    font-size: 18px;
+    color: gold;
+    text-shadow: 1px 1px 12px rgba(0,0,0,0.7);
 }
 
-/* صناديق المعلومات والقائمة */
+/* صناديق المعلومات والقوائم */
 #infoBox, #allTitles {
-    margin-top: 25px;
-    padding: 20px;
+    margin-top: 30px;
+    padding: 25px;
     background: rgba(0,0,0,0.45);
-    border-radius: 20px;
-    max-height: 380px;
+    border-radius: 25px;
+    max-height: 420px;
     overflow-y: auto;
-    font-family: 'WriteFont', sans-serif;
-    backdrop-filter: blur(15px);
     color: #fff;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.6);
-    border: 1px solid rgba(255,255,255,0.2);
-    transition: all 0.5s ease;
+    font-family: 'WriteFont', sans-serif;
+    backdrop-filter: blur(20px);
+    box-shadow: 0 15px 45px rgba(255,215,0,0.25);
+    border: 1px solid rgba(255,215,0,0.3);
+    animation: fadeIn 1.5s ease forwards;
 }
 
-/* قائمة العناوين */
+/* قوائم الطلبة */
 #allTitles ul { list-style: none; padding: 0; margin: 0; }
 
 #allTitles li {
-    padding: 12px 15px;
-    border-bottom: 1px solid rgba(255,255,255,0.2);
+    padding: 16px 20px;
+    margin-bottom: 12px;
+    border-radius: 18px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    transition: all 0.3s ease;
-    border-radius: 10px;
     background: rgba(255,255,255,0.05);
+    transition: all 0.3s ease;
+    box-shadow: 0 0 12px rgba(255,215,0,0.1);
 }
 
 #allTitles li:hover {
-    transform: scale(1.02);
-    background: rgba(255,255,255,0.15);
-    box-shadow: 0 4px 12px rgba(255,215,0,0.2);
+    transform: scale(1.04);
+    background: rgba(255,215,0,0.1);
+    box-shadow: 0 0 25px gold;
 }
 
 #allTitles li span.time {
-    color: #ccc;
     font-size: 13px;
     flex-shrink: 0;
+    color: #ccc;
     direction: ltr;
 }
 
@@ -174,29 +207,28 @@ button:active {
 }
 
 .highlight {
-    background: rgba(255,215,0,0.3);
-    border-left: 5px solid gold;
-    padding-left: 8px;
-    border-radius: 5px;
+    background: rgba(255,215,0,0.35);
+    border-left: 6px solid gold;
+    padding-left: 12px;
+    border-radius: 10px;
     font-weight: bold;
-    color: #fff;
-    text-shadow: 1px 1px 4px rgba(0,0,0,0.8);
+    text-shadow: 1px 1px 6px rgba(0,0,0,0.8);
 }
 
-/* Scrollbar فخم */
+/* Scrollbar VIP */
 #infoBox::-webkit-scrollbar, #allTitles::-webkit-scrollbar {
-    width: 10px;
+    width: 12px;
 }
 
 #infoBox::-webkit-scrollbar-track, #allTitles::-webkit-scrollbar-track {
     background: rgba(255,255,255,0.05);
-    border-radius: 10px;
+    border-radius: 12px;
 }
 
 #infoBox::-webkit-scrollbar-thumb, #allTitles::-webkit-scrollbar-thumb {
     background: gold;
-    border-radius: 10px;
-    box-shadow: 0 0 5px rgba(0,0,0,0.3);
+    border-radius: 12px;
+    box-shadow: 0 0 6px rgba(0,0,0,0.3);
 }
 </style>
 </head>
@@ -206,8 +238,9 @@ button:active {
     <source src="V.mp4" type="video/mp4">
     متصفحك لا يدعم عرض الفيديو.
 </video>
+<div id="overlay"></div>
 
-<div class="header">عناوين تقارير الطلبة VIP</div>
+<div class="header">لوحة تقارير الطلبة VIP</div>
 
 <div class="container">
 <input id="studentName" placeholder="اسمك الثنائي">
