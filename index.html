@@ -192,9 +192,9 @@ async function saveData(){
     const msg = document.getElementById("msg")
     const infoBox = document.getElementById("infoBox")
 
-    if(name.split(/\s+/).length < 2){
-    msg.innerHTML="الاسم يجب أن يكون ثنائي على الأقل"
-    return
+    if(name.trim().split(/\s+/).length < 2){
+    msg.innerHTML = "الاسم يجب أن يكون ثنائي على الأقل";
+    return;
     }
     if(!name||!title||!subject){ msg.innerHTML="املأ جميع الحقول"; return }
 
