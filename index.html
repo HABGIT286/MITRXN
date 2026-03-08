@@ -1,9 +1,8 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
-
 <head>
 <meta charset="UTF-8">
-<title>لوحة تحكم الطلبة</title>
+<title>عناوين تقارير الطلبة</title>
 <style>
 @font-face { font-family: 'TitelFont'; src: url('TITEL.ttf'); }
 @font-face { font-family: 'WriteFont'; src: url('WRITE.otf'); }
@@ -26,6 +25,17 @@ body{
     height: auto;
     z-index: -1;
     object-fit: cover;
+}
+
+.header{
+    text-align:center;
+    font-size:32px;
+    font-weight:bold;
+    padding:20px;
+    background:rgba(30,58,95,0.8);
+    color:white;
+    font-family:'TitelFont',sans-serif;
+    text-shadow: 2px 2px 8px rgba(0,0,0,0.7);
 }
 
 .container{
@@ -51,9 +61,9 @@ input{
 }
 
 button{
-    width:48%;
-    padding:12px;
-    margin:5px 1%;
+    width:100%;
+    padding:14px;
+    margin-bottom:12px;
     border:none;
     border-radius:10px;
     cursor:pointer;
@@ -63,6 +73,7 @@ button{
     background: rgba(30,58,95,0.7);
     box-shadow: 0 6px 15px rgba(0,0,0,0.5);
     transition: all 0.2s ease-in-out;
+    perspective: 1000px;
 }
 
 button:hover{
@@ -75,6 +86,12 @@ button:active{
     box-shadow: 0 4px 10px rgba(0,0,0,0.5);
 }
 
+.save{background: rgba(30,58,95,0.8);}
+.change{background: rgba(179,139,0,0.8);}
+.info{background: rgba(0,107,56,0.8);}
+.show{background: rgba(139,0,0,0.8);}
+.delete{background: rgba(170,0,0,0.8);}
+
 #msg{
     margin-top:10px;
     font-weight:bold;
@@ -83,22 +100,46 @@ button:active{
     text-shadow: 1px 1px 4px rgba(255,255,255,0.7);
 }
 
-table{
-    width:100%;
+#infoBox, #allTitles{
     margin-top:20px;
-    border-collapse:collapse;
+    padding:15px;
+    background: rgba(240,240,240,0.7);
+    border-radius:10px;
+    max-height:350px;
+    overflow-y:auto;
+    font-family:'WriteFont',sans-serif;
+    backdrop-filter: blur(5px);
 }
 
-td,th{
-    border:1px solid #ccc;
-    padding:8px;
-    text-align:center;
-    background: rgba(255,255,255,0.6);
+#allTitles ul{list-style:none;padding:0;margin:0;}
+#allTitles li{
+    padding:8px 10px;
+    border-bottom:1px solid rgba(0,0,0,0.2);
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
 }
 
+#allTitles li span.time{
+    color:#555;
+    font-size:12px;
+    flex-shrink:0;
+    direction:ltr;
+}
+
+#allTitles li span.info{
+    margin-right:10px;
+    flex-grow:1;
+}
+
+.highlight{
+    background: rgba(255,255,0,0.3);
+    border-left:4px solid #ff0;
+    padding-left:4px;
+    border-radius:3px;
+}
 </style>
 </head>
-
 <body>
 
 <video autoplay muted loop id="bgVideo">
@@ -106,152 +147,144 @@ td,th{
     متصفحك لا يدعم عرض الفيديو.
 </video>
 
-<div class="container">
-<h2>لوحة تحكم الطلبة</h2>
+<div class="header">عناوين تقارير الطلبة</div>
 
-<input id="studentName" placeholder="اسم الطالب الثنائي">
+<div class="container">
+<input id="studentName" placeholder="اسم الطالب الثلاثي">
 <input id="reportTitle" placeholder="عنوان التقرير">
 <input id="subjectName" placeholder="المادة الدراسية">
 
-<br>
-<button onclick="saveData()">➕ حفظ</button>
-<button onclick="updateData()">✏ تعديل</button>
+<button class="save" onclick="saveData()">حفظ</button>
+<button class="change" onclick="changeTitle()">تغيير عنوان التقرير</button>
+<button class="info" onclick="showMyInfo()">معلوماتي</button>
+<button class="show" onclick="showAll()">عناوين الطلبة</button>
+<button class="delete" onclick="deleteMyData()">حذف معلوماتي</button>
 
 <div id="msg"></div>
-
-<h3>قائمة الطلبة</h3>
-
-<table>
-<thead>
-<tr>
-<th>#</th>
-<th>الاسم</th>
-<th>العنوان</th>
-<th>المادة</th>
-<th>التاريخ</th>
-<th>تحكم</th>
-</tr>
-</thead>
-<tbody id="studentsTable"></tbody>
-</table>
-
+<div id="infoBox"></div>
+<div id="allTitles"></div>
 </div>
 
 <script type="module">
 import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
-
-const SUPABASE_URL="https://mcwemgjmqwbgxoyiwant.supabase.co"
-const SUPABASE_KEY="sb_publishable_qmIUC4Rkb-VGOek8qkVqFg_Sn4x3WjI"
-const supabase=createClient(SUPABASE_URL,SUPABASE_KEY)
-
-let selectedID=null
+const SUPABASE_URL = "https://mcwemgjmqwbgxoyiwant.supabase.co"
+const SUPABASE_KEY = "sb_publishable_qmIUC4Rkb-VGOek8qkVqFg_Sn4x3WjI"
+const supabase = createClient(SUPABASE_URL, SUPABASE_KEY)
 
 function formatDate(ts){
     if(!ts) return ""
-    const d=new Date(ts)
-    return `${d.getHours()}:${d.getMinutes()} (${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()})`
+    const d = new Date(ts)
+    const h = String(d.getHours()).padStart(2,'0')
+    const m = String(d.getMinutes()).padStart(2,'0')
+    const s = String(d.getSeconds()).padStart(2,'0')
+    return `${h}:${m}:${s}(${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()})`
+}
+
+// توليد رمز تلقائي
+function generateCode(){
+    return Math.floor(1000 + Math.random()*9000).toString() // 4 أرقام
 }
 
 async function saveData(){
-    const name=document.getElementById("studentName").value.trim()
-    const title=document.getElementById("reportTitle").value.trim()
-    const subject=document.getElementById("subjectName").value.trim()
-    const msg=document.getElementById("msg")
+    const name = document.getElementById("studentName").value.trim()
+    const title = document.getElementById("reportTitle").value.trim()
+    const subject = document.getElementById("subjectName").value.trim()
+    const msg = document.getElementById("msg")
+    const infoBox = document.getElementById("infoBox")
 
-    if(name.split(/\s+/).length<2){ msg.innerHTML="الاسم يجب أن يكون ثنائي"; return }
+    if(name.split(" ").length<3){ msg.innerHTML="الاسم يجب أن يكون ثلاثي"; return }
     if(!name||!title||!subject){ msg.innerHTML="املأ جميع الحقول"; return }
 
-    // تحقق من تكرار الاسم أو العنوان
     const {data:check} = await supabase.from("student_reports").select("*").or(`name.eq.${name},title.eq.${title}`)
     if(check && check.length>0){ msg.innerHTML="الاسم أو العنوان مستخدم مسبقاً"; return }
 
-    const now=new Date().toISOString()
-    const {error}=await supabase.from("student_reports").insert([{name,title,subject,date:now}])
+    // رمز الطالب
+    let code = localStorage.getItem("studentCode")
+    if(!code){
+        let unique = false
+        while(!unique){
+            code = generateCode()
+            const {data:codeCheck} = await supabase.from("student_reports").select("*").eq("code", code)
+            if(!codeCheck || codeCheck.length===0) unique = true
+        }
+        localStorage.setItem("studentCode", code)
+    }
+
+    const now = new Date().toISOString()
+    const {error} = await supabase.from("student_reports").insert([{name,title,subject,date:now, code}])
     if(error){ msg.innerHTML="فشل الحفظ"; console.log(error); return }
 
-    msg.innerHTML="تم إضافة الطالب بنجاح"
-    clearInputs()
-    loadStudents()
+    msg.innerHTML="تم حفظ البيانات بنجاح"
+    await showMyInfo()
+    await showAll()
 }
 
-function editStudent(student){
-    selectedID=student.id
-    document.getElementById("studentName").value=student.name
-    document.getElementById("reportTitle").value=student.title
-    document.getElementById("subjectName").value=student.subject
+async function changeTitle(){
+    const name = document.getElementById("studentName").value.trim()
+    const msg = document.getElementById("msg")
+    if(!name){ msg.innerHTML="ادخل اسمك"; return }
+    const newTitle = prompt("ادخل العنوان الجديد")
+    if(!newTitle) return
+    const now = new Date().toISOString()
+    const code = localStorage.getItem("studentCode")
+    const {error} = await supabase.from("student_reports").update({title:newTitle,date:now}).eq("code", code)
+    if(error){ msg.innerHTML="فشل التحديث"; console.log(error); return }
+    msg.innerHTML="تم تغيير العنوان"
+    await showMyInfo()
+    await showAll()
 }
 
-async function updateData(){
-    if(!selectedID){ alert("اختر طالب للتعديل"); return }
-
-    const name=document.getElementById("studentName").value.trim()
-    const title=document.getElementById("reportTitle").value.trim()
-    const subject=document.getElementById("subjectName").value.trim()
-    const msg=document.getElementById("msg")
-
-    if(!name||!title||!subject){ msg.innerHTML="املأ جميع الحقول"; return }
-
-    const {data:check} = await supabase.from("student_reports").select("*").or(`name.eq.${name},title.eq.${title}`).neq("id", selectedID)
-    if(check && check.length>0){ msg.innerHTML="الاسم أو العنوان مستخدم مسبقاً"; return }
-
-    const now=new Date().toISOString()
-    const {error}=await supabase.from("student_reports").update({name,title,subject,date:now}).eq("id",selectedID)
-    if(error){ msg.innerHTML="فشل التعديل"; console.log(error); return }
-
-    msg.innerHTML="تم تعديل بيانات الطالب"
-    clearInputs()
-    loadStudents()
+async function showMyInfo(){
+    const code = localStorage.getItem("studentCode")
+    const infoBox = document.getElementById("infoBox")
+    const msg = document.getElementById("msg")
+    if(!code){ msg.innerHTML="لم يتم إدخال بياناتك بعد"; return }
+    const {data,error} = await supabase.from("student_reports").select("*").eq("code", code).single()
+    if(error || !data){ msg.innerHTML="لا توجد بيانات"; return }
+    infoBox.innerHTML = `<h4>معلومات الطالب</h4>
+        <p><strong>الاسم:</strong> ${data.name}</p>
+        <p><strong>العنوان:</strong> ${data.title}</p>
+        <p><strong>المادة:</strong> ${data.subject}</p>
+        <p><strong>التاريخ:</strong> ${formatDate(data.date)}</p>`
 }
 
-async function deleteStudent(id){
-    if(!confirm("هل تريد حذف الطالب؟")) return
-    const {error}=await supabase.from("student_reports").delete().eq("id",id)
-    if(error){ console.log(error); alert("فشل الحذف") }
-}
-
-async function loadStudents(){
-    const {data,error}=await supabase.from("student_reports").select("*").order("id",{ascending:true})
-    if(error){ console.log(error); return }
-    const table=document.getElementById("studentsTable")
-    table.innerHTML=""
-    data.forEach((s,i)=>{
-        table.innerHTML+=`
-        <tr>
-        <td>${i+1}</td>
-        <td>${s.name}</td>
-        <td>${s.title}</td>
-        <td>${s.subject}</td>
-        <td>${formatDate(s.date)}</td>
-        <td>
-        <button onclick='editStudent(${JSON.stringify(s)})'>تعديل</button>
-        <button onclick='deleteStudent(${s.id})'>حذف</button>
-        </td>
-        </tr>
-        `
+async function showAll(){
+    const {data,error} = await supabase.from("student_reports").select("*").order("id",{ascending:true})
+    const container = document.getElementById("allTitles")
+    const code = localStorage.getItem("studentCode")
+    if(error){ container.innerHTML="فشل تحميل البيانات"; return }
+    let html = "<h3>جميع العناوين</h3><ul>"
+    data.forEach((d,i)=>{
+        const highlight = d.code===code ? "highlight" : ""
+        html+=`<li class="${highlight}">
+            <span class="time">${formatDate(d.date)}</span>
+            <span class="info">${i+1}. ${d.name} | ${d.title} | ${d.subject}</span>
+        </li>`
     })
+    html+="</ul>"
+    container.innerHTML = html
 }
 
-// Realtime التحديث التلقائي
-supabase.channel("students_channel")
-.on("postgres_changes",{event:"*",schema:"public",table:"student_reports"},payload=>{
-    loadStudents()
-})
-.subscribe()
-
-function clearInputs(){
-    document.getElementById("studentName").value=""
-    document.getElementById("reportTitle").value=""
-    document.getElementById("subjectName").value=""
-    selectedID=null
+async function deleteMyData(){
+    const code = localStorage.getItem("studentCode")
+    const msg = document.getElementById("msg")
+    const infoBox = document.getElementById("infoBox")
+    if(!code){ msg.innerHTML="لم يتم إدخال بياناتك بعد"; return }
+    const {error} = await supabase.from("student_reports").delete().eq("code",code)
+    if(error){ msg.innerHTML="فشل الحذف"; console.log(error); return }
+    msg.innerHTML="تم حذف بياناتك"
+    infoBox.innerHTML = ""
+    localStorage.removeItem("studentCode")
+    await showAll()
 }
 
-window.saveData=saveData
-window.updateData=updateData
-window.editStudent=editStudent
-window.deleteStudent=deleteStudent
-
-loadStudents()
+window.saveData = saveData
+window.changeTitle = changeTitle
+window.showAll = showAll
+window.showMyInfo = showMyInfo
+window.deleteMyData = deleteMyData
 </script>
 
 </body>
 </html>
+
