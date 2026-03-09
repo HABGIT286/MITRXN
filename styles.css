@@ -325,7 +325,7 @@ html,body{
   border:1px solid rgba(255,255,255,0.12);
   border-radius:16px;
   color:#fff;
-  font-size:14px;
+  font-size:16px; /* تم التعديل هنا */
   outline:none;
   transition: transform .18s ease, border-color .18s ease, box-shadow .18s ease, background .18s ease;
   backdrop-filter: blur(var(--blur));
@@ -530,6 +530,7 @@ html,body{
   background: rgba(255,255,255,0.06);
   color:#fff;
   outline:none;
+  font-size:16px; /* تم التعديل هنا */
   backdrop-filter: blur(var(--blur));
   -webkit-backdrop-filter: blur(var(--blur));
 }
