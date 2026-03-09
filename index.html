@@ -171,6 +171,41 @@ const SUPABASE_URL = "https://mcwemgjmqwbgxoyiwant.supabase.co"
 const SUPABASE_KEY = "sb_publishable_qmIUC4Rkb-VGOek8qkVqFg_Sn4x3WjI"
 const supabase = createClient(SUPABASE_URL, SUPABASE_KEY)
 
+// ---- أضف بعده هذا الكود للتحقق من حالة الموقع ----
+async function checkSiteStatus() {
+    const { data, error } = await supabase
+        .from("site_control")
+        .select("site_open")
+        .eq("id", 1)
+        .single();
+
+    if(error){
+        document.body.innerHTML = "<h2>حدث خطأ عند التحقق من حالة الموقع</h2>";
+        console.log(error);
+        return false;
+    }
+
+    if(!data.site_open){
+        document.body.innerHTML = "<h2 style='text-align:center;margin-top:50px;'>الموقع مغلق ❌</h2>";
+        return false;
+    }
+
+    return true;
+}
+
+// تحقق من السويج قبل تفعيل الوظائف
+checkSiteStatus().then(open => {
+    if(open){
+        window.saveData = saveData
+        window.changeTitle = changeTitle
+        window.showAll = showAll
+        window.showMyInfo = showMyInfo
+        window.deleteMyData = deleteMyData
+    }
+});
+
+
+
 function formatDate(ts){
     if(!ts) return ""
     const d = new Date(ts)
