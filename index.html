@@ -1,4 +1,4 @@
-خ<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8" />
@@ -8,19 +8,15 @@
     @font-face { font-family: 'TitelFont'; src: url('TITEL.ttf'); font-display: swap; }
     @font-face { font-family: 'WriteFont'; src: url('WRITE.otf'); font-display: swap; }
 
-    /* ===== DISABLE TEXT SELECTION + OUTLINE ===== */
     * {
       margin: 0; padding: 0; box-sizing: border-box;
-      user-select: none;
-      -webkit-user-select: none;
-      -moz-user-select: none;
-      -ms-user-select: none;
+      user-select: none; -webkit-user-select: none;
+      -moz-user-select: none; -ms-user-select: none;
       -webkit-tap-highlight-color: transparent !important;
       outline: none !important;
     }
     input, textarea, #searchInput, .modal-input, #modal-textarea {
-      user-select: text !important;
-      -webkit-user-select: text !important;
+      user-select: text !important; -webkit-user-select: text !important;
       -moz-user-select: text !important;
     }
     input:focus, textarea:focus { outline: none !important; }
@@ -45,25 +41,14 @@
       --radius: 22px;
     }
 
-    html, body {
-      height: 100%;
-      font-family: 'WriteFont', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      color: var(--txt);
-      overflow: hidden;
-    }
+    html, body { height: 100%; font-family: 'WriteFont', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; color: var(--txt); overflow: hidden; }
 
-    /* Background */
-    .bg-image {
-      position: fixed; inset: 0;
-      background: url('M.jpg') no-repeat center center fixed;
-      background-size: cover; z-index: -10;
-    }
+    .bg-image { position: fixed; inset: 0; background: url('M.jpg') no-repeat center center fixed; background-size: cover; z-index: -10; }
     .bg-overlay {
       position: fixed; inset: 0; z-index: -9;
-      background:
-        radial-gradient(ellipse at 30% 10%, rgba(125,211,252,0.18), transparent 55%),
-        radial-gradient(ellipse at 90% 90%, rgba(245,200,66,0.12), transparent 60%),
-        linear-gradient(180deg, rgba(0,0,0,0.52), rgba(0,0,0,0.35));
+      background: radial-gradient(ellipse at 30% 10%, rgba(125,211,252,0.18), transparent 55%),
+                  radial-gradient(ellipse at 90% 90%, rgba(245,200,66,0.12), transparent 60%),
+                  linear-gradient(180deg, rgba(0,0,0,0.52), rgba(0,0,0,0.35));
     }
     .bg-noise {
       position: fixed; inset: 0; z-index: -8; pointer-events: none; opacity: 0.07;
@@ -94,44 +79,29 @@
 
     /* ===== NOTIFICATION BANNER ===== */
     #notifBanner {
-      position: fixed;
-      top: 74px; left: 0; right: 0;
-      z-index: 400;
-      display: none;
-      align-items: center;
-      gap: 12px;
-      padding: 13px 20px;
+      position: fixed; top: 74px; left: 0; right: 0; z-index: 400;
+      display: none; align-items: center; gap: 12px; padding: 13px 20px;
       background: linear-gradient(135deg, rgba(245,200,66,0.20), rgba(245,200,66,0.08));
       border-bottom: 1px solid rgba(245,200,66,0.30);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
+      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
     }
-    #notifBanner.visible {
-      display: flex;
-      animation: notifSlide 0.5s cubic-bezier(.22,1,.36,1);
-    }
+    #notifBanner.visible { display: flex; animation: notifSlide 0.5s cubic-bezier(.22,1,.36,1); }
     @keyframes notifSlide { from{transform:translateY(-40px);opacity:0} to{transform:translateY(0);opacity:1} }
     .notif-icon { font-size: 20px; flex-shrink: 0; animation: notifPulse 2s ease-in-out infinite; }
     @keyframes notifPulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.15)} }
     .notif-text { flex: 1; color: rgba(255,255,255,0.95); font-size: 14px; font-weight: 700; line-height: 1.5; }
-    .notif-close {
-      background: none; border: 1px solid rgba(255,255,255,0.15);
-      color: rgba(255,255,255,0.50); cursor: pointer;
-      font-size: 16px; padding: 3px 10px; border-radius: 8px;
-      transition: all 0.2s; line-height: 1; flex-shrink: 0;
-    }
+    .notif-close { background: none; border: 1px solid rgba(255,255,255,0.15); color: rgba(255,255,255,0.50); cursor: pointer; font-size: 16px; padding: 3px 10px; border-radius: 8px; transition: all 0.2s; line-height: 1; flex-shrink: 0; }
     .notif-close:hover { color: #fff; background: rgba(255,255,255,0.12); border-color: rgba(255,255,255,0.25); }
 
     /* Topbar */
     .topbar {
       position: relative; z-index: 2;
-      padding: 16px 18px;
+      padding: 14px 18px;
       display: flex; align-items: center; justify-content: space-between; gap: 12px;
       background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.04));
       border-bottom: 1px solid rgba(255,255,255,0.10);
       box-shadow: 0 10px 35px rgba(0,0,0,0.35);
-      backdrop-filter: blur(var(--blur));
-      -webkit-backdrop-filter: blur(var(--blur));
+      backdrop-filter: blur(var(--blur)); -webkit-backdrop-filter: blur(var(--blur));
       opacity: 0; transform: translateY(-28px);
       animation: topbarIn .65s cubic-bezier(.22,1,.36,1) 1.35s forwards;
     }
@@ -139,10 +109,36 @@
     .brand { display: flex; align-items: center; gap: 12px; min-width: 0; }
     .brand-badge { width: 40px; height: 40px; border-radius: 14px; background: linear-gradient(145deg, rgba(255,255,255,0.14), rgba(255,255,255,0.05)); border: 1px solid rgba(255,255,255,0.14); box-shadow: inset 0 1px 0 rgba(255,255,255,0.18), 0 12px 26px rgba(0,0,0,0.25); display: flex; align-items: center; justify-content: center; color: rgba(255,255,255,0.92); }
     .brand-text { min-width: 0; }
-    .brand-text h1 { font-family: 'TitelFont', sans-serif; font-size: 18px; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .brand-text p { font-size: 12px; color: rgba(255,255,255,0.58); margin-top: 2px; }
-    .topbar-actions { display: flex; gap: 10px; align-items: center; }
-    .pill { display: inline-flex; align-items: center; gap: 8px; padding: 10px 14px; border-radius: 999px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); color: rgba(255,255,255,0.9); text-decoration: none; font-size: 13px; transition: transform .18s ease, background .18s ease, border-color .18s ease; backdrop-filter: blur(var(--blur)); -webkit-backdrop-filter: blur(var(--blur)); }
+    .brand-text h1 { font-family: 'TitelFont', sans-serif; font-size: 16px; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .brand-text p { font-size: 11px; color: rgba(255,255,255,0.58); margin-top: 2px; }
+    .topbar-center { display: flex; align-items: center; gap: 10px; flex: 1; justify-content: center; }
+    .topbar-actions { display: flex; gap: 8px; align-items: center; }
+
+    /* ===== CLOCK ===== */
+    .topbar-clock {
+      display: flex; align-items: center; gap: 8px;
+      padding: 8px 16px; border-radius: 999px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.12);
+      backdrop-filter: blur(var(--blur)); -webkit-backdrop-filter: blur(var(--blur));
+      transition: border-color .2s;
+    }
+    .topbar-clock:hover { border-color: rgba(245,200,66,0.35); }
+    .clock-icon { font-size: 14px; animation: clockSpin 60s linear infinite; }
+    @keyframes clockSpin { to{ transform: rotate(360deg); } }
+    .clock-time {
+      font-family: 'TitelFont', monospace;
+      font-size: 15px; font-weight: 700;
+      color: rgba(255,255,255,0.92);
+      letter-spacing: 2px; direction: ltr;
+      text-shadow: 0 0 12px rgba(125,211,252,0.3);
+    }
+    .clock-date {
+      font-size: 10px; color: rgba(255,255,255,0.45);
+      letter-spacing: 1px; margin-top: 2px;
+    }
+
+    .pill { display: inline-flex; align-items: center; gap: 8px; padding: 9px 14px; border-radius: 999px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); color: rgba(255,255,255,0.9); text-decoration: none; font-size: 12px; transition: transform .18s ease, background .18s ease, border-color .18s ease; backdrop-filter: blur(var(--blur)); -webkit-backdrop-filter: blur(var(--blur)); }
     .pill:hover { transform: translateY(-2px); background: rgba(255,255,255,0.09); border-color: rgba(255,255,255,0.18); }
     .pill i { font-style: normal; }
     .pill.name { color: rgba(245,200,66,0.95); border-color: rgba(245,200,66,0.22); }
@@ -151,11 +147,9 @@
     /* Layout */
     .page-wrap {
       height: calc(100vh - 74px);
-      overflow: auto;
-      padding: 26px 14px 38px;
+      overflow: auto; padding: 26px 14px 38px;
       position: relative; z-index: 1;
-      scrollbar-width: thin;
-      scrollbar-color: rgba(255,255,255,0.18) transparent;
+      scrollbar-width: thin; scrollbar-color: rgba(255,255,255,0.18) transparent;
       transition: padding-top 0.4s cubic-bezier(.22,1,.36,1);
     }
     .page-wrap.has-notif { padding-top: 64px; }
@@ -171,29 +165,25 @@
       border-radius: var(--radius);
       padding: 30px 28px;
       box-shadow: var(--shadow);
-      backdrop-filter: blur(var(--blur));
-      -webkit-backdrop-filter: blur(var(--blur));
+      backdrop-filter: blur(var(--blur)); -webkit-backdrop-filter: blur(var(--blur));
       opacity: 0; transform: translateY(34px) scale(.985);
       animation: cardIn .8s cubic-bezier(.22,1,.36,1) 1.55s forwards;
       position: relative; overflow: hidden;
       transform-style: preserve-3d; will-change: transform;
+      transition: background 0.5s ease, border-color 0.5s ease, box-shadow 0.5s ease;
     }
     @keyframes cardIn { to{opacity:1;transform:translateY(0) scale(1)} }
     .card::before { content: ''; position: absolute; inset: 0; pointer-events: none; background: radial-gradient(800px 400px at 20% 0%, rgba(255,255,255,0.10), transparent 55%), radial-gradient(700px 380px at 90% 100%, rgba(125,211,252,0.10), transparent 60%); }
-    .card-topline { height: 2px; margin: 0 -28px 18px; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.28), rgba(125,211,252,0.28), transparent); opacity: 0.8; }
-    .section-title { font-family: 'TitelFont', sans-serif; color: rgba(245,200,66,0.92); font-size: 13px; text-align: center; letter-spacing: 3px; opacity: .95; margin: 10px 0 18px; }
+    .card-topline { height: 2px; margin: 0 -28px 18px; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.28), rgba(125,211,252,0.28), transparent); opacity: 0.8; transition: background 0.5s ease; }
+    .section-title { font-family: 'TitelFont', sans-serif; color: rgba(245,200,66,0.92); font-size: 13px; text-align: center; letter-spacing: 3px; opacity: .95; margin: 10px 0 18px; transition: color 0.4s; }
 
     /* ===== DEADLINE PANEL ===== */
     #deadlinePanel {
       display: none;
       background: linear-gradient(135deg, rgba(125,211,252,0.10), rgba(125,211,252,0.04));
-      border: 1px solid rgba(125,211,252,0.22);
-      border-radius: 18px;
-      padding: 16px 20px 14px;
-      margin-bottom: 20px;
-      position: relative;
-      overflow: hidden;
-      animation: fadeSlide .4s ease;
+      border: 1px solid rgba(125,211,252,0.22); border-radius: 18px;
+      padding: 16px 20px 14px; margin-bottom: 20px;
+      position: relative; overflow: hidden; animation: fadeSlide .4s ease;
     }
     #deadlinePanel::before { content: ''; position: absolute; inset: 0; background: radial-gradient(500px 200px at 50% 0%, rgba(125,211,252,0.07), transparent 70%); pointer-events: none; }
     #deadlinePanel::after { content: '⏰'; position: absolute; left: -10px; top: -10px; font-size: 70px; opacity: 0.04; pointer-events: none; }
@@ -202,15 +192,7 @@
     .deadline-info { flex: 1; }
     .deadline-label-text { font-size: 11px; color: rgba(125,211,252,0.65); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 3px; }
     .deadline-date-display { font-size: 14px; font-weight: 700; color: rgba(125,211,252,0.95); }
-    .deadline-countdown {
-      font-size: 19px; font-weight: 900;
-      color: rgba(245,200,66,0.95);
-      text-shadow: 0 0 20px rgba(245,200,66,0.25);
-      letter-spacing: 0.5px;
-      direction: ltr;
-      text-align: center;
-      padding: 6px 0 2px;
-    }
+    .deadline-countdown { font-size: 19px; font-weight: 900; color: rgba(245,200,66,0.95); text-shadow: 0 0 20px rgba(245,200,66,0.25); letter-spacing: 0.5px; direction: ltr; text-align: center; padding: 6px 0 2px; }
 
     /* Inputs */
     .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
@@ -220,7 +202,14 @@
     .input-group.full { grid-column: 1 / -1; }
     .input-group label { display: flex; align-items: center; justify-content: space-between; font-size: 11px; color: rgba(255,255,255,0.60); margin-bottom: 6px; padding-right: 6px; letter-spacing: 1px; }
     .hint { font-size: 10px; color: rgba(255,255,255,0.38); }
-    .input-group input { width: 100%; padding: 13px 16px 13px 44px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); border-radius: 16px; color: #fff; font-size: 14px; outline: none; transition: transform .18s ease, border-color .18s ease, box-shadow .18s ease, background .18s ease; backdrop-filter: blur(var(--blur)); -webkit-backdrop-filter: blur(var(--blur)); }
+    .input-group input {
+      width: 100%; padding: 13px 16px 13px 44px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 16px; color: #fff; font-size: 14px; outline: none;
+      transition: transform .18s ease, border-color .18s ease, box-shadow .18s ease, background .18s ease;
+      backdrop-filter: blur(var(--blur)); -webkit-backdrop-filter: blur(var(--blur));
+    }
     .input-group input::placeholder { color: rgba(255,255,255,0.30); }
     .input-group input:focus { background: rgba(255,255,255,0.10); border-color: rgba(255,255,255,0.22); box-shadow: 0 0 0 3px rgba(125,211,252,0.12); transform: translateY(-1px); }
     .input-icon { position: absolute; left: 14px; bottom: 12px; font-size: 16px; color: rgba(255,255,255,0.30); transition: color .18s ease, transform .18s ease; pointer-events: none; }
@@ -242,13 +231,6 @@
     .btn-glass:hover::after { transform: translateX(-140%); }
     .btn-glass:active { transform: translateY(1px) scale(.995); }
     .btn-icon { margin-left: 8px; font-style: normal; opacity: .95; }
-    .btn-primary  { box-shadow: 0 18px 45px rgba(125,211,252,0.10), var(--shadow-soft); }
-    .btn-warn     { box-shadow: 0 18px 45px rgba(245,200,66,0.10), var(--shadow-soft); }
-    .btn-success  { box-shadow: 0 18px 45px rgba(76,255,145,0.08), var(--shadow-soft); }
-    .btn-danger   { box-shadow: 0 18px 45px rgba(255,92,92,0.08), var(--shadow-soft); }
-    .btn-cyan     { box-shadow: 0 18px 45px rgba(125,211,252,0.10), var(--shadow-soft); }
-    .btn-delete   { border-color: rgba(255,92,92,0.20); }
-    .btn-problem  { border-color: rgba(255,140,0,0.25); box-shadow: 0 18px 45px rgba(255,140,0,0.10), var(--shadow-soft); }
 
     /* Ripple */
     .ripple { position: absolute; border-radius: 50%; transform: scale(0); animation: ripple .55s ease-out; background: rgba(255,255,255,0.20); pointer-events: none; mix-blend-mode: overlay; }
@@ -262,7 +244,7 @@
     #msg.info    { color: var(--accent); text-shadow: 0 0 12px rgba(125,211,252,0.22); }
 
     /* Panels */
-    .panel { margin-top: 16px; padding: 18px; border-radius: 18px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); backdrop-filter: blur(var(--blur)); -webkit-backdrop-filter: blur(var(--blur)); display: none; animation: fadeSlide .35s ease; }
+    .panel { margin-top: 16px; padding: 18px; border-radius: 18px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); backdrop-filter: blur(var(--blur)); -webkit-backdrop-filter: blur(var(--blur)); display: none; animation: fadeSlide .35s ease; transition: background 0.5s ease, border-color 0.5s ease; }
     @keyframes fadeSlide { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
     .panel h4, .panel h3 { font-family: 'TitelFont', sans-serif; color: rgba(245,200,66,0.92); margin-bottom: 12px; font-size: 15px; display: flex; align-items: center; gap: 8px; }
     .badge { margin-right: auto; color: rgba(255,255,255,0.55); font-size: 12px; }
@@ -279,13 +261,196 @@
     #allTitles::-webkit-scrollbar { width: 5px; }
     #allTitles::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.18); border-radius: 10px; }
     #allTitles ul { list-style: none; }
-    #allTitles li { padding: 10px 12px; border-radius: 14px; margin-bottom: 8px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); display: flex; gap: 10px; align-items: center; transition: transform .18s ease, background .18s ease, border-color .18s ease; font-size: 13px; }
+    #allTitles li { padding: 10px 12px; border-radius: 14px; margin-bottom: 8px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); display: flex; flex-wrap: wrap; gap: 8px; align-items: center; transition: transform .18s ease, background .18s ease, border-color .18s ease; font-size: 13px; }
     #allTitles li:hover { background: rgba(255,255,255,0.07); border-color: rgba(255,255,255,0.12); transform: translateX(-3px); }
     .row-num { width: 24px; height: 24px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 10px; background: rgba(125,211,252,0.22); flex-shrink: 0; }
     .time { margin-right: auto; direction: ltr; color: rgba(255,255,255,0.34); font-size: 11px; flex-shrink: 0; }
     .info { text-align: right; flex: 1; }
     .highlight { background: rgba(245,200,66,0.08) !important; border: 1px solid rgba(245,200,66,0.22) !important; }
     .highlight .row-num { background: rgba(245,200,66,0.22); }
+
+    /* ===== ⚠️ ALERT BADGE STYLES ===== */
+    @keyframes alertShimmer {
+      0%   { background-position: 200% center; }
+      100% { background-position: -200% center; }
+    }
+    @keyframes alertGlow {
+      0%,100% {
+        box-shadow: 0 0 8px var(--ac, rgba(255,80,80,0.6)),
+                    0 0 18px var(--ac, rgba(255,80,80,0.3));
+      }
+      50% {
+        box-shadow: 0 0 18px var(--ac, rgba(255,80,80,0.8)),
+                    0 0 36px var(--ac, rgba(255,80,80,0.5)),
+                    0 0 55px var(--ac, rgba(255,80,80,0.2));
+      }
+    }
+
+    /* Full alert badge (in معلوماتي) */
+    .alert-full-wrap { margin: 10px 0 14px; }
+    .alert-full-badge {
+      display: flex; align-items: center; gap: 10px;
+      padding: 12px 20px; border-radius: 24px; width: 100%;
+      font-weight: 800; font-size: 14px;
+      border: 1.5px solid var(--ac, #ff4444);
+      color: var(--ac, #ff4444);
+      background: rgba(255,255,255,0.03);
+      backdrop-filter: blur(12px);
+      position: relative; overflow: hidden;
+      animation: alertGlow 2.5s ease-in-out infinite;
+    }
+    .alert-full-badge::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(
+        90deg,
+        transparent 0%,
+        rgba(255,255,255,0.30) 35%,
+        rgba(255,255,255,0.10) 50%,
+        rgba(255,255,255,0.30) 65%,
+        transparent 100%
+      );
+      background-size: 200% 100%;
+      animation: alertShimmer 2.2s linear infinite;
+    }
+    .alert-full-icon { font-size: 22px; flex-shrink: 0; position: relative; z-index: 1; }
+    .alert-full-text { flex: 1; position: relative; z-index: 1; line-height: 1.5; }
+    .alert-full-type {
+      font-size: 10px; font-weight: 700; opacity: 0.65;
+      padding: 2px 8px; border-radius: 10px;
+      border: 1px solid currentColor;
+      position: relative; z-index: 1; flex-shrink: 0;
+    }
+
+    /* Mini alert badge (in all-titles list) */
+    .alert-mini-badge {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 3px 10px; border-radius: 14px;
+      font-size: 11px; font-weight: 700;
+      border: 1px solid var(--ac, #ff4444);
+      color: var(--ac, #ff4444);
+      background: rgba(255,255,255,0.03);
+      position: relative; overflow: hidden;
+      animation: alertGlow 2.5s ease-in-out infinite,
+                 alertShimmer 2.2s linear infinite;
+      background-size: 200% 100%;
+    }
+    .alert-mini-badge::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent);
+      background-size: 200% 100%;
+      animation: alertShimmer 2.2s linear infinite;
+    }
+
+    /* ===== THEME SELECTOR ===== */
+    .theme-section { margin-top: 6px; }
+    .theme-section-title {
+      font-family: 'TitelFont', sans-serif;
+      font-size: 11px; letter-spacing: 2px;
+      color: rgba(255,255,255,0.55);
+      text-transform: uppercase; margin-bottom: 10px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .theme-grid {
+      display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px;
+    }
+    .theme-btn-item {
+      background: rgba(255,255,255,0.05);
+      border: 1.5px solid rgba(255,255,255,0.10);
+      border-radius: 14px; padding: 10px 6px 8px;
+      cursor: pointer; text-align: center;
+      transition: all 0.25s cubic-bezier(.22,1,.36,1);
+      color: rgba(255,255,255,0.65);
+      font-size: 10px; font-family: 'WriteFont', sans-serif;
+      line-height: 1.4;
+    }
+    .theme-btn-item:hover {
+      transform: translateY(-3px) scale(1.04);
+      border-color: rgba(255,255,255,0.25);
+      background: rgba(255,255,255,0.09);
+      color: rgba(255,255,255,0.9);
+    }
+    .theme-btn-item.active {
+      border-color: rgba(245,200,66,0.65);
+      background: rgba(245,200,66,0.08);
+      color: rgba(245,200,66,0.95);
+      box-shadow: 0 0 14px rgba(245,200,66,0.15);
+    }
+    .theme-swatch {
+      width: 100%; height: 26px; border-radius: 8px; margin-bottom: 6px;
+      border: 1px solid rgba(255,255,255,0.12);
+    }
+
+    /* ===== 5 THEMES ===== */
+    /* Theme 1: رصاصي وأزرق */
+    [data-theme="1"] .card {
+      background: linear-gradient(180deg, rgba(140,150,175,0.22), rgba(25,65,210,0.16)) !important;
+      border-color: rgba(130,145,180,0.55) !important;
+      box-shadow: 0 22px 60px rgba(0,0,0,0.58), 0 0 40px rgba(50,100,230,0.14) !important;
+    }
+    [data-theme="1"] .card-topline { background: linear-gradient(90deg, transparent, rgba(130,145,180,0.5), rgba(70,120,230,0.5), transparent) !important; }
+    [data-theme="1"] .input-group input { background: rgba(25,65,210,0.10) !important; border-color: rgba(70,120,230,0.32) !important; }
+    [data-theme="1"] .input-group input:focus { border-color: rgba(70,120,230,0.65) !important; box-shadow: 0 0 0 3px rgba(70,120,230,0.15), 0 4px 20px rgba(70,120,230,0.1) !important; }
+    [data-theme="1"] .btn-glass { background: rgba(140,150,175,0.12) !important; border-color: rgba(70,120,230,0.30) !important; box-shadow: 0 14px 35px rgba(25,65,210,0.18), var(--shadow-soft) !important; }
+    [data-theme="1"] .panel { background: rgba(25,65,210,0.09) !important; border-color: rgba(70,120,230,0.22) !important; }
+    [data-theme="1"] #allTitles li { background: rgba(25,65,210,0.07) !important; border-color: rgba(70,120,230,0.16) !important; }
+
+    /* Theme 2: أبيض وليموني */
+    [data-theme="2"] .card {
+      background: linear-gradient(180deg, rgba(255,255,255,0.24), rgba(185,235,0,0.14)) !important;
+      border-color: rgba(255,255,255,0.52) !important;
+      box-shadow: 0 22px 60px rgba(0,0,0,0.50), 0 0 35px rgba(190,240,0,0.10) !important;
+    }
+    [data-theme="2"] .card-topline { background: linear-gradient(90deg, transparent, rgba(255,255,255,0.45), rgba(200,250,0,0.45), transparent) !important; }
+    [data-theme="2"] .section-title { color: rgba(190,230,0,0.92) !important; }
+    [data-theme="2"] .input-group input { background: rgba(185,235,0,0.10) !important; border-color: rgba(200,250,0,0.32) !important; }
+    [data-theme="2"] .input-group input:focus { border-color: rgba(200,250,0,0.65) !important; box-shadow: 0 0 0 3px rgba(200,250,0,0.13), 0 4px 20px rgba(200,250,0,0.08) !important; }
+    [data-theme="2"] .btn-glass { background: rgba(255,255,255,0.13) !important; border-color: rgba(200,250,0,0.30) !important; box-shadow: 0 14px 35px rgba(185,235,0,0.12), var(--shadow-soft) !important; }
+    [data-theme="2"] .panel { background: rgba(185,235,0,0.08) !important; border-color: rgba(200,250,0,0.20) !important; }
+    [data-theme="2"] #allTitles li { background: rgba(185,235,0,0.06) !important; border-color: rgba(200,250,0,0.14) !important; }
+
+    /* Theme 3: أسود وبنفسجي */
+    [data-theme="3"] .card {
+      background: linear-gradient(180deg, rgba(10,4,18,0.82), rgba(110,25,210,0.20)) !important;
+      border-color: rgba(40,15,65,0.85) !important;
+      box-shadow: 0 22px 60px rgba(0,0,0,0.80), 0 0 45px rgba(120,40,240,0.14) !important;
+    }
+    [data-theme="3"] .card-topline { background: linear-gradient(90deg, transparent, rgba(40,15,65,0.6), rgba(140,55,250,0.55), transparent) !important; }
+    [data-theme="3"] .section-title { color: rgba(180,100,255,0.92) !important; }
+    [data-theme="3"] .input-group input { background: rgba(110,25,210,0.12) !important; border-color: rgba(140,55,250,0.38) !important; }
+    [data-theme="3"] .input-group input:focus { border-color: rgba(160,80,255,0.68) !important; box-shadow: 0 0 0 3px rgba(140,55,250,0.16), 0 4px 20px rgba(140,55,250,0.10) !important; }
+    [data-theme="3"] .btn-glass { background: rgba(18,6,35,0.65) !important; border-color: rgba(140,55,250,0.32) !important; box-shadow: 0 14px 35px rgba(110,25,210,0.20), var(--shadow-soft) !important; }
+    [data-theme="3"] .panel { background: rgba(110,25,210,0.09) !important; border-color: rgba(140,55,250,0.20) !important; }
+    [data-theme="3"] #allTitles li { background: rgba(110,25,210,0.08) !important; border-color: rgba(140,55,250,0.16) !important; }
+
+    /* Theme 4: سماوي وأحمر */
+    [data-theme="4"] .card {
+      background: linear-gradient(180deg, rgba(0,185,215,0.20), rgba(215,35,35,0.14)) !important;
+      border-color: rgba(0,185,215,0.50) !important;
+      box-shadow: 0 22px 60px rgba(0,0,0,0.55), 0 0 38px rgba(0,185,215,0.14) !important;
+    }
+    [data-theme="4"] .card-topline { background: linear-gradient(90deg, transparent, rgba(0,185,215,0.5), rgba(215,35,35,0.45), transparent) !important; }
+    [data-theme="4"] .section-title { color: rgba(0,205,235,0.92) !important; }
+    [data-theme="4"] .input-group input { background: rgba(215,35,35,0.09) !important; border-color: rgba(0,185,215,0.32) !important; }
+    [data-theme="4"] .input-group input:focus { border-color: rgba(0,185,215,0.65) !important; box-shadow: 0 0 0 3px rgba(0,185,215,0.15), 0 4px 20px rgba(0,185,215,0.10) !important; }
+    [data-theme="4"] .btn-glass { background: rgba(0,185,215,0.10) !important; border-color: rgba(215,35,35,0.28) !important; box-shadow: 0 14px 35px rgba(0,185,215,0.14), var(--shadow-soft) !important; }
+    [data-theme="4"] .panel { background: rgba(0,185,215,0.08) !important; border-color: rgba(0,185,215,0.20) !important; }
+    [data-theme="4"] #allTitles li { background: rgba(0,185,215,0.07) !important; border-color: rgba(0,185,215,0.15) !important; }
+
+    /* Theme 5: وردي وأزرق */
+    [data-theme="5"] .card {
+      background: linear-gradient(180deg, rgba(255,100,175,0.20), rgba(20,80,230,0.15)) !important;
+      border-color: rgba(255,100,175,0.50) !important;
+      box-shadow: 0 22px 60px rgba(0,0,0,0.55), 0 0 38px rgba(255,100,175,0.14) !important;
+    }
+    [data-theme="5"] .card-topline { background: linear-gradient(90deg, transparent, rgba(255,100,175,0.5), rgba(20,80,230,0.45), transparent) !important; }
+    [data-theme="5"] .section-title { color: rgba(255,130,190,0.92) !important; }
+    [data-theme="5"] .input-group input { background: rgba(20,80,230,0.10) !important; border-color: rgba(255,100,175,0.32) !important; }
+    [data-theme="5"] .input-group input:focus { border-color: rgba(255,100,175,0.65) !important; box-shadow: 0 0 0 3px rgba(255,100,175,0.15), 0 4px 20px rgba(255,100,175,0.10) !important; }
+    [data-theme="5"] .btn-glass { background: rgba(255,100,175,0.10) !important; border-color: rgba(20,80,230,0.28) !important; box-shadow: 0 14px 35px rgba(255,100,175,0.14), var(--shadow-soft) !important; }
+    [data-theme="5"] .panel { background: rgba(255,100,175,0.08) !important; border-color: rgba(255,100,175,0.20) !important; }
+    [data-theme="5"] #allTitles li { background: rgba(255,100,175,0.07) !important; border-color: rgba(255,100,175,0.15) !important; }
 
     /* Modal */
     #modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.62); z-index: 10000; display: none; align-items: center; justify-content: center; backdrop-filter: blur(10px); }
@@ -315,9 +480,6 @@
     /* Toast */
     #toast { position: fixed; bottom: 26px; left: 50%; transform: translateX(-50%) translateY(110px); background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.14); padding: 12px 20px; border-radius: 999px; box-shadow: 0 18px 40px rgba(0,0,0,0.45); display: flex; gap: 10px; align-items: center; z-index: 9000; transition: transform .38s cubic-bezier(.22,1,.36,1); backdrop-filter: blur(var(--blur)); -webkit-backdrop-filter: blur(var(--blur)); }
     #toast.show { transform: translateX(-50%) translateY(0); }
-    #toast.success-toast { border-color: rgba(76,255,145,0.18); }
-    #toast.error-toast   { border-color: rgba(255,92,92,0.18); }
-    #toast.info-toast    { border-color: rgba(125,211,252,0.18); }
     #toast-text { font-size: 13px; color: #fff; }
 
     /* Footer */
@@ -330,7 +492,9 @@
       .input-group.full { grid-column: auto; }
       .card { padding: 26px 18px; }
       .card-topline { margin: 0 -18px 18px; }
-      .topbar .brand-text h1 { font-size: 14px; }
+      .topbar .brand-text h1 { font-size: 12px; }
+      .theme-grid { grid-template-columns: repeat(3, 1fr); }
+      .topbar-center { display: none; }
     }
     @media (prefers-reduced-motion: reduce) {
       .orb, .notif-icon { animation: none !important; }
@@ -359,7 +523,7 @@
     <div class="loader-bar-wrap"><div class="loader-bar"></div></div>
   </div>
 
-  <!-- ✅ NOTIFICATION BANNER -->
+  <!-- NOTIFICATION BANNER -->
   <div id="notifBanner">
     <span class="notif-icon">📢</span>
     <span class="notif-text" id="notifText">إشعار من الإدارة</span>
@@ -393,9 +557,21 @@
         <p>واجهة لوحة تحكّم للطلبة — حفظ • تعديل • عرض • تصدير</p>
       </div>
     </div>
+
+    <!-- ===== CLOCK (NEW) ===== -->
+    <div class="topbar-center">
+      <div class="topbar-clock">
+        <span class="clock-icon">🕐</span>
+        <div>
+          <div class="clock-time" id="clockTime">00:00:00</div>
+          <div class="clock-date" id="clockDate">—</div>
+        </div>
+      </div>
+    </div>
+
     <div class="topbar-actions">
       <span class="pill name" title="اسم المطوّر/المالك"><i>👑</i> ONX-TAQE</span>
-      <a class="pill dev" href="https://t.me/ONX44" target="_blank" rel="noopener"><i>💬</i> تواصل مع المطوّر</a>
+      <a class="pill dev" href="https://t.me/ONX44" target="_blank" rel="noopener"><i>💬</i> تواصل</a>
     </div>
   </header>
 
@@ -404,7 +580,7 @@
     <section class="card" id="mainCard">
       <div class="card-topline"></div>
 
-      <!-- ✅ DEADLINE PANEL -->
+      <!-- DEADLINE PANEL -->
       <div id="deadlinePanel">
         <div class="deadline-header">
           <div class="deadline-icon-box">⏰</div>
@@ -470,7 +646,6 @@
         </div>
       </div>
 
-      <!-- ✅ زر حذف + زر إرسال مشكلة -->
       <div class="btn-grid" style="margin-top:14px;">
         <div class="btn-wrap">
           <button class="btn-glass btn-delete" onclick="deleteMyData()">
@@ -498,7 +673,49 @@
         <div id="allTitles"></div>
       </div>
 
-      <footer class="footer">
+      <!-- ===== THEME SELECTOR (NEW) ===== -->
+      <div class="divider"></div>
+      <div class="theme-section">
+        <div class="theme-section-title">🎨 اختر ثيم الواجهة</div>
+        <div class="theme-grid" id="themeGrid">
+
+          <button class="theme-btn-item active" data-t="0" onclick="applyTheme(0)">
+            <div class="theme-swatch" style="background:linear-gradient(135deg,rgba(255,255,255,0.12),rgba(125,211,252,0.12))"></div>
+            افتراضي
+          </button>
+
+          <button class="theme-btn-item" data-t="1" onclick="applyTheme(1)">
+            <div class="theme-swatch" style="background:linear-gradient(135deg,rgba(140,150,180,0.55),rgba(30,80,210,0.45))"></div>
+            رصاصي وأزرق
+          </button>
+
+          <button class="theme-btn-item" data-t="2" onclick="applyTheme(2)">
+            <div class="theme-swatch" style="background:linear-gradient(135deg,rgba(255,255,255,0.60),rgba(190,240,0,0.55))"></div>
+            أبيض وليموني
+          </button>
+
+          <button class="theme-btn-item" data-t="3" onclick="applyTheme(3)">
+            <div class="theme-swatch" style="background:linear-gradient(135deg,rgba(12,4,20,0.92),rgba(130,40,240,0.65))"></div>
+            أسود وبنفسجي
+          </button>
+
+          <button class="theme-btn-item" data-t="4" onclick="applyTheme(4)">
+            <div class="theme-swatch" style="background:linear-gradient(135deg,rgba(0,185,215,0.65),rgba(220,35,35,0.55))"></div>
+            سماوي وأحمر
+          </button>
+
+        </div>
+
+        <!-- Row 2 -->
+        <div style="margin-top:8px">
+          <button class="theme-btn-item" data-t="5" onclick="applyTheme(5)" style="width:100%">
+            <div class="theme-swatch" style="background:linear-gradient(135deg,rgba(255,100,175,0.65),rgba(20,80,230,0.55));width:100%"></div>
+            وردي وأزرق
+          </button>
+        </div>
+      </div>
+
+      <footer class="footer" style="margin-top:18px">
         واجهة لوحة تحكّم — <a href="https://t.me/ONX44" target="_blank" rel="noopener">@ONX44</a>
       </footer>
     </section>
@@ -507,22 +724,12 @@
   <script type="module">
     import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
 
-    /* =============================================
-       CONFIG — Supabase
-    ============================================= */
     const SUPABASE_URL = "https://mcwemgjmqwbgxoyiwant.supabase.co";
     const SUPABASE_KEY = "sb_publishable_qmIUC4Rkb-VGOek8qkVqFg_Sn4x3WjI";
     const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
-    /* =============================================
-       ⚠️  Telegram CONFIG
-       1. أرسل رسالة للبوت الخاص بك أولاً
-       2. افتح الرابط التالي في متصفحك لتحصل على chat_id:
-          https://api.telegram.org/bot7735965641:AAFzkUy27zKXYWroodhdxOBapMgwttyq5_s/getUpdates
-       3. انسخ قيمة  "id"  من  "chat"  وضعها أدناه
-    ============================================= */
     const TELEGRAM_BOT_TOKEN = "7769329974:AAHEwfIzPDZ1-KCSAKsxepmNtC35lYXvlMs";
-    const TELEGRAM_CHAT_ID   = "910624538"; // ← ضع هنا رقم chat_id الخاص بك
+    const TELEGRAM_CHAT_ID   = "910624538";
 
     /* ===== Performance ===== */
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -548,7 +755,7 @@
       }
       step(){
         this.x += this.vx; this.y += this.vy;
-        if(this.y < -20)             this.y = canvas.height+20;
+        if(this.y < -20)              this.y = canvas.height+20;
         if(this.y > canvas.height+20) this.y = -20;
         if(this.x < -30 || this.x > canvas.width+30) this.reset();
       }
@@ -641,19 +848,16 @@
       m._t = setTimeout(()=> m.className='', 4200);
     }
 
-    /* ===== Modal (supports input + textarea) ===== */
+    /* ===== Modal ===== */
     function showModal({ icon='✏️', title='', msg='', inputPlaceholder='', withInput=false,
                          isTextarea=false, confirmText='تأكيد', cancelText='إلغاء' }){
       return new Promise(resolve=>{
         document.getElementById('modal-icon').textContent  = icon;
         document.getElementById('modal-title').textContent = title;
         document.getElementById('modal-msg').textContent   = msg;
-
         const inp = document.getElementById('modal-input');
         const ta  = document.getElementById('modal-textarea');
-        inp.style.display = 'none';
-        ta.style.display  = 'none';
-
+        inp.style.display = 'none'; ta.style.display  = 'none';
         if(withInput){
           const activeEl = isTextarea ? ta : inp;
           activeEl.style.display = 'block';
@@ -661,7 +865,6 @@
           activeEl.value         = '';
           setTimeout(()=> activeEl.focus(), 60);
         }
-
         const btns    = document.getElementById('modal-btns');
         btns.innerHTML = `
           <button class="modal-btn modal-btn-cancel">${cancelText}</button>
@@ -669,7 +872,6 @@
         `;
         const overlay = document.getElementById('modal-overlay');
         overlay.classList.add('active');
-
         const activeEl = isTextarea ? ta : inp;
         btns.querySelector('.modal-btn-confirm').onclick = ()=>{
           overlay.classList.remove('active');
@@ -690,6 +892,45 @@
       document.getElementById('pageWrap').classList.remove('has-notif');
     }
     window.dismissNotif = dismissNotif;
+
+    /* ===== ⏰ CLOCK (NEW) ===== */
+    function initClock(){
+      const DAYS_AR = ['الأحد','الاثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];
+      const MONTHS_AR = ['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'];
+      function update(){
+        const now = new Date();
+        const h = String(now.getHours()).padStart(2,'0');
+        const m = String(now.getMinutes()).padStart(2,'0');
+        const s = String(now.getSeconds()).padStart(2,'0');
+        const clockEl = document.getElementById('clockTime');
+        const dateEl  = document.getElementById('clockDate');
+        if(clockEl) clockEl.textContent = `${h}:${m}:${s}`;
+        if(dateEl)  dateEl.textContent  = `${DAYS_AR[now.getDay()]} ${now.getDate()} ${MONTHS_AR[now.getMonth()]}`;
+        // Update clock icon per hour
+        const icons = ['🕛','🕐','🕑','🕒','🕓','🕔','🕕','🕖','🕗','🕘','🕙','🕚'];
+        const iconEl = document.querySelector('.clock-icon');
+        if(iconEl) iconEl.textContent = icons[now.getHours() % 12];
+      }
+      update();
+      setInterval(update, 1000);
+    }
+    initClock();
+
+    /* ===== 🎨 THEME SYSTEM (NEW) ===== */
+    function applyTheme(n){
+      document.documentElement.setAttribute('data-theme', String(n));
+      localStorage.setItem('onx_theme', String(n));
+      document.querySelectorAll('.theme-btn-item').forEach(b =>{
+        b.classList.toggle('active', b.dataset.t == n);
+      });
+    }
+
+    function initTheme(){
+      const saved = localStorage.getItem('onx_theme') || '0';
+      applyTheme(parseInt(saved));
+    }
+    initTheme();
+    window.applyTheme = applyTheme;
 
     /* ===== Countdown ===== */
     let countdownInterval = null;
@@ -720,13 +961,10 @@
       countdownInterval = setInterval(update, 1000);
     }
 
-    /* ===== Load Site Control (Notification + Deadline) ===== */
+    /* ===== Load Site Control ===== */
     async function loadSiteControlData(){
-      const { data, error } = await supabase
-        .from("site_control").select("*").eq("id",1).single();
+      const { data, error } = await supabase.from("site_control").select("*").eq("id",1).single();
       if(error || !data) return;
-
-      /* — Notification — */
       const banner    = document.getElementById('notifBanner');
       const notifText = document.getElementById('notifText');
       if(data.notification && data.notification.trim()){
@@ -738,8 +976,6 @@
         banner.style.display = 'none';
         document.getElementById('pageWrap').classList.remove('has-notif');
       }
-
-      /* — Deadline — */
       const deadlinePanel = document.getElementById('deadlinePanel');
       clearInterval(countdownInterval);
       if(data.deadline && data.deadline_active){
@@ -756,8 +992,7 @@
 
     /* ===== Check Site Status ===== */
     async function checkSiteStatus(){
-      const { data, error } = await supabase
-        .from("site_control").select("site_open").eq("id",1).single();
+      const { data, error } = await supabase.from("site_control").select("site_open").eq("id",1).single();
       if(error){
         document.body.innerHTML = `<h2 style="color:#fff;text-align:center;margin-top:120px;">حدث خطأ عند التحقق من حالة الموقع</h2>`;
         return false;
@@ -791,8 +1026,7 @@
         const gl = c.getContext('webgl') || c.getContext('experimental-webgl');
         if(!gl) return "no-webgl";
         const dbg = gl.getExtension('WEBGL_debug_renderer_info');
-        return (dbg ? gl.getParameter(dbg.UNMASKED_VENDOR_WEBGL) : "v?")
-             + "|"
+        return (dbg ? gl.getParameter(dbg.UNMASKED_VENDOR_WEBGL) : "v?") + "|"
              + (dbg ? gl.getParameter(dbg.UNMASKED_RENDERER_WEBGL) : "r?");
       } catch { return "no-webgl"; }
     }
@@ -811,13 +1045,9 @@
     async function trackVisitor(){
       const code = await DEVICE_CODE_PROMISE;
       try {
-        const { data: sd } = await supabase
-          .from("student_reports").select("name").eq("code",code).single();
+        const { data: sd } = await supabase.from("student_reports").select("name").eq("code",code).single();
         const name = sd?.name || null;
-
-        const { data: existing } = await supabase
-          .from("visitors").select("*").eq("code",code).single();
-
+        const { data: existing } = await supabase.from("visitors").select("*").eq("code",code).single();
         if(existing){
           await supabase.from("visitors").update({
             last_visit:  new Date().toISOString(),
@@ -825,45 +1055,32 @@
             name: name || existing.name
           }).eq("code", code);
         } else {
-          await supabase.from("visitors").insert([{
-            code,
-            name,
-            last_visit:  new Date().toISOString(),
-            visit_count: 1
-          }]);
+          await supabase.from("visitors").insert([{ code, name, last_visit: new Date().toISOString(), visit_count: 1 }]);
         }
       } catch(e){ console.log("visitor track:", e); }
     }
 
-    /* ===== Report Problem → Telegram ===== */
+    /* ===== 🆘 Report Problem ===== */
     async function reportProblem(){
       const code = await DEVICE_CODE_PROMISE;
-      const { data: me } = await supabase
-        .from("student_reports").select("name").eq("code",code).single();
-
+      const { data: me } = await supabase.from("student_reports").select("name").eq("code",code).single();
       const result = await showModal({
-        icon:             '🆘',
-        title:            'أرسل مشكلتك للمشرف',
-        msg:              'اكتب مشكلتك أو استفسارك بالتفصيل\nوسيتم إرسالها للمشرف مباشرة عبر تيليغرام',
-        withInput:        true,
-        isTextarea:       true,
+        icon: '🆘', title: 'أرسل مشكلتك للمشرف',
+        msg: 'اكتب مشكلتك أو استفسارك بالتفصيل\nوسيتم إرسالها للمشرف مباشرة عبر تيليغرام',
+        withInput: true, isTextarea: true,
         inputPlaceholder: 'اكتب مشكلتك هنا…',
-        confirmText:      '📤 إرسال',
-        cancelText:       'إلغاء'
+        confirmText: '📤 إرسال', cancelText: 'إلغاء'
       });
-
       if(!result || !result.trim()) return;
-
       const studentName = me?.name || 'طالب غير مسجل';
-      const msgText = `🆘 <b>مشكلة من طالب — ONX-TAQE</b>\n\n` +
-                      `👤 <b>الاسم:</b> ${studentName}\n` +
-                      `📝 <b>المشكلة:</b>\n${result.trim()}\n\n` +
-                      `🕐 <b>الوقت:</b> ${new Date().toLocaleString('ar-EG')}`;
+      const msgText = `🆘 <b>مشكلة من طالب — ONX-TAQE</b>\n\n`
+                    + `👤 <b>الاسم:</b> ${studentName}\n`
+                    + `📝 <b>المشكلة:</b>\n${result.trim()}\n\n`
+                    + `🕐 <b>الوقت:</b> ${new Date().toLocaleString('ar-EG')}`;
       try {
-        const res     = await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
-          method:  'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body:    JSON.stringify({ chat_id: TELEGRAM_CHAT_ID, text: msgText, parse_mode: 'HTML' })
+        const res  = await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ chat_id: TELEGRAM_CHAT_ID, text: msgText, parse_mode: 'HTML' })
         });
         const json = await res.json();
         if(json.ok){
@@ -874,7 +1091,7 @@
         }
       } catch(e){
         console.error("Telegram:", e);
-        setMsg("❌ فشل الإرسال — تأكد من إعداد chat_id في الكود أو تواصل مع المشرف مباشرة", "error");
+        setMsg("❌ فشل الإرسال — تواصل مع المشرف مباشرة", "error");
         showToast("فشل الإرسال ❌", "error");
       }
     }
@@ -905,28 +1122,21 @@
       const title   = document.getElementById("reportTitle").value.trim();
       const subject = document.getElementById("subjectName").value.trim();
       const code    = await DEVICE_CODE_PROMISE;
-
       if(name.split(/\s+/).length < 2){ setMsg("⚠️ الاسم لازم يكون ثنائي على الأقل","error"); showToast("الاسم لازم يكون ثنائي","error"); return; }
       if(!name||!title||!subject){ setMsg("⚠️ املا كل الحقول الأول","error"); showToast("املا كل الحقول","error"); return; }
-
       const { data:already, error:e0 } = await supabase.from("student_reports").select("id").eq("code",code).limit(1);
       if(e0){ setMsg("❌ حصل خطأ أثناء التحقق","error"); showToast("خطأ في التحقق","error"); return; }
       if(already && already.length){ setMsg("⛔ عندك بيانات محفوظة بالفعل. احذف بياناتك أولًا لو عايز تسجل من جديد.","error"); showToast("لا يمكن إضافة بيانات جديدة","error"); await showMyInfo(); return; }
-
       const [{ data:nameUsed, error:err1 }, { data:titleUsed, error:err2 }] = await Promise.all([
         supabase.from("student_reports").select("id").eq("name",name).limit(1),
         supabase.from("student_reports").select("id").eq("title",title).limit(1)
       ]);
       if(err1||err2){ setMsg("❌ حصل خطأ في التحقق من البيانات","error"); showToast("خطأ في التحقق","error"); return; }
       if((nameUsed&&nameUsed.length)||(titleUsed&&titleUsed.length)){ setMsg("❌ الاسم أو العنوان مستخدم مسبقاً","error"); showToast("الاسم/العنوان مستخدم","error"); return; }
-
       const { error } = await supabase.from("student_reports")
         .insert([{ name, title, subject, date: new Date().toISOString(), code }]);
       if(error){ console.log(error); setMsg("❌ فشل الحفظ","error"); showToast("فشل الحفظ","error"); return; }
-
-      // تحديث اسم الزائر بعد الحفظ
       await supabase.from("visitors").update({ name }).eq("code", code);
-
       setMsg("✅ اتسجلت بياناتك بنجاح","success"); showToast("تم الحفظ بنجاح","success");
       await showMyInfo(); await showAll();
     }
@@ -936,36 +1146,47 @@
       const code = await DEVICE_CODE_PROMISE;
       const { data:me, error:e } = await supabase.from("student_reports").select("id").eq("code",code).limit(1);
       if(e||!me||!me.length){ setMsg("⚠️ مفيش بيانات محفوظة ليك","error"); showToast("لا توجد بيانات","error"); return; }
-
       const newTitle = await showModal({ icon:'✏️', title:'تغيير عنوان التقرير', msg:'اكتب العنوان الجديد (لازم يكون فريد)', withInput:true, inputPlaceholder:'العنوان الجديد...', confirmText:'تغيير', cancelText:'إلغاء' });
       if(!newTitle) return;
       const clean = newTitle.trim();
       if(!clean){ setMsg("⚠️ العنوان الجديد فاضي","error"); showToast("اكتب عنوان","error"); return; }
-
       const { data:titleUsed } = await supabase.from("student_reports").select("id").eq("title",clean).limit(1);
       if(titleUsed && titleUsed.length){ setMsg("❌ العنوان ده مستخدم قبل كده","error"); showToast("العنوان مستخدم","error"); return; }
-
-      const { error } = await supabase.from("student_reports")
-        .update({ title: clean, date: new Date().toISOString() }).eq("code", code);
+      const { error } = await supabase.from("student_reports").update({ title: clean, date: new Date().toISOString() }).eq("code", code);
       if(error){ console.log(error); setMsg("❌ فشل التحديث","error"); showToast("فشل التحديث","error"); return; }
-
       setMsg("✅ تم تغيير العنوان","success"); showToast("تم تغيير العنوان","success");
       await showMyInfo(); await showAll();
     }
 
-    /* ===== Show My Info (مع Badge + Color) ===== */
+    /* ===== ✅ Show My Info — مع عرض التحذير ===== */
     async function showMyInfo(){
       const code    = await DEVICE_CODE_PROMISE;
       const infoBox = document.getElementById("infoBox");
-      const { data, error } = await supabase
-        .from("student_reports").select("*").eq("code",code).single();
+      const { data, error } = await supabase.from("student_reports").select("*").eq("code",code).single();
       if(error||!data){ setMsg("⚠️ مش لاقي بياناتك","error"); showToast("لا توجد بيانات","error"); return; }
 
       const nameColor = data.color || 'rgba(255,255,255,0.86)';
       const badgeStr  = data.badge ? `${data.badge} ` : '';
+
+      /* ⚠️ Alert HTML */
+      let alertHtml = '';
+      if(data.alert_text){
+        const ac       = data.alert_color || '#ff4444';
+        const typeLabel= data.alert_type === 'public' ? '🌐 عام' : '🔒 خاص';
+        alertHtml = `
+          <div class="alert-full-wrap">
+            <div class="alert-full-badge" style="--ac:${ac}; border-color:${ac}; color:${ac}">
+              <span class="alert-full-icon">⚠️</span>
+              <span class="alert-full-text">${data.alert_text}</span>
+              <span class="alert-full-type">${typeLabel}</span>
+            </div>
+          </div>`;
+      }
+
       infoBox.style.display = 'block';
       infoBox.innerHTML = `
         <h4>🎓 بيانات الطالب</h4>
+        ${alertHtml}
         <p><strong>👤 الاسم</strong>
            <span style="color:${nameColor};font-weight:700">${badgeStr}${data.name}</span></p>
         <p><strong>📄 العنوان</strong> ${data.title}</p>
@@ -974,16 +1195,13 @@
       `;
     }
 
-    /* ===== Show All (مع Badge + Color) ===== */
+    /* ===== ✅ Show All — مع عرض التحذير العام ===== */
     async function showAll(){
       const allPanel  = document.getElementById("allPanel");
       const allTitles = document.getElementById("allTitles");
-
-      const { data, error } = await supabase
-        .from("student_reports")
-        .select("id,name,title,subject,date,code,badge,color")
+      const { data, error } = await supabase.from("student_reports")
+        .select("id,name,title,subject,date,code,badge,color,alert_text,alert_color,alert_type")
         .order("id", { ascending:true });
-
       if(error){ allPanel.style.display='block'; allTitles.innerHTML="❌ فشل تحميل البيانات"; return; }
       ALL_CACHE = data || [];
       allPanel.style.display = 'block';
@@ -1004,11 +1222,20 @@
           const highlight   = d.code === myCode ? "highlight" : "";
           const displayName = d.badge ? `${d.badge} ${d.name}` : d.name;
           const nameColor   = d.color || 'rgba(255,255,255,0.84)';
+
+          /* ⚠️ Public alert badge */
+          let alertBadge = '';
+          if(d.alert_text && d.alert_type === 'public'){
+            const ac = d.alert_color || '#ff4444';
+            alertBadge = `<span class="alert-mini-badge" style="--ac:${ac};border-color:${ac};color:${ac}">⚠️ ${d.alert_text}</span>`;
+          }
+
           html += `
             <li class="${highlight}">
               <span class="row-num">${i+1}</span>
               <span class="info">
                 <span style="color:${nameColor};font-weight:700">${displayName}</span>
+                ${alertBadge}
                 — ${d.title}
                 — <em style="color:rgba(255,255,255,0.60)">${d.subject}</em>
               </span>
@@ -1024,13 +1251,10 @@
       const code = await DEVICE_CODE_PROMISE;
       const { data:me, error:e } = await supabase.from("student_reports").select("id").eq("code",code).limit(1);
       if(e||!me||!me.length){ setMsg("⚠️ مفيش بيانات محفوظة","error"); showToast("لا توجد بيانات","error"); return; }
-
       const confirmed = await showModal({ icon:'🗑️', title:'تأكيد الحذف', msg:'هل أنت متأكد إنك عايز تحذف بياناتك؟\nالإجراء نهائي ولا يمكن التراجع عنه.', withInput:false, confirmText:'حذف', cancelText:'إلغاء' });
       if(!confirmed) return;
-
       const { error } = await supabase.from("student_reports").delete().eq("code",code);
       if(error){ console.log(error); setMsg("❌ فشل الحذف","error"); showToast("فشل الحذف","error"); return; }
-
       const infoBox = document.getElementById("infoBox");
       infoBox.style.display='none'; infoBox.innerHTML='';
       setMsg("✅ اتحذفت بياناتك","success"); showToast("تم حذف البيانات","success");
@@ -1042,13 +1266,10 @@
       const code = await DEVICE_CODE_PROMISE;
       const { data, error } = await supabase.from("student_reports").select("*").eq("code",code).single();
       if(error||!data){ setMsg("⚠️ لازم تحفظ بياناتك الأول","error"); showToast("لا توجد بيانات","error"); return; }
-
       const choice = await showModal({ icon:'⬇️', title:'تحميل بياناتي', msg:'اختار صيغة التحميل:\nاكتب: JSON أو TXT', withInput:true, inputPlaceholder:'اكتب JSON أو TXT', confirmText:'تحميل', cancelText:'إلغاء' });
       if(!choice) return;
-
       const format   = choice.trim().toUpperCase();
       const safeName = (data.name||'student').replace(/[^\u0600-\u06FFa-zA-Z0-9_-]+/g,'_');
-
       if(format==="JSON"){
         downloadBlob(`ONX-TAQE_${safeName}_report.json`,
           JSON.stringify({ brand:"ONX-TAQE", exported_at:new Date().toISOString(),
@@ -1073,13 +1294,10 @@
 
     /* ===== Realtime Subscriptions ===== */
     function setupRealtime(){
-      // تغييرات لوحة التحكم (إشعار + موعد التسليم)
       supabase.channel("site_ctrl_student")
         .on("postgres_changes", { event:"*", schema:"public", table:"site_control" }, ()=>{
           loadSiteControlData();
         }).subscribe();
-
-      // تغييرات بيانات الطلبة
       supabase.channel("reports_student")
         .on("postgres_changes", { event:"*", schema:"public", table:"student_reports" }, ()=>{
           showMyInfo().catch(()=>{});
@@ -1088,27 +1306,22 @@
         }).subscribe();
     }
 
-    /* ===== Boot Sequence ===== */
+    /* ===== Boot ===== */
     checkSiteStatus().then(open => {
       if(!open) return;
-
-      // Expose to window (onclick handlers)
       window.saveData       = saveData;
       window.changeTitle    = changeTitle;
       window.showAll        = showAll;
       window.showMyInfo     = showMyInfo;
       window.deleteMyData   = deleteMyData;
       window.downloadMyData = downloadMyData;
-
-      // Init features
-      trackVisitor().catch(()=>{});       // تسجيل الزيارة
-      loadSiteControlData();              // إشعار + موعد
-      setupRealtime();                    // مزامنة فورية
-
-      // تحميل معلومات الطالب تلقائياً
+      trackVisitor().catch(()=>{});
+      loadSiteControlData();
+      setupRealtime();
       setTimeout(()=> showMyInfo().catch(()=>{}), 700);
     });
   </script>
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js/v8c78df7c7c0f484497ecbca7046644da1771523124516" integrity="sha512-8DS7rgIrAmghBFwoOTujcf6D9rXvH8xm8JQ1Ja01h9QX8EzXldiszufYa4IFfKdLUKTTrnSFXLDkUEOTrZQ8Qg==" data-cf-beacon='{"version":"2024.11.0","token":"4edd5f8ec12a48cfa682ab8261b80a79","server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
 <script defer src="https://static.cloudflareinsights.com/beacon.min.js/v8c78df7c7c0f484497ecbca7046644da1771523124516" integrity="sha512-8DS7rgIrAmghBFwoOTujcf6D9rXvH8xm8JQ1Ja01h9QX8EzXldiszufYa4IFfKdLUKTTrnSFXLDkUEOTrZQ8Qg==" data-cf-beacon='{"version":"2024.11.0","token":"4edd5f8ec12a48cfa682ab8261b80a79","server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
 </body>
 </html>
