@@ -181,29 +181,20 @@
 
     /* Card */
     .card {
-  width: 100%;
-  margin: 0;
-  padding: 30px 28px;
-
-  background: linear-gradient(180deg, rgba(255,255,255,0.10), rgba(255,255,255,0.06));
-  border: 1px solid rgba(255,255,255,0.14);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
-
-  backdrop-filter: blur(var(--blur));
-  -webkit-backdrop-filter: blur(var(--blur));
-
-  opacity: 0;
-  transform: translateY(34px) scale(.985);
-  animation: cardIn .8s cubic-bezier(.22,1,.36,1) 1.55s forwards;
-
-  position: relative;
-  overflow: hidden;
-  transform-style: preserve-3d;
-  will-change: transform;
-
-  transition: background 0.5s ease, border-color 0.5s ease, box-shadow 0.5s ease;
-}
+      width: 780px; max-width: 100%;
+      margin: 0 auto;
+      background: linear-gradient(180deg, rgba(255,255,255,0.10), rgba(255,255,255,0.06));
+      border: 1px solid rgba(255,255,255,0.14);
+      border-radius: var(--radius);
+      padding: 30px 28px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(var(--blur)); -webkit-backdrop-filter: blur(var(--blur));
+      opacity: 0; transform: translateY(34px) scale(.985);
+      animation: cardIn .8s cubic-bezier(.22,1,.36,1) 1.55s forwards;
+      position: relative; overflow: hidden;
+      transform-style: preserve-3d; will-change: transform;
+      transition: background 0.5s ease, border-color 0.5s ease, box-shadow 0.5s ease;
+    }
     @keyframes cardIn { to{opacity:1;transform:translateY(0) scale(1)} }
     .card::before { content: ''; position: absolute; inset: 0; pointer-events: none; background: radial-gradient(800px 400px at 20% 0%, rgba(255,255,255,0.10), transparent 55%), radial-gradient(700px 380px at 90% 100%, rgba(125,211,252,0.10), transparent 60%); }
     .card-topline { height: 2px; margin: 0 -28px 18px; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.28), rgba(125,211,252,0.28), transparent); opacity: 0.8; transition: background 0.5s ease; }
@@ -456,24 +447,11 @@
     .searchRow input:focus { border-color: rgba(125,211,252,0.28); box-shadow: 0 0 0 3px rgba(125,211,252,0.10); }
 
     .table-wrapper-student {
-  max-height: 55vh;
-  overflow-y: auto;
-  overflow-x: auto;
-  border-radius: 14px;
-
-  scrollbar-width: thin;
-  scrollbar-color: rgba(255,255,255,0.18) transparent;
-}
-
-.table-wrapper-student::-webkit-scrollbar {
-  width: 6px;
-  height: 5px;
-}
-
-.table-wrapper-student::-webkit-scrollbar-thumb {
-  background: rgba(255,255,255,0.18);
-  border-radius: 10px;
-}
+      overflow-x: auto; border-radius: 14px; overflow-y: visible;
+      scrollbar-width: thin; scrollbar-color: rgba(255,255,255,0.18) transparent;
+    }
+    .table-wrapper-student::-webkit-scrollbar { height: 5px; }
+    .table-wrapper-student::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.18); border-radius: 10px; }
 
     .student-table { width: 100%; border-collapse: collapse; min-width: 560px; }
     .student-table thead tr {
@@ -481,27 +459,18 @@
       border-bottom: 1px solid rgba(255,255,255,0.10);
     }
     .student-table thead th {
-  padding: 12px 10px;
-  text-align: center;
-  font-family: 'TitelFont', sans-serif;
-  font-size: 11px;
-  font-weight: 700;
-  color: rgba(255,255,255,0.55);
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  white-space: nowrap;
-
-  position: sticky;
-  top: 0;
-  z-index: 50;
-  background: linear-gradient(135deg, rgba(125,211,252,0.10), rgba(245,200,66,0.07));
-}
-
-.student-table tbody tr {
-  border-bottom: 1px solid rgba(255,255,255,0.05);
-  transition: all 0.25s ease;
-  animation: rowIn 0.4s ease both;
-}
+      padding: 12px 10px; text-align: center;
+      font-family: 'TitelFont', sans-serif;
+      font-size: 11px; font-weight: 700;
+      color: rgba(255,255,255,0.55);
+      text-transform: uppercase; letter-spacing: 1px;
+      white-space: nowrap;
+    }
+    .student-table tbody tr {
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      transition: all 0.25s ease;
+      animation: rowIn 0.4s ease both;
+    }
     @keyframes rowIn { from{opacity:0;transform:translateX(10px)} to{opacity:1;transform:translateX(0)} }
     .student-table tbody tr:hover {
       background: rgba(255,255,255,0.04);
@@ -519,14 +488,6 @@
       font-family: 'WriteFont', sans-serif;
       vertical-align: middle;
     }
-    .student-table td:first-child,
-.student-table th:first-child {
-  position: sticky;
-  right: 0;
-  z-index: 30;
-  background: rgba(20,20,30,0.95);
-}
-
     .td-num .row-num-badge {
       width: 28px; height: 28px; border-radius: 8px;
       background: rgba(125,211,252,0.12);
