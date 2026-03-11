@@ -6,16 +6,6 @@
   <title>تقارير الطلبة — تصميم احترافي | ONX-TAQE PRO</title>
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
 
-  <!--
-    ✅ ملف HTML كامل (إصدار احترافي - ONX-TAQE PRO v2.1)
-    - ساعة فاخرة بنظام 12 ساعة + التاريخ الهجري والميلادي
-    - حقوق © ONX-TAQE فوق الساعة بتأثير وميض فاخر + تناثر جزيئات
-    - زر تواصل 🧑‍💻 DEV يوجه لـ @ONX44
-    - تصدير TXT فقط (بدون PDF)
-    - إحصائيات دقيقة: إجمالي • متميزون • تنبيهات
-    - 10 ثيمات فاخرة • حماية البصمة • تحديث فوري
-  -->
-
   <style>
     /* ===== CSS Variables ===== */
     :root {
@@ -31,6 +21,26 @@
       --card-glow: rgba(125,211,252,.15);
       --card-radial-1: rgba(125,211,252,.12);
       --card-radial-2: rgba(245,200,66,.10);
+      --bg-color: #050b1a;
+      --bg-gradient: radial-gradient(ellipse at 20% 50%, rgba(0,212,255,0.10) 0%, transparent 60%),
+                     radial-gradient(ellipse at 80% 20%, rgba(123,47,255,0.10) 0%, transparent 60%),
+                     radial-gradient(ellipse at 50% 80%, rgba(233,69,96,0.07) 0%, transparent 60%),
+                     linear-gradient(180deg, rgba(5,11,26,0.4) 0%, rgba(5,11,26,0.7) 100%);
+    }
+
+    /* ===== LIGHT MODE ===== */
+    html[data-mode="light"]{
+      --bg-color: #f0f2f5;
+      --text-light: #1a1a2e;
+      --glass: rgba(0,0,0,0.05);
+      --glass-border: rgba(0,0,0,0.1);
+      --card-shadow: 0 20px 60px rgba(0,0,0,0.15);
+      --card-gradient-start: rgba(0,0,0,.03);
+      --card-gradient-end: rgba(0,0,0,.01);
+      --card-border: rgba(0,0,0,.08);
+      --bg-gradient: radial-gradient(ellipse at 20% 50%, rgba(0,212,255,0.08) 0%, transparent 60%),
+                     radial-gradient(ellipse at 80% 20%, rgba(123,47,255,0.08) 0%, transparent 60%),
+                     linear-gradient(180deg, rgba(240,242,245,0.8) 0%, rgba(240,242,245,0.95) 100%);
     }
 
     /* ===== Reset & Base ===== */
@@ -39,15 +49,15 @@
     body{
       font-family:'Cairo',system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
       overflow:hidden; -webkit-user-select:none; -moz-user-select:none;
-      -ms-user-select:none; user-select:none; background:#050b1a;
+      -ms-user-select:none; user-select:none; background:var(--bg-color);
       color:var(--text-light); transition: background 0.4s ease;
     }
     button,input,textarea,select{
-      font-family:inherit; -webkit-user-select:none; -moz-user-select:none;
-      -ms-user-select:none; user-select:none;
+      font-family:inherit; -webkit-user-select:text; -moz-user-select:text;
+      -ms-user-select:text; user-select:text;
     }
     :focus{outline:none!important;box-shadow:none!important}
-    ::selection{background:transparent}
+    ::selection{background:rgba(0,212,255,0.3)}
 
     /* ===== Background Effects ===== */
     .bg-image {
@@ -55,12 +65,12 @@
       background: url('M.jpg') center center / cover no-repeat;
       filter:brightness(0.25) saturate(1.5);
     }
+    html[data-mode="light"] .bg-image{
+      filter:brightness(0.85) saturate(1.2);
+    }
     .bg-overlay {
       position:fixed; inset:0; z-index:-1;
-      background: radial-gradient(ellipse at 20% 50%, rgba(0,212,255,0.10) 0%, transparent 60%),
-                  radial-gradient(ellipse at 80% 20%, rgba(123,47,255,0.10) 0%, transparent 60%),
-                  radial-gradient(ellipse at 50% 80%, rgba(233,69,96,0.07) 0%, transparent 60%),
-                  linear-gradient(180deg, rgba(5,11,26,0.4) 0%, rgba(5,11,26,0.7) 100%);
+      background: var(--bg-gradient);
     }
     #particles { position:fixed; inset:0; z-index:-1; pointer-events:none; }
     .particle {
@@ -175,47 +185,10 @@
       -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; letter-spacing:1px; 
     }
     .header-subtitle { color:rgba(255,255,255,0.5); font-size:0.9rem; margin-top:4px; letter-spacing:2px; text-transform:uppercase; }
+    html[data-mode="light"] .header-subtitle{ color:rgba(0,0,0,0.5); }
     .header-line { width:180px; height:2px; margin:12px auto 0; background:linear-gradient(90deg,transparent,var(--neon-blue),var(--neon-purple),transparent); }
 
-    /* ===== FANCY CLOCK (نظام 12 ساعة) ===== */
-    .fancy-clock {
-      display:flex; align-items:center; justify-content:center; gap:12px;
-      padding:10px 18px; border-radius:16px;
-      background:linear-gradient(135deg, rgba(0,212,255,0.08), rgba(123,47,255,0.08));
-      border:1px solid rgba(0,212,255,0.2);
-      margin:15px auto 20px; max-width:420px;
-      box-shadow:0 8px 32px rgba(0,212,255,0.15), inset 0 1px 0 rgba(255,255,255,0.1);
-      animation: clockGlow 3s ease-in-out infinite;
-    }
-    @keyframes clockGlow {
-      0%,100% { box-shadow:0 8px 32px rgba(0,212,255,0.15), inset 0 1px 0 rgba(255,255,255,0.1); }
-      50% { box-shadow:0 12px 48px rgba(0,212,255,0.35), inset 0 1px 0 rgba(255,255,255,0.2); }
-    }
-    .clock-time {
-      font-family:'Cairo',monospace; font-size:1.6rem; font-weight:900;
-      color:var(--neon-blue); letter-spacing:2px; direction:ltr;
-      text-shadow:0 0 20px rgba(0,212,255,0.5);
-    }
-    .clock-period {
-      font-size:0.7rem; color:rgba(255,255,255,0.6); margin-right:4px;
-      background:rgba(0,212,255,0.15); padding:2px 6px; border-radius:6px;
-    }
-    .clock-date {
-      display:flex; flex-direction:column; align-items:flex-start; gap:2px;
-      padding-right:12px; border-right:1px solid rgba(255,255,255,0.2);
-    }
-    .clock-date .miladi {
-      font-size:0.75rem; color:rgba(255,255,255,0.7);
-    }
-    .clock-date .hijri {
-      font-size:0.7rem; color:var(--gold); font-weight:600;
-    }
-    .clock-icon {
-      font-size:1.4rem; animation: tick 1s steps(1) infinite;
-    }
-    @keyframes tick { 50% { transform:scale(1.1); } }
-
-    /* ===== ONX-TAQE FANCY RIGHTS ABOVE CLOCK (جديد - فاخر جداً) ===== */
+    /* ===== FANCY RIGHTS ABOVE CLOCK ===== */
     .fancy-rights-above {
       text-align:center; margin:8px auto 12px; position:relative;
       min-height:32px; display:flex; align-items:center; justify-content:center;
@@ -256,75 +229,97 @@
     }
     @keyframes iconPulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.3) rotate(15deg)} }
 
+    /* ===== FANCY CLOCK ===== */
+    .fancy-clock {
+      display:flex; align-items:center; justify-content:center; gap:12px;
+      padding:10px 18px; border-radius:16px;
+      background:linear-gradient(135deg, rgba(0,212,255,0.08), rgba(123,47,255,0.08));
+      border:1px solid rgba(0,212,255,0.2);
+      margin:15px auto 20px; max-width:420px;
+      box-shadow:0 8px 32px rgba(0,212,255,0.15), inset 0 1px 0 rgba(255,255,255,0.1);
+      animation: clockGlow 3s ease-in-out infinite;
+    }
+    @keyframes clockGlow {
+      0%,100% { box-shadow:0 8px 32px rgba(0,212,255,0.15), inset 0 1px 0 rgba(255,255,255,0.1); }
+      50% { box-shadow:0 12px 48px rgba(0,212,255,0.35), inset 0 1px 0 rgba(255,255,255,0.2); }
+    }
+    .clock-time {
+      font-family:'Cairo',monospace; font-size:1.6rem; font-weight:900;
+      color:var(--neon-blue); letter-spacing:2px; direction:ltr;
+      text-shadow:0 0 20px rgba(0,212,255,0.5);
+    }
+    .clock-period {
+      font-size:0.7rem; color:rgba(255,255,255,0.6); margin-right:4px;
+      background:rgba(0,212,255,0.15); padding:2px 6px; border-radius:6px;
+    }
+    html[data-mode="light"] .clock-period{ color:rgba(0,0,0,0.6); }
+    .clock-date {
+      display:flex; flex-direction:column; align-items:flex-start; gap:2px;
+      padding-right:12px; border-right:1px solid rgba(255,255,255,0.2);
+    }
+    .clock-date .miladi {
+      font-size:0.75rem; color:rgba(255,255,255,0.7);
+    }
+    html[data-mode="light"] .clock-date .miladi{ color:rgba(0,0,0,0.7); }
+    .clock-date .hijri {
+      font-size:0.7rem; color:var(--gold); font-weight:600;
+    }
+    .clock-icon {
+      font-size:1.4rem; animation: tick 1s steps(1) infinite;
+    }
+    @keyframes tick { 50% { transform:scale(1.1); } }
+
     /* ===== STATS BAR ===== */
-.stats-bar { 
-  display:flex; 
-  justify-content:center; 
-  gap:15px; 
-  padding:8px 20px 15px; 
-  animation:fadeIn 1s 0.3s both; 
-  flex-wrap:wrap; 
-}
-@keyframes fadeIn { 
-  from{opacity:0;transform:translateY(20px)} 
-  to{opacity:1;transform:translateY(0)} 
-}
+    .stats-bar { display:flex; justify-content:center; gap:15px; padding:8px 20px 15px; animation:fadeIn 1s 0.3s both; flex-wrap:wrap; }
+    @keyframes fadeIn { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+    .stat-badge { 
+      background:var(--glass); 
+      border:1px solid var(--glass-border); 
+      backdrop-filter:blur(10px); 
+      padding:8px 16px; 
+      border-radius:50px; 
+      display:flex; 
+      align-items:center; 
+      gap:6px; 
+      font-size:0.85rem; 
+      font-weight:600; 
+      transition:var(--transition);
+      box-sizing: border-box;
+      white-space: nowrap;
+      justify-content: flex-start;
+      min-width: fit-content;
+      position: relative;
+      line-height: 1.2;
+    }
+    .stat-badge:hover { 
+      transform:translateY(-2px); 
+      border-color:var(--neon-blue);
+      box-shadow: 0 0 0 2px rgba(0,212,255,0.15);
+    }
+    .stat-dot { 
+      width:7px; 
+      height:7px; 
+      border-radius:50%; 
+      flex-shrink: 0;
+      box-shadow:0 0 8px currentColor;
+    }
+    .stat-badge strong,
+    .stat-badge span:not(.stat-dot) {
+      line-height: 1;
+      display: inline-flex;
+      align-items: center;
+    }
+    .stat-badge:active {
+      animation: badgePulse 0.3s ease;
+      border-color: var(--gold);
+      box-shadow: 0 0 0 3px rgba(245,197,24,0.3);
+    }
+    @keyframes badgePulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
 
-.stat-badge { 
-  background:var(--glass); 
-  border:1px solid var(--glass-border); 
-  backdrop-filter:blur(10px); 
-  padding:8px 16px; 
-  border-radius:50px; 
-  display:flex; 
-  align-items:center; 
-  gap:6px; 
-  font-size:0.85rem; 
-  font-weight:600; 
-  transition:var(--transition);
-  
-  /* ✅ إصلاحات الإطار الكامل */
-  box-sizing: border-box;
-  white-space: nowrap;
-  justify-content: flex-start;
-  min-width: fit-content;
-  position: relative;
-  line-height: 1.2;
-}
-
-.stat-badge:hover { 
-  transform:translateY(-2px); 
-  border-color:var(--neon-blue);
-  box-shadow: 0 0 0 2px rgba(0,212,255,0.15);
-}
-
-.stat-dot { 
-  width:7px; 
-  height:7px; 
-  border-radius:50%; 
-  flex-shrink: 0;
-  box-shadow:0 0 8px currentColor;
-}
-
-/* ✅ ضمان محاذاة النص مع النقطة */
-.stat-badge strong,
-.stat-badge span:not(.stat-dot) {
-  line-height: 1;
-  display: inline-flex;
-  align-items: center;
-}
-
-/* ✅ تأثير وميض عند النقر (اختياري) */
-.stat-badge:active {
-  animation: badgePulse 0.3s ease;
-  border-color: var(--gold);
-  box-shadow: 0 0 0 3px rgba(245,197,24,0.3);
-}
-@keyframes badgePulse {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.05); }
-  100% { transform: scale(1); }
-}
     /* ===== TABS SYSTEM ===== */
     .tabs-container { max-width:1200px; margin:0 auto; padding:0 20px 30px; }
     .tabs-nav { 
@@ -340,7 +335,9 @@
       transition:var(--transition); display:flex; align-items:center; gap:6px;
       white-space:nowrap;
     }
+    html[data-mode="light"] .tab-btn{ color:rgba(0,0,0,0.6); }
     .tab-btn:hover { background:rgba(255,255,255,0.08); color:#fff; }
+    html[data-mode="light"] .tab-btn:hover{ background:rgba(0,0,0,0.08); color:#000; }
     .tab-btn.active {
       background:linear-gradient(135deg,var(--neon-blue),var(--neon-purple));
       color:#fff; box-shadow:0 4px 20px rgba(0,212,255,0.3);
@@ -355,8 +352,8 @@
 
     /* ===== GLASS CARD ===== */
     .glass-card { 
-      background:linear-gradient(135deg,rgba(255,255,255,0.08),rgba(255,255,255,0.03)); 
-      border:1px solid var(--glass-border); backdrop-filter:blur(20px); 
+      background:linear-gradient(135deg,var(--card-gradient-start),var(--card-gradient-end)); 
+      border:1px solid var(--card-border); backdrop-filter:blur(20px); 
       border-radius:22px; padding:24px; box-shadow:var(--card-shadow); 
       position:relative; overflow:hidden; transform-style:preserve-3d; 
       transition:var(--transition); animation:cardEntrance 0.8s cubic-bezier(0.23,1,0.32,1) both; 
@@ -387,17 +384,22 @@
     .icon-orange { background:linear-gradient(135deg,#ff8c0022,#ff8c0044); border:1px solid #ff8c0044; }
     .icon-teal   { background:linear-gradient(135deg,#14b8a622,#14b8a644); border:1px solid #14b8a644; }
     .card-title { font-size:1.1rem; font-weight:700; color:#fff; }
+    html[data-mode="light"] .card-title{ color:#1a1a2e; }
     .card-desc  { font-size:0.75rem; color:rgba(255,255,255,0.4); margin-top:2px; }
+    html[data-mode="light"] .card-desc{ color:rgba(0,0,0,0.4); }
 
     /* ===== INPUTS ===== */
     .input-group { position:relative; margin-bottom:12px; }
     .input-label { font-size:0.7rem; font-weight:600; color:rgba(255,255,255,0.5); text-transform:uppercase; letter-spacing:1px; margin-bottom:5px; display:block; }
+    html[data-mode="light"] .input-label{ color:rgba(0,0,0,0.5); }
     .styled-input { 
       width:100%; padding:12px 14px 12px 42px; background:rgba(255,255,255,0.06); 
       border:1px solid rgba(255,255,255,0.12); border-radius:10px; color:#fff; 
       font-family:'Cairo',sans-serif; font-size:0.9rem; transition:var(--transition); outline:none; direction:rtl; 
     }
+    html[data-mode="light"] .styled-input{ background:rgba(0,0,0,0.05); border-color:rgba(0,0,0,0.12); color:#1a1a2e; }
     .styled-input::placeholder { color:rgba(255,255,255,0.3); }
+    html[data-mode="light"] .styled-input::placeholder{ color:rgba(0,0,0,0.3); }
     .styled-input:focus { border-color:var(--neon-blue); background:rgba(0,212,255,0.06); box-shadow:0 0 0 3px rgba(0,212,255,0.1),0 4px 20px rgba(0,212,255,0.1); }
     .input-icon { position:absolute; left:12px; top:50%; transform:translateY(-50%); font-size:16px; pointer-events:none; }
     .styled-input[type="datetime-local"] { color-scheme: dark; padding-left: 12px; }
@@ -409,7 +411,9 @@
       transition:var(--transition); outline:none; direction:rtl;
       resize:vertical; min-height:100px; line-height:1.7;
     }
+    html[data-mode="light"] .styled-textarea{ background:rgba(0,0,0,0.05); border-color:rgba(0,0,0,0.12); color:#1a1a2e; }
     .styled-textarea::placeholder { color:rgba(255,255,255,0.3); }
+    html[data-mode="light"] .styled-textarea::placeholder{ color:rgba(0,0,0,0.3); }
     .styled-textarea:focus { border-color:var(--neon-blue); background:rgba(0,212,255,0.06); box-shadow:0 0 0 3px rgba(0,212,255,0.1); }
 
     /* ===== BUTTONS ===== */
@@ -427,6 +431,7 @@
     .btn-success  { background:linear-gradient(135deg,#00c851,#00ff88); color:#fff; box-shadow:0 6px 25px rgba(0,200,81,0.35); }
     .btn-gold     { background:linear-gradient(135deg,#f5c518,#ff9500); color:#000; box-shadow:0 6px 25px rgba(245,197,24,0.35); }
     .btn-outline  { background:transparent; border:1px solid rgba(255,255,255,0.2); color:rgba(255,255,255,0.8); }
+    html[data-mode="light"] .btn-outline{ border-color:rgba(0,0,0,0.2); color:rgba(0,0,0,0.8); }
     .btn-telegram { background:linear-gradient(135deg,#0088cc,#00aff0); color:#fff; box-shadow:0 6px 25px rgba(0,136,204,0.35); }
     .btn-primary:hover  { transform:translateY(-2px) scale(1.02); box-shadow:0 12px 35px rgba(0,212,255,0.5); }
     .btn-secondary:hover{ transform:translateY(-2px) scale(1.02); box-shadow:0 12px 35px rgba(123,47,255,0.5); }
@@ -487,28 +492,6 @@
       0% { filter:brightness(1); } 50% { filter:brightness(1.3); } 100% { filter:brightness(1); }
     }
 
-    /* ===== COLOR PALETTE ===== */
-    .palette-label { font-size:0.7rem; font-weight:600; color:rgba(255,255,255,0.5); text-transform:uppercase; letter-spacing:1px; margin-bottom:8px; display:block; }
-    .color-palette { display:flex; flex-wrap:wrap; gap:6px; margin-bottom:12px; }
-    .color-box { width:30px; height:30px; border-radius:8px; cursor:pointer; border:2px solid transparent; transition:var(--transition); position:relative; overflow:hidden; box-shadow:0 4px 10px rgba(0,0,0,0.3); }
-    .color-box::after { content:'✓'; position:absolute; inset:0; display:flex; align-items:center; justify-content:center; color:#fff; font-size:12px; font-weight:900; opacity:0; transition:opacity 0.2s; text-shadow:0 1px 3px rgba(0,0,0,0.5); }
-    .color-box:hover { transform:scale(1.15) translateY(-2px); box-shadow:0 8px 20px rgba(0,0,0,0.5); }
-    .color-box.selected { border-color:#fff; box-shadow:0 0 15px rgba(255,255,255,0.5); }
-    .color-box.selected::after { opacity:1; }
-
-    /* ===== TOGGLE SWITCH ===== */
-    .toggle-container { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px; }
-    .toggle-info { flex:1; }
-    .toggle-title { font-size:0.95rem; font-weight:700; color:#fff; }
-    .toggle-desc  { font-size:0.75rem; color:rgba(255,255,255,0.4); margin-top:2px; }
-    .switch { position:relative; display:inline-block; width:60px; height:32px; flex-shrink:0; }
-    .switch input { opacity:0; width:0; height:0; }
-    .slider { position:absolute; cursor:pointer; inset:0; background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); border-radius:32px; transition:var(--transition); }
-    .slider:before { content:''; position:absolute; width:22px; height:22px; border-radius:50%; left:4px; top:4px; background:linear-gradient(135deg,#fff,#ccc); box-shadow:0 2px 8px rgba(0,0,0,0.4); transition:var(--transition); }
-    input:checked + .slider { background:linear-gradient(135deg,#00c851,#00ff88); border-color:#00ff88; box-shadow:0 0 20px rgba(0,200,81,0.4); }
-    input:checked + .slider:before { transform:translateX(28px); background:linear-gradient(135deg,#fff,#e0ffe0); }
-    input:not(:checked) + .slider { background:linear-gradient(135deg,#e94560,#ff4040); border-color:#e94560; box-shadow:0 0 20px rgba(233,69,96,0.3); }
-
     /* ===== MSG BOX ===== */
     .msg-box { padding:10px 16px; border-radius:10px; font-weight:600; text-align:center; font-size:0.85rem; transition:var(--transition); opacity:0; transform:translateY(-8px); margin-top:12px; border:1px solid rgba(255,255,255,0.1); }
     .msg-box.show { opacity:1; transform:translateY(0); }
@@ -522,6 +505,7 @@
     table { width:100%; border-collapse:collapse; min-width:700px; }
     thead tr { background:linear-gradient(135deg,rgba(0,212,255,0.15),rgba(123,47,255,0.15)); border-bottom:1px solid rgba(255,255,255,0.1); }
     thead th { padding:14px 12px; text-align:center; font-size:0.75rem; font-weight:700; color:rgba(255,255,255,0.7); text-transform:uppercase; letter-spacing:1px; white-space:nowrap; }
+    html[data-mode="light"] thead th{ color:rgba(0,0,0,0.7); }
     tbody tr { border-bottom:1px solid rgba(255,255,255,0.05); transition:var(--transition); animation:rowSlide 0.5s ease both; }
     @keyframes rowSlide { from{opacity:0;transform:translateX(20px)} to{opacity:1;transform:translateX(0)} }
     tbody tr:hover { background:rgba(255,255,255,0.05); transform:scale(1.003); }
@@ -530,6 +514,7 @@
     .student-name-cell { font-weight:700; font-size:0.95rem; }
     .subject-badge { background:rgba(0,212,255,0.15); border:1px solid rgba(0,212,255,0.3); padding:3px 10px; border-radius:18px; font-size:0.75rem; display:inline-block; color:#00d4ff; }
     .date-cell { color:rgba(255,255,255,0.4); font-size:0.75rem; }
+    html[data-mode="light"] .date-cell{ color:rgba(0,0,0,0.4); }
     .row-num { width:28px; height:28px; border-radius:8px; background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.12); display:inline-flex; align-items:center; justify-content:center; font-weight:700; font-size:0.8rem; }
     .meBadge{font-size:8px;padding:2px 7px;border-radius:999px;border:1px solid rgba(245,200,66,.45);
       background:rgba(245,200,66,.18);color:rgba(245,200,66,.92);font-weight:700;letter-spacing:1px}
@@ -611,6 +596,7 @@
       white-space:pre-wrap; max-height:90px; overflow:hidden;
       transition:max-height .4s ease; position:relative; font-size:0.9rem;
     }
+    html[data-mode="light"] .bigNote{ color:rgba(0,0,0,.86); }
     .bigNote.expanded{ max-height:2000px; }
     .bigNote::after{
       content:''; position:absolute; bottom:0; left:0; right:0; height:35px;
@@ -618,79 +604,28 @@
       pointer-events:none; opacity:0; transition:opacity .3s ease;
     }
     .bigNote:not(.expanded)::after{ opacity:1; }
-
-    /* ===== GUIDELINES PREVIEW ===== */
-    #guidelinesPreview { display:none; margin-top:16px; }
-    #guidelinesPreview.show { display:block; }
-    .guidelines-preview-wrap {
-      background: linear-gradient(135deg, rgba(20,184,166,0.10), rgba(20,184,166,0.04));
-      border: 1.5px solid rgba(20,184,166,0.30);
-      border-radius:16px; overflow:hidden;
-      box-shadow: 0 10px 35px rgba(0,0,0,0.3), 0 0 25px rgba(20,184,166,0.07);
-      position:relative;
+    
+    /* ✅ زر طوي/فتح ينزل للأسفل */
+    .bigNote-toggle{
+      display:inline-flex; align-items:center; gap:5px;
+      margin-top:6px; padding:5px 10px; border-radius:10px;
+      background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.12);
+      color:rgba(255,255,255,.75); font-size:10px; cursor:pointer; transition:.2s;
     }
-    .guidelines-preview-wrap::before {
-      content:''; position:absolute; top:0; left:0; right:0; height:2px;
-      background:linear-gradient(90deg,transparent,rgba(20,184,166,0.7),rgba(245,197,24,0.5),transparent);
-    }
-    .guidelines-preview-header {
-      display:flex; align-items:center; gap:10px;
-      padding:12px 16px 10px;
-      border-bottom:1px solid rgba(20,184,166,0.15);
-      background: linear-gradient(135deg,rgba(20,184,166,0.08),transparent);
-    }
-    .gp-icon {
-      width:36px; height:36px; border-radius:10px;
-      background:linear-gradient(135deg,rgba(20,184,166,0.25),rgba(20,184,166,0.10));
-      border:1px solid rgba(20,184,166,0.35);
-      display:flex; align-items:center; justify-content:center;
-      font-size:18px; flex-shrink:0;
-      box-shadow:0 0 18px rgba(20,184,166,0.18);
-      animation:tealPulse 3s ease-in-out infinite;
-    }
-    @keyframes tealPulse { 0%,100%{box-shadow:0 0 15px rgba(20,184,166,0.15);} 50%{box-shadow:0 0 28px rgba(20,184,166,0.40);} }
-    .gp-title-wrap { flex:1; }
-    .gp-main-title {
-      font-size:12px; font-weight:800;
-      color:rgba(20,184,166,0.95);
-      letter-spacing:1.5px;
-      text-shadow:0 0 16px rgba(20,184,166,0.3);
-    }
-    .gp-sub-title { font-size:10px; color:rgba(255,255,255,0.40); margin-top:1px; }
-    .gp-live-badge {
-      display:inline-flex; align-items:center; gap:4px;
-      padding:3px 8px; border-radius:18px;
-      background:rgba(20,184,166,0.12);
-      border:1px solid rgba(20,184,166,0.28);
-      font-size:9px; font-weight:700;
-      color:rgba(20,184,166,0.90);
-    }
-    .gp-live-dot { width:5px; height:5px; border-radius:50%; background:#14b8a6; animation:pulse-dot 1.5s ease-in-out infinite; }
-    @keyframes pulse-dot { 0%,100%{transform:scale(1);opacity:1} 50%{transform:scale(1.4);opacity:0.7} }
-    .gp-body {
-      padding:14px 16px 16px;
-      font-size:12.5px; line-height:1.9;
-      color:rgba(255,255,255,0.85);
-      white-space:pre-wrap;
-      position:relative;
-    }
-    .gp-body::before {
-      content:'📋'; position:absolute; left:8px; bottom:6px;
-      font-size:45px; opacity:0.04; pointer-events:none;
-    }
-    .gp-footer {
-      padding:6px 16px 10px;
-      border-top:1px solid rgba(20,184,166,0.10);
-      font-size:10px; color:rgba(255,255,255,0.32);
-      display:flex; align-items:center; gap:5px;
-    }
+    html[data-mode="light"] .bigNote-toggle{ background:rgba(0,0,0,.05); border-color:rgba(0,0,0,.12); color:rgba(0,0,0,.75); }
+    .bigNote-toggle:hover{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.18)}
+    html[data-mode="light"] .bigNote-toggle:hover{background:rgba(0,0,0,.08);border-color:rgba(0,0,0,.18)}
+    .bigNote-toggle.expanded{ background:rgba(245,200,66,.08); border-color:rgba(245,200,66,.25); color:var(--gold); }
 
     /* ===== INFO BOX ===== */
     .infoRow{display:flex;flex-direction:column;gap:8px}
     .kv{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;
       padding:10px 12px;border-radius:14px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.10)}
+    html[data-mode="light"] .kv{ background:rgba(0,0,0,.04); border-color:rgba(0,0,0,.10); }
     .kv strong{font-size:10px;color:rgba(255,255,255,.50);min-width:70px}
+    html[data-mode="light"] .kv strong{ color:rgba(0,0,0,.50); }
     .kv span{font-size:12px;color:rgba(255,255,255,.88)}
+    html[data-mode="light"] .kv span{ color:rgba(0,0,0,.88); }
 
     /* ===== THEME PICKER ===== */
     .themePicker{ display:grid; grid-template-columns:repeat(2,1fr); gap:6px; margin-top:6px; }
@@ -701,10 +636,13 @@
       border:1px solid rgba(255,255,255,.10);
       cursor:pointer; transition:.2s; user-select:none;
     }
+    html[data-mode="light"] .themeOption{ background:rgba(0,0,0,.04); border-color:rgba(0,0,0,.10); }
     .themeOption:hover{ transform:translateY(-2px); background:rgba(255,255,255,.07); border-color:rgba(255,255,255,.18); }
+    html[data-mode="light"] .themeOption:hover{ background:rgba(0,0,0,.07); border-color:rgba(0,0,0,.18); }
     .themeOption.active{ border-color:var(--gold); background:rgba(245,200,66,.08); box-shadow:0 0 0 2px rgba(245,200,66,.2); }
     .themeSwatch{ width:20px; height:20px; border-radius:6px; border:1px solid rgba(255,255,255,.2); flex-shrink:0; }
     .themeName{ font-size:11px; color:rgba(255,255,255,.85); font-weight:600; }
+    html[data-mode="light"] .themeName{ color:rgba(0,0,0,.85); }
     .themePreview{ display:flex; gap:3px; margin-top:3px; }
     .themePreview span{ width:10px; height:10px; border-radius:3px; border:1px solid rgba(255,255,255,.15); }
 
@@ -718,16 +656,18 @@
       padding:22px; text-align:center; backdrop-filter: blur(18px);
       animation: mi .26s cubic-bezier(.22,1,.36,1);
     }
-    @keyframes mi{from{opacity:0;transform:scale(.95) translateY(10px)}to{opacity:1;transform:scale(1) translateY(0)}}
     .mIco{font-size:38px;margin-bottom:8px;display:block}
     .mT{font-weight:900;color:rgba(245,200,66,.95);font-size:16px;margin-bottom:6px}
     .mM{color:rgba(255,255,255,.68);font-size:12px;line-height:1.6;margin-bottom:12px;white-space:pre-line}
+    html[data-mode="light"] .mM{ color:rgba(0,0,0,.68); }
     .mInp{width:100%;padding:10px 12px;border-radius:14px;border:1px solid rgba(255,255,255,.14);
       background:rgba(0,0,0,.18);color:#fff;margin-bottom:12px;font-size:0.9rem}
+    html[data-mode="light"] .mInp{ background:rgba(255,255,255,.18); color:#1a1a2e; border-color:rgba(0,0,0,.14); }
     .mInp:focus{border-color:rgba(125,211,252,.30);box-shadow:0 0 0 3px rgba(125,211,252,.10)}
     .mBtns{display:flex;gap:8px}
     .mBtns button{flex:1;padding:10px 12px;border-radius:14px;border:none;cursor:pointer;font-weight:900;font-size:0.9rem}
     .mCancel{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);color:rgba(255,255,255,.80)}
+    html[data-mode="light"] .mCancel{ background:rgba(0,0,0,.06); border-color:rgba(0,0,0,.12); color:rgba(0,0,0,.80); }
     .mOk{background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.18);color:#fff}
 
     #toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(100px);
@@ -739,6 +679,7 @@
     }
     #toast.show{transform:translateX(-50%) translateY(0)}
     #toast span{color:#fff;font-size:12px}
+    html[data-mode="light"] #toast span{ color:#1a1a2e; }
 
     /* ===== NOTIFICATION BANNER ===== */
     #notifBanner{
@@ -748,12 +689,15 @@
       color:rgba(255,255,255,.92); gap:8px; align-items:center;
       user-select:none; font-size:0.9rem;
     }
+    html[data-mode="light"] #notifBanner{ color:rgba(0,0,0,.92); }
     #notifBanner.visible{display:flex}
     .notifClose{margin-right:auto;cursor:pointer;border-radius:10px;padding:4px 8px;
       background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);color:rgba(255,255,255,.70);font-size:14px}
+    html[data-mode="light"] .notifClose{ background:rgba(0,0,0,.06); border-color:rgba(0,0,0,.12); color:rgba(0,0,0,.70); }
     .notifClose:hover{background:rgba(255,255,255,.10);color:#fff}
+    html[data-mode="light"] .notifClose:hover{background:rgba(0,0,0,.10);color:#000}
 
-    /* ===== EXPORT BUTTONS (TXT فقط) ===== */
+    /* ===== EXPORT BUTTONS ===== */
     .export-buttons {
       display:flex; gap:12px; justify-content:center; margin-top:16px; flex-wrap:wrap;
     }
@@ -764,6 +708,7 @@
       border:1px solid rgba(255,255,255,0.15); cursor:pointer;
       transition:var(--transition); text-decoration:none; color:inherit;
     }
+    html[data-mode="light"] .export-btn{ background:linear-gradient(135deg, rgba(0,0,0,0.06), rgba(0,0,0,0.03)); border-color:rgba(0,0,0,0.15); }
     .export-btn:hover {
       transform:translateY(-4px); border-color:var(--neon-blue);
       box-shadow:0 12px 40px rgba(0,212,255,0.25);
@@ -774,6 +719,379 @@
     .export-icon { font-size:2rem; }
     .export-label { font-weight:700; font-size:0.95rem; }
     .export-desc { font-size:0.75rem; color:rgba(255,255,255,0.5); }
+    html[data-mode="light"] .export-desc{ color:rgba(0,0,0,0.5); }
+
+    /* ===== COMMENTS SECTION (جديد) ===== */
+    .comments-section {
+      margin-top: 16px;
+      border-top: 1px solid var(--glass-border);
+      padding-top: 16px;
+    }
+    .comments-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+    .comments-title {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--neon-blue);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .comment-count {
+      background: rgba(0, 212, 255, 0.15);
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-size: 0.75rem;
+      color: var(--neon-blue);
+    }
+    .comment-input-area {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+    .comment-input {
+      flex: 1;
+      padding: 10px 14px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 10px;
+      color: #fff;
+      font-family: 'Cairo', sans-serif;
+      font-size: 0.85rem;
+      transition: var(--transition);
+      outline: none;
+    }
+    html[data-mode="light"] .comment-input {
+      background: rgba(0, 0, 0, 0.05);
+      border-color: rgba(0, 0, 0, 0.12);
+      color: #1a1a2e;
+    }
+    .comment-input:focus {
+      border-color: var(--neon-blue);
+      background: rgba(0, 212, 255, 0.06);
+      box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.1);
+    }
+    .comment-submit {
+      padding: 10px 16px;
+      background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
+      border: none;
+      border-radius: 10px;
+      color: #fff;
+      font-weight: 700;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    .comment-submit:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0, 212, 255, 0.3);
+    }
+    .comments-list {
+      max-height: 300px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .comment-item {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      padding: 12px;
+      transition: var(--transition);
+    }
+    html[data-mode="light"] .comment-item {
+      background: rgba(0, 0, 0, 0.04);
+      border-color: rgba(0, 0, 0, 0.08);
+    }
+    .comment-item:hover {
+      border-color: rgba(0, 212, 255, 0.2);
+    }
+    .comment-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+    .comment-author {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--neon-blue);
+    }
+    .comment-time {
+      font-size: 0.7rem;
+      color: rgba(255, 255, 255, 0.4);
+    }
+    html[data-mode="light"] .comment-time {
+      color: rgba(0, 0, 0, 0.4);
+    }
+    .comment-text {
+      font-size: 0.85rem;
+      color: rgba(255, 255, 255, 0.85);
+      line-height: 1.6;
+      white-space: pre-wrap;
+    }
+    html[data-mode="light"] .comment-text {
+      color: rgba(0, 0, 0, 0.85);
+    }
+    .comment-replies {
+      margin-top: 10px;
+      padding-right: 12px;
+      border-right: 2px solid rgba(0, 212, 255, 0.2);
+    }
+    .reply-btn {
+      font-size: 0.75rem;
+      color: rgba(0, 212, 255, 0.7);
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px 8px;
+      border-radius: 6px;
+      transition: var(--transition);
+    }
+    .reply-btn:hover {
+      background: rgba(0, 212, 255, 0.1);
+      color: var(--neon-blue);
+    }
+    .reply-input {
+      width: 100%;
+      padding: 8px 10px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      color: #fff;
+      font-family: 'Cairo', sans-serif;
+      font-size: 0.8rem;
+      margin-top: 8px;
+      outline: none;
+    }
+    html[data-mode="light"] .reply-input {
+      background: rgba(0, 0, 0, 0.04);
+      border-color: rgba(0, 0, 0, 0.1);
+      color: #1a1a2e;
+    }
+    .reply-input:focus {
+      border-color: var(--neon-blue);
+    }
+
+    /* ===== SOUND TOGGLE ===== */
+    .sound-toggle-container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 12px;
+    }
+    .toggle-info {
+      flex: 1;
+    }
+    .toggle-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #fff;
+    }
+    html[data-mode="light"] .toggle-title {
+      color: #1a1a2e;
+    }
+    .toggle-desc {
+      font-size: 0.75rem;
+      color: rgba(255, 255, 255, 0.4);
+      margin-top: 2px;
+    }
+    html[data-mode="light"] .toggle-desc {
+      color: rgba(0, 0, 0, 0.4);
+    }
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 60px;
+      height: 32px;
+      flex-shrink: 0;
+    }
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      inset: 0;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 32px;
+      transition: var(--transition);
+    }
+    html[data-mode="light"] .slider {
+      background: rgba(0, 0, 0, 0.1);
+      border-color: rgba(0, 0, 0, 0.2);
+    }
+    .slider:before {
+      content: '';
+      position: absolute;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      left: 4px;
+      top: 4px;
+      background: linear-gradient(135deg, #fff, #ccc);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+      transition: var(--transition);
+    }
+    input:checked + .slider {
+      background: linear-gradient(135deg, #00c851, #00ff88);
+      border-color: #00ff88;
+      box-shadow: 0 0 20px rgba(0, 200, 81, 0.4);
+    }
+    input:checked + .slider:before {
+      transform: translateX(28px);
+      background: linear-gradient(135deg, #fff, #e0ffe0);
+    }
+    input:not(:checked) + .slider {
+      background: linear-gradient(135deg, #e94560, #ff4040);
+      border-color: #e94560;
+      box-shadow: 0 0 20px rgba(233, 69, 96, 0.3);
+    }
+
+    /* ===== DARK/LIGHT MODE TOGGLE ===== */
+    .mode-toggle-container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 12px;
+    }
+    .mode-switch {
+      position: relative;
+      display: inline-block;
+      width: 70px;
+      height: 34px;
+      flex-shrink: 0;
+    }
+    .mode-switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    .mode-slider {
+      position: absolute;
+      cursor: pointer;
+      inset: 0;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 34px;
+      transition: var(--transition);
+    }
+    html[data-mode="light"] .mode-slider {
+      background: rgba(0, 0, 0, 0.1);
+      border-color: rgba(0, 0, 0, 0.2);
+    }
+    .mode-slider:before {
+      content: '';
+      position: absolute;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      left: 4px;
+      top: 3px;
+      background: linear-gradient(135deg, #f5c518, #ff9500);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+    }
+    input:checked + .mode-slider {
+      background: linear-gradient(135deg, #0f1e3d, #1a2a4a);
+      border-color: #00d4ff;
+      box-shadow: 0 0 20px rgba(0, 212, 255, 0.4);
+    }
+    input:checked + .mode-slider:before {
+      transform: translateX(36px);
+      background: linear-gradient(135deg, #00d4ff, #0077ff);
+    }
+
+    /* ===== PREVIEW MODAL ===== */
+    #previewModal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.75);
+      z-index: 10001;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(10px);
+    }
+    #previewModal.active {
+      display: flex;
+    }
+    .preview-content {
+      width: 500px;
+      max-width: 92%;
+      border-radius: 20px;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.10), rgba(255, 255, 255, 0.06));
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      box-shadow: 0 25px 65px rgba(0, 0, 0, 0.75);
+      padding: 24px;
+      backdrop-filter: blur(18px);
+      animation: mi 0.26s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .preview-text {
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 12px;
+      padding: 16px;
+      font-family: 'Courier New', monospace;
+      font-size: 0.85rem;
+      color: rgba(255, 255, 255, 0.9);
+      white-space: pre-wrap;
+      max-height: 300px;
+      overflow-y: auto;
+      margin: 16px 0;
+      text-align: left;
+      direction: ltr;
+    }
+    html[data-mode="light"] .preview-text {
+      background: rgba(255, 255, 255, 0.3);
+      color: rgba(0, 0, 0, 0.9);
+    }
+    .preview-actions {
+      display: flex;
+      gap: 8px;
+    }
+    .preview-actions button {
+      flex: 1;
+      padding: 12px 16px;
+      border-radius: 14px;
+      border: none;
+      cursor: pointer;
+      font-weight: 900;
+      font-size: 0.9rem;
+      transition: var(--transition);
+    }
+    .preview-cancel {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: rgba(255, 255, 255, 0.80);
+    }
+    html[data-mode="light"] .preview-cancel {
+      background: rgba(0, 0, 0, 0.06);
+      border-color: rgba(0, 0, 0, 0.12);
+      color: rgba(0, 0, 0, 0.80);
+    }
+    .preview-download {
+      background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
+      color: #fff;
+    }
+    .preview-download:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0, 212, 255, 0.4);
+    }
 
     /* ===== THEME SYSTEM (10 THEMES) ===== */
     html[data-theme="0"]{ --gold:#f5c842;--neon-blue:#7dd3fc;--neon-purple:#b28dff; --card-gradient-start: rgba(255,255,255,.065); --card-gradient-end: rgba(255,255,255,.035); --card-border: rgba(255,255,255,.12); --card-glow: rgba(245,200,66,.15); --card-radial-1: rgba(125,211,252,.12); --card-radial-2: rgba(245,200,66,.10); }
@@ -857,6 +1175,20 @@
     </div>
   </div>
 
+  <!-- PREVIEW MODAL (جديد) -->
+  <div id="previewModal" aria-hidden="true">
+    <div class="preview-content">
+      <span class="mIco">👁️</span>
+      <div class="mT">معاينة التقرير</div>
+      <div class="mM">راجع المحتوى قبل التحميل</div>
+      <div class="preview-text" id="previewText"></div>
+      <div class="preview-actions">
+        <button class="preview-cancel" id="previewCancel">❌ إلغاء</button>
+        <button class="preview-download" id="previewDownload">⬇️ تحميل</button>
+      </div>
+    </div>
+  </div>
+
   <!-- TOAST -->
   <div id="toast" aria-live="polite">
     <span id="toast-icon">✅</span>
@@ -885,7 +1217,7 @@
       <div class="header-line"></div>
     </div>
 
-    <!-- ✅ FANCY RIGHTS ABOVE CLOCK (جديد - فاخر جداً) -->
+    <!-- ✅ FANCY RIGHTS ABOVE CLOCK -->
     <div class="fancy-rights-above" id="fancyRightsAbove">
       <span class="fancy-rights-text">
         <span class="rights-icon">✦</span>
@@ -894,7 +1226,7 @@
       </span>
     </div>
 
-    <!-- ✅ FANCY CLOCK (نظام 12 ساعة) -->
+    <!-- ✅ FANCY CLOCK -->
     <div class="fancy-clock">
       <span class="clock-icon">🕐</span>
       <div style="display:flex;align-items:center;gap:4px">
@@ -938,6 +1270,7 @@
         <button class="tab-btn" data-tab="myinfo">👁️ معلوماتي</button>
         <button class="tab-btn" data-tab="all">📋 العناوين</button>
         <button class="tab-btn" data-tab="export">⬇️ تصدير</button>
+        <button class="tab-btn" data-tab="comments">💬 تعليقات</button>
         <button class="tab-btn" data-tab="help">🆘 مساعدة</button>
         <button class="tab-btn" data-tab="delete">🗑️ حذف</button>
         <button class="tab-btn" data-tab="themes">🎨 ثيمات</button>
@@ -968,13 +1301,16 @@
             </div>
           </div>
 
-          <!-- GUIDELINES (بدون زر طوي/فتح) -->
+          <!-- GUIDELINES (✅ زر طوي/فتح) -->
           <div id="guidelinesPanel" style="display:none;margin-bottom:12px">
             <div class="glass-card" style="border-radius:16px;padding:16px">
               <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
                 <strong style="color:rgba(20,184,166,.95);font-size:12px">📋 متطلبات الاستخدام</strong>
+                <button class="btn btn-outline" id="importantBtn" style="padding:6px 12px;font-size:0.8rem">📌 طوي/فتح</button>
               </div>
-              <div id="guidelinesContent" class="bigNote expanded">جارٍ التحميل…</div>
+              <div id="guidelinesContent" class="bigNote">جارٍ التحميل…</div>
+              <!-- ✅ الزر ينزل للأسفل -->
+              <button id="guidelinesToggle" class="bigNote-toggle">🔽 عرض التفاصيل</button>
             </div>
           </div>
 
@@ -1017,6 +1353,30 @@
 
           <div class="infoRow" id="infoBox" style="display:none"></div>
 
+          <!-- ✅ وضع ليلي/نهاري -->
+          <div class="mode-toggle-container">
+            <div class="toggle-info">
+              <div class="toggle-title">🌙 الوضع الليلي / النهاري</div>
+              <div class="toggle-desc">تبديل بين الوضع الداكن والفاتح</div>
+            </div>
+            <label class="mode-switch">
+              <input type="checkbox" id="modeToggle">
+              <span class="mode-slider"></span>
+            </label>
+          </div>
+
+          <!-- ✅ أصوات التأثيرات -->
+          <div class="sound-toggle-container">
+            <div class="toggle-info">
+              <div class="toggle-title">🔊 أصوات التأثيرات</div>
+              <div class="toggle-desc">تشغيل أصوات عند النقر والتحميل</div>
+            </div>
+            <label class="switch">
+              <input type="checkbox" id="soundsToggle" checked>
+              <span class="slider"></span>
+            </label>
+          </div>
+
           <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px">
             <button class="btn btn-outline" id="btnDownload"><span>⬇️</span> تحميل بياناتي</button>
             <button class="btn btn-danger" id="btnDelete"><span>🗑️</span> حذف معلوماتي</button>
@@ -1056,7 +1416,7 @@
         </div>
       </div>
 
-      <!-- ===== TAB: تصدير (TXT فقط) ===== -->
+      <!-- ===== TAB: تصدير (معاينة قبل التحميل) ===== -->
       <div class="tab-content" id="tab-export">
         <div class="glass-card card-glow-gold">
           <div class="card-header">
@@ -1074,13 +1434,47 @@
             </p>
           </div>
 
-          <!-- ✅ زر TXT فقط -->
+          <!-- ✅ زر TXT فقط مع معاينة -->
           <div class="export-buttons">
-            <button class="export-btn txt" id="exportTXT" onclick="downloadFancy('txt')">
+            <button class="export-btn txt" id="exportTXT" onclick="previewBeforeDownload('txt')">
               <span class="export-icon">📝</span>
               <span class="export-label">TXT فاخر</span>
-              <span class="export-desc">نص مزخرف + حقوقك</span>
+              <span class="export-desc">معاينة + تحميل</span>
             </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== TAB: تعليقات (جديد) ===== -->
+      <div class="tab-content" id="tab-comments">
+        <div class="glass-card card-glow-teal">
+          <div class="card-header">
+            <div class="card-icon icon-teal">💬</div>
+            <div>
+              <div class="card-title">نقاشات الطلبة</div>
+              <div class="card-desc">تواصل مع زملائك واطرح أسئلتك</div>
+            </div>
+          </div>
+
+          <div class="comments-section">
+            <div class="comments-header">
+              <div class="comments-title">
+                <span>💭</span> التعليقات
+                <span class="comment-count" id="commentCount">0</span>
+              </div>
+            </div>
+
+            <div class="comment-input-area">
+              <input class="comment-input" id="commentInput" placeholder="اكتب تعليقك أو سؤالك هنا…" />
+              <button class="comment-submit" id="commentSubmit">إرسال</button>
+            </div>
+
+            <div class="comments-list" id="commentsList">
+              <div style="text-align:center;padding:30px;color:rgba(255,255,255,.4)">
+                <div style="font-size:40px;margin-bottom:10px">💬</div>
+                <div>كن أول من يعلق!</div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -1227,6 +1621,91 @@
     const $ = (s) => document.querySelector(s);
     const $$ = (s) => Array.from(document.querySelectorAll(s));
 
+    /* ===== SOUND EFFECTS (جديد) ===== */
+    const sounds = {
+      click: new Audio('data:audio/wav;base64,UklGRl9vT19XQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YU'),
+      success: new Audio('data:audio/wav;base64,UklGRl9vT19XQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YU'),
+      error: new Audio('data:audio/wav;base64,UklGRl9vT19XQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YU'),
+      delete: new Audio('data:audio/wav;base64,UklGRl9vT19XQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YU')
+    };
+
+    function playSound(type){
+      const enabled = localStorage.getItem('sounds_enabled') !== 'false';
+      if(!enabled) return;
+      
+      // Simple beep using Web Audio API (better than empty base64)
+      const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      const oscillator = audioContext.createOscillator();
+      const gainNode = audioContext.createGain();
+      
+      oscillator.connect(gainNode);
+      gainNode.connect(audioContext.destination);
+      
+      switch(type){
+        case 'click':
+          oscillator.frequency.value = 800;
+          gainNode.gain.value = 0.1;
+          oscillator.start();
+          oscillator.stop(audioContext.currentTime + 0.05);
+          break;
+        case 'success':
+          oscillator.frequency.value = 1200;
+          gainNode.gain.value = 0.15;
+          oscillator.start();
+          oscillator.stop(audioContext.currentTime + 0.15);
+          setTimeout(()=>{
+            const osc2 = audioContext.createOscillator();
+            const gain2 = audioContext.createGain();
+            osc2.connect(gain2);
+            gain2.connect(audioContext.destination);
+            osc2.frequency.value = 1600;
+            gain2.gain.value = 0.15;
+            osc2.start();
+            osc2.stop(audioContext.currentTime + 0.15);
+          }, 100);
+          break;
+        case 'error':
+          oscillator.frequency.value = 400;
+          gainNode.gain.value = 0.15;
+          oscillator.start();
+          oscillator.stop(audioContext.currentTime + 0.2);
+          break;
+        case 'delete':
+          oscillator.frequency.value = 300;
+          gainNode.gain.value = 0.2;
+          oscillator.start();
+          oscillator.stop(audioContext.currentTime + 0.3);
+          break;
+      }
+    }
+
+    /* ===== DARK/LIGHT MODE (جديد) ===== */
+    function initMode(){
+      const saved = localStorage.getItem('onx_mode') || 'dark';
+      document.documentElement.setAttribute('data-mode', saved);
+      $('#modeToggle').checked = saved === 'light';
+    }
+
+    $('#modeToggle')?.addEventListener('change', (e)=>{
+      const mode = e.target.checked ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-mode', mode);
+      localStorage.setItem('onx_mode', mode);
+      playSound('click');
+      showToast(`تم التبديل للوضع ${mode === 'light' ? 'النهاري ☀️' : 'الليلي 🌙'}`, 'success');
+    });
+
+    /* ===== SOUNDS TOGGLE (جديد) ===== */
+    function initSounds(){
+      const enabled = localStorage.getItem('sounds_enabled') !== 'false';
+      $('#soundsToggle').checked = enabled;
+    }
+
+    $('#soundsToggle')?.addEventListener('change', (e)=>{
+      localStorage.setItem('sounds_enabled', e.target.checked);
+      playSound('click');
+      showToast(e.target.checked ? 'تم تفعيل الأصوات 🔊' : 'تم كتم الأصوات 🔇', 'info');
+    });
+
     function showToast(msg, type='success'){
       const t = $('#toast'), icon = $('#toast-icon'), text = $('#toast-text');
       icon.textContent = type==='success'?'✅':type==='error'?'❌':'ℹ️';
@@ -1249,7 +1728,7 @@
       return `${hh}:${mm}:${ss} (${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()})`;
     }
 
-    /* ===== FANCY CLOCK (نظام 12 ساعة) ===== */
+    /* ===== FANCY CLOCK ===== */
     function initFancyClock(){
       const DAYS_AR = ['الأحد','الاثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];
       const MONTHS_AR = ['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'];
@@ -1257,24 +1736,21 @@
       
       function updateClock(){
         const now = new Date();
-        // Time - 12-hour format
         let h = now.getHours();
         const period = h >= 12 ? 'PM' : 'AM';
-        h = h % 12; h = h ? h : 12; // Convert 0 to 12
+        h = h % 12; h = h ? h : 12;
         const hStr = String(h).padStart(2,'0');
         const m = String(now.getMinutes()).padStart(2,'0');
         const s = String(now.getSeconds()).padStart(2,'0');
         $('#clockTime').textContent = `${hStr}:${m}:${s}`;
         $('#clockPeriod').textContent = period;
         
-        // Gregorian Date
         const dayName = DAYS_AR[now.getDay()];
         const day = now.getDate();
         const month = MONTHS_AR[now.getMonth()];
         const year = now.getFullYear();
         $('#clockMiladi').textContent = `${dayName} ${day} ${month} ${year}`;
         
-        // Simple Hijri approximation
         const hijriYear = year - 579;
         const hijriMonth = HIJRI_MONTHS[now.getMonth()];
         const hijriDay = Math.floor(day * 0.97) + 1;
@@ -1290,7 +1766,6 @@
       const container = $('#fancyRightsAbove');
       const colors = ['#f5c518', '#00d4ff', '#7b2fff', '#e94560', '#00ff88', '#ff9a5c', '#4dd0e1', '#c9a0ff'];
       
-      // Create sparkle particles on each blink
       setInterval(()=>{
         for(let i=0; i<5; i++){
           const sparkle = document.createElement('span');
@@ -1324,6 +1799,27 @@
         btns.querySelector('.mCancel').onclick = ()=>{ overlay.classList.remove('active'); resolve(null); };
       });
     }
+
+    /* ===== PREVIEW MODAL (جديد) ===== */
+    let pendingDownload = null;
+    
+    function showPreviewModal(content){
+      $('#previewText').textContent = content;
+      $('#previewModal').classList.add('active');
+    }
+
+    $('#previewCancel')?.addEventListener('click', ()=>{
+      $('#previewModal').classList.remove('active');
+      pendingDownload = null;
+      playSound('click');
+    });
+
+    $('#previewDownload')?.addEventListener('click', ()=>{
+      if(pendingDownload){
+        downloadFancy(pendingDownload.format, true);
+        $('#previewModal').classList.remove('active');
+      }
+    });
 
     /* ===== PARTICLES ===== */
     (function(){
@@ -1362,6 +1858,7 @@
         const theme = THEMES.find(t=>t.id===n);
         showToast(`تم تطبيق ثيم "${theme?.name||n}" ✨`, 'success');
         $('#currentThemeName').textContent = theme?.name || '';
+        playSound('success');
       }
     }
 
@@ -1377,12 +1874,14 @@
     /* ===== TABS SYSTEM ===== */
     $$('.tab-btn').forEach(btn => {
       btn.addEventListener('click', () => {
+        playSound('click');
         $$('.tab-btn').forEach(b => b.classList.remove('active'));
         $$('.tab-content').forEach(c => c.classList.remove('active'));
         btn.classList.add('active');
         $('#tab-' + btn.dataset.tab).classList.add('active');
         if(btn.dataset.tab === 'all') showAll().catch(()=>{});
         if(btn.dataset.tab === 'myinfo') showMyInfo().catch(()=>{});
+        if(btn.dataset.tab === 'comments') loadComments().catch(()=>{});
       });
     });
 
@@ -1432,25 +1931,28 @@
     async function loadSiteControlData(){
       const { data, error } = await supabase.from('site_control').select('*').eq('id',1).single();
       if(error || !data) return;
-      // Notification
       const banner = $('#notifBanner'), notifText = $('#notifText');
       if(data.notification && data.notification.trim()){ notifText.textContent = data.notification.trim(); banner.classList.add('visible'); banner.style.display='flex'; }
       else { banner.classList.remove('visible'); banner.style.display='none'; }
-      // Deadline
       clearInterval(countdownInterval); const dp = $('#deadlinePanel');
       if(data.deadline && data.deadline_active){
         const dt = new Date(data.deadline);
         $('#deadlineDateDisplay').textContent = dt.toLocaleDateString('ar-EG', { year:'numeric', month:'long', day:'numeric', hour:'2-digit', minute:'2-digit', hour12:true });
         dp.style.display='block'; startCountdown(dt);
       } else { dp.style.display='none'; }
-      // Guidelines
-      const gp = $('#guidelinesPanel'), gc = $('#guidelinesContent');
+      const gp = $('#guidelinesPanel'), gc = $('#guidelinesContent'), toggleBtn = $('#guidelinesToggle');
       if(data.usage_guidelines && data.usage_guidelines.trim()){
         gc.textContent = data.usage_guidelines.trim(); gp.style.display='block';
-        // ✅ بدون زر طوي/فتح - المحتوى مفتوح دائماً
-        gc.classList.add('expanded');
+        let isCollapsed = false;
+        toggleBtn.onclick = (e)=>{ 
+          e.stopPropagation(); 
+          playSound('click');
+          isCollapsed = !isCollapsed; 
+          gc.classList.toggle('expanded', !isCollapsed); 
+          toggleBtn.innerHTML = '🔽 عرض التفاصيل';
+          toggleBtn.classList.toggle('expanded', isCollapsed);
+        };
       } else { gp.style.display='none'; }
-      // Status
       const st = $('#siteStatusBadge');
       if(!data.site_open){ st.innerHTML = 'الحالة: <strong style="color:#ff6b6b">مغلق</strong>'; }
       else { st.innerHTML = 'الحالة: <strong style="color:#00ff88">مفتوح</strong>'; }
@@ -1468,7 +1970,6 @@
     /* ===== APP STATE ===== */
     let ALL_CACHE = [], SEARCH_TIMER = 0;
     
-    // ✅ تحديث الإحصائيات بدقة
     function updateStats(){
       const total = ALL_CACHE.length;
       const badged = ALL_CACHE.filter(d => d.badge && d.badge.trim()).length;
@@ -1478,7 +1979,6 @@
       $('#statsBadged').textContent = badged;
       $('#statsAlerts').textContent = alerts;
       
-      // آخر تقرير
       if(ALL_CACHE.length > 0){
         const last = ALL_CACHE[ALL_CACHE.length-1];
         const nameParts = (last.name||'').split(' ');
@@ -1493,39 +1993,55 @@
       const el = $('#counterNum'), old = parseInt(el.textContent) || 0;
       if(old === num) return; el.textContent = num; el.classList.remove('pop'); void el.offsetWidth; el.classList.add('pop');
       setTimeout(()=> el.classList.remove('pop'), 450);
-      updateStats(); // ✅ تحديث الإحصائيات عند تغيير العداد
+      updateStats();
     }
 
-    /* ===== FANCY EXPORT FORMAT (TXT فقط) ===== */
+    /* ===== FANCY EXPORT FORMAT ===== */
     function generateFancyContent(data, format){
       const name = data.name || 'غير محدد';
       const subject = data.subject || 'غير محدد';
       const title = data.title || 'غير محدد';
       const date = formatDate(data.date) || 'غير محدد';
       
-      // ✅ التنسيق الفاخر المطلوب
       const fancyHeader = `❮𝗢𝗡𝗫_𝗧𝗔𝗤𝗘𝗦𝗧𝗨𝗗𝗘𝗡𝗧❯\n❮𝗥𝗘𝗣𝗢𝗥𝗧❯•.•.•.•.•.•.\n【☞ 𝗪𝗘𝗟𝗖𝗢𝗠𝗘 ☜】\n⊠⊠⊠⊠⊠⊠⊠⊠⊠⊠⊠⊠⊠⊠\n`;
       const fancyBody = `𝙽𝙰𝙼𝙴 :${name}\n𝙼𝙰𝚃𝙴𝚁𝙸𝙰𝙻:${subject}\n𝚃𝙸𝚃𝙻𝙴 𝚁𝙴𝙿𝙾𝚁𝚃:${title}\n 𝙳𝙰𝚃𝙰:${date}\n`;
       const fancyFooter = `⊠⊠⊠⊠⊠⊠⊠⊠⊠⊠⊠⊠⊠⊠\n𓆩الهـم صـلِ علـى محـمد وآل مـحمـد𓆪\n📮.Ᏼ𝚈➣@ONX44`;
       
-      const fullContent = fancyHeader + fancyBody + fancyFooter;
-      
-      if(format === 'txt'){
-        return fullContent;
-      }
-      return fullContent;
+      return fancyHeader + fancyBody + fancyFooter;
     }
 
-    async function downloadFancy(format){
+    /* ===== PREVIEW BEFORE DOWNLOAD (جديد) ===== */
+    async function previewBeforeDownload(format){
       const code = await DEVICE_CODE_PROMISE;
       const { data, error } = await supabase.from('student_reports').select('*').eq('code',code).single();
-      if(error || !data){ setMsg('⚠️ سجل بياناتك أولاً','error'); showToast('لا توجد بيانات','error'); return; }
+      if(error || !data){ 
+        setMsg('⚠️ سجل بياناتك أولاً','error'); 
+        showToast('لا توجد بيانات','error'); 
+        playSound('error');
+        return; 
+      }
+      
+      const content = generateFancyContent(data, format);
+      pendingDownload = { format, data };
+      showPreviewModal(content);
+      playSound('click');
+    }
+    window.previewBeforeDownload = previewBeforeDownload;
+
+    async function downloadFancy(format, skipPreview = false){
+      const code = await DEVICE_CODE_PROMISE;
+      const { data, error } = await supabase.from('student_reports').select('*').eq('code',code).single();
+      if(error || !data){ 
+        setMsg('⚠️ سجل بياناتك أولاً','error'); 
+        showToast('لا توجد بيانات','error'); 
+        playSound('error');
+        return; 
+      }
       
       const content = generateFancyContent(data, format);
       const safeName = (data.name||'student').replace(/[^\u0600-\u06FFa-zA-Z0-9_-]+/g,'_');
       const filename = `ONX-TAQE_${safeName}_report.txt`;
       
-      // Create blob and download
       const blob = new Blob([content], {type: 'text/plain;charset=utf-8'});
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
@@ -1537,34 +2053,153 @@
       URL.revokeObjectURL(url);
       
       showToast(`تم التحميل بصيغة TXT ✨`, 'success');
+      playSound('success');
     }
     window.downloadFancy = downloadFancy;
 
+    /* ===== COMMENTS SYSTEM (جديد) ===== */
+    async function loadComments(){
+      const code = await DEVICE_CODE_PROMISE;
+      const { data, error } = await supabase.from('comments').select('*').order('created_at', { ascending: false }).limit(50);
+      
+      if(error || !data){
+        $('#commentsList').innerHTML = `<div style="text-align:center;padding:30px;color:rgba(255,255,255,.4)"><div style="font-size:40px;margin-bottom:10px">⚠️</div><div>تعذر تحميل التعليقات</div></div>`;
+        return;
+      }
+      
+      $('#commentCount').textContent = data.length;
+      
+      if(data.length === 0){
+        $('#commentsList').innerHTML = `<div style="text-align:center;padding:30px;color:rgba(255,255,255,.4)"><div style="font-size:40px;margin-bottom:10px">💬</div><div>كن أول من يعلق!</div></div>`;
+        return;
+      }
+      
+      let html = '';
+      data.forEach(comment => {
+        const timeAgo = getTimeAgo(comment.created_at);
+        const isMe = comment.code === code;
+        html += `
+          <div class="comment-item" style="${isMe ? 'border-color: rgba(245,197,24,0.3);' : ''}">
+            <div class="comment-header">
+              <span class="comment-author">${isMe ? 'أنت' : comment.anonymous_name || 'طالب'}</span>
+              <span class="comment-time">${timeAgo}</span>
+            </div>
+            <div class="comment-text">${comment.text}</div>
+            <button class="reply-btn" onclick="showReplyInput('${comment.id}')">💭 رد</button>
+            <div id="reply-${comment.id}" style="display:none"></div>
+          </div>
+        `;
+      });
+      
+      $('#commentsList').innerHTML = html;
+    }
+
+    function getTimeAgo(timestamp){
+      const seconds = Math.floor((new Date() - new Date(timestamp)) / 1000);
+      if(seconds < 60) return 'الآن';
+      const minutes = Math.floor(seconds / 60);
+      if(minutes < 60) return `منذ ${minutes} دقيقة`;
+      const hours = Math.floor(minutes / 60);
+      if(hours < 24) return `منذ ${hours} ساعة`;
+      const days = Math.floor(hours / 24);
+      return `منذ ${days} يوم`;
+    }
+
+    async function submitComment(){
+      const input = $('#commentInput');
+      const text = input.value.trim();
+      if(!text){
+        showToast('اكتب تعليقاً أولاً','error');
+        playSound('error');
+        return;
+      }
+      
+      const code = await DEVICE_CODE_PROMISE;
+      const { data: me } = await supabase.from('student_reports').select('name').eq('code',code).single();
+      
+      const { error } = await supabase.from('comments').insert([{
+        text,
+        code,
+        anonymous_name: me?.name ? me.name.split(' ')[0] : 'طالب',
+        created_at: new Date().toISOString()
+      }]);
+      
+      if(error){
+        showToast('فشل إرسال التعليق','error');
+        playSound('error');
+        return;
+      }
+      
+      input.value = '';
+      showToast('تم إرسال التعليق ✨','success');
+      playSound('success');
+      loadComments();
+    }
+
+    window.showReplyInput = function(commentId){
+      const replyDiv = $(`#reply-${commentId}`);
+      if(replyDiv.style.display === 'none'){
+        replyDiv.style.display = 'block';
+        replyDiv.innerHTML = `
+          <input class="reply-input" placeholder="اكتب ردك..." id="replyInput-${commentId}" />
+          <button class="comment-submit" style="margin-top:8px;width:100%" onclick="submitReply('${commentId}')">إرسال الرد</button>
+        `;
+      } else {
+        replyDiv.style.display = 'none';
+      }
+      playSound('click');
+    };
+
+    window.submitReply = async function(commentId){
+      const input = $(`#replyInput-${commentId}`);
+      const text = input.value.trim();
+      if(!text){
+        showToast('اكتب ردك أولاً','error');
+        playSound('error');
+        return;
+      }
+      
+      showToast('تم إرسال الرد (قريباً)','success');
+      playSound('success');
+      input.value = '';
+      $(`#reply-${commentId}`).style.display = 'none';
+    };
+
+    $('#commentSubmit')?.addEventListener('click', ()=>{
+      submitComment();
+    });
+
+    $('#commentInput')?.addEventListener('keypress', (e)=>{
+      if(e.key === 'Enter') submitComment();
+    });
+
     /* ===== CORE ACTIONS ===== */
     async function saveData(){
+      playSound('click');
       const name = $('#studentName').value.trim(), title = $('#reportTitle').value.trim(), subject = $('#subjectName').value.trim(), code = await DEVICE_CODE_PROMISE;
-      if(name.split(/\s+/).length < 2){ setMsg('⚠️ الاسم لازم يكون ثنائي على الأقل','error'); showToast('الاسم ثنائي مطلوب','error'); return; }
-      if(!name || !title || !subject){ setMsg('⚠️ املا كل الحقول','error'); showToast('املأ جميع الحقول','error'); return; }
+      if(name.split(/\s+/).length < 2){ setMsg('⚠️ الاسم لازم يكون ثنائي على الأقل','error'); showToast('الاسم ثنائي مطلوب','error'); playSound('error'); return; }
+      if(!name || !title || !subject){ setMsg('⚠️ املا كل الحقول','error'); showToast('املأ جميع الحقول','error'); playSound('error'); return; }
       const { data:already } = await supabase.from('student_reports').select('id').eq('code',code).limit(1);
-      if(already?.length){ setMsg('⛔ لديك بيانات محفوظة','error'); showToast('لا يمكن التسجيل مرتين','error'); await showMyInfo(); setActiveTab('myinfo'); return; }
-      const [{ nameUsed }, { data:titleUsed }] = await Promise.all([supabase.from('student_reports').select('id').eq('name',name).limit(1), supabase.from('student_reports').select('id').eq('title',title).limit(1)]);
-      if((nameUsed?.length)||(titleUsed?.length)){ setMsg('❌ الاسم أو العنوان مستخدم','error'); showToast('مكرر مسبقاً','error'); return; }
+      if(already?.length){ setMsg('⛔ لديك بيانات محفوظة','error'); showToast('لا يمكن التسجيل مرتين','error'); playSound('error'); await showMyInfo(); setActiveTab('myinfo'); return; }
+      const [{ nameUsed }, { titleUsed }] = await Promise.all([supabase.from('student_reports').select('id').eq('name',name).limit(1), supabase.from('student_reports').select('id').eq('title',title).limit(1)]);
+      if((nameUsed?.length)||(titleUsed?.length)){ setMsg('❌ الاسم أو العنوان مستخدم','error'); showToast('مكرر مسبقاً','error'); playSound('error'); return; }
       const { error } = await supabase.from('student_reports').insert([{ name, title, subject, date:new Date().toISOString(), code }]);
-      if(error){ console.log(error); setMsg('❌ فشل الحفظ','error'); showToast('خطأ في الحفظ','error'); return; }
-      setMsg('✅ تم التسجيل بنجاح','success'); showToast('تم الحفظ ✨','success'); await showMyInfo(); await showAll(); setActiveTab('myinfo');
+      if(error){ console.log(error); setMsg('❌ فشل الحفظ','error'); showToast('خطأ في الحفظ','error'); playSound('error'); return; }
+      setMsg('✅ تم التسجيل بنجاح','success'); showToast('تم الحفظ ✨','success'); playSound('success'); await showMyInfo(); await showAll(); setActiveTab('myinfo');
     }
 
     async function changeTitle(){
+      playSound('click');
       const code = await DEVICE_CODE_PROMISE;
       const { data:me } = await supabase.from('student_reports').select('id').eq('code',code).limit(1);
-      if(!me?.length){ setMsg('⚠️ لا توجد بيانات لك','error'); showToast('سجل أولاً','error'); return; }
+      if(!me?.length){ setMsg('⚠️ لا توجد بيانات لك','error'); showToast('سجل أولاً','error'); playSound('error'); return; }
       const newTitle = await showModal({ icon:'✏️', title:'تغيير العنوان', msg:'اكتب العنوان الجديد (فريد)', withInput:true, inputPlaceholder:'العنوان الجديد...', confirmText:'تغيير', cancelText:'إلغاء' });
-      if(!newTitle) return; const clean = newTitle.trim(); if(!clean){ setMsg('⚠️ العنوان فاضي','error'); return; }
+      if(!newTitle) return; const clean = newTitle.trim(); if(!clean){ setMsg('⚠️ العنوان فاضي','error'); playSound('error'); return; }
       const { titleUsed } = await supabase.from('student_reports').select('id').eq('title',clean).limit(1);
-      if(titleUsed?.length){ setMsg('❌ العنوان مستخدم','error'); return; }
+      if(titleUsed?.length){ setMsg('❌ العنوان مستخدم','error'); playSound('error'); return; }
       const { error } = await supabase.from('student_reports').update({ title:clean, date:new Date().toISOString() }).eq('code', code);
-      if(error){ setMsg('❌ فشل التحديث','error'); return; }
-      setMsg('✅ تم التغيير','success'); showToast('تم التحديث ✨','success'); await showMyInfo(); await showAll(); setActiveTab('myinfo');
+      if(error){ setMsg('❌ فشل التحديث','error'); playSound('error'); return; }
+      setMsg('✅ تم التغيير','success'); showToast('تم التحديث ✨','success'); playSound('success'); await showMyInfo(); await showAll(); setActiveTab('myinfo');
     }
 
     async function showMyInfo(){
@@ -1588,7 +2223,7 @@
       if(error){ allTitles.innerHTML = `<div style="text-align:center;padding:22px;color:#ff5c5c">❌ فشل التحميل</div>`; return; }
       ALL_CACHE = data || []; 
       updateCounter(ALL_CACHE.length); 
-      updateStats(); // ✅ تحديث الإحصائيات
+      updateStats();
       renderAllList();
     }
 
@@ -1611,17 +2246,19 @@
     }
 
     async function deleteMyData(){
+      playSound('click');
       const code = await DEVICE_CODE_PROMISE;
-      const { data: me } = await supabase.from('student_reports').select('id').eq('code',code).limit(1);
-      if(!me?.length){ setMsg('⚠️ لا توجد بيانات','error'); return; }
+      const {  me } = await supabase.from('student_reports').select('id').eq('code',code).limit(1);
+      if(!me?.length){ setMsg('⚠️ لا توجد بيانات','error'); playSound('error'); return; }
       const confirmed = await showModal({ icon:'🗑️', title:'تأكيد الحذف', msg:'هل أنت متأكد؟\nالإجراء نهائي ولا يمكن التراجع.', withInput:false, confirmText:'حذف', cancelText:'إلغاء' });
       if(!confirmed) return;
       const { error } = await supabase.from('student_reports').delete().eq('code', code);
-      if(error){ setMsg('❌ فشل الحذف','error'); return; }
-      $('#infoBox').style.display='none'; $('#infoBox').innerHTML=''; setMsg('✅ تم الحذف','success'); showToast('تم حذف البيانات','success'); await showAll(); setActiveTab('register');
+      if(error){ setMsg('❌ فشل الحذف','error'); playSound('error'); return; }
+      $('#infoBox').style.display='none'; $('#infoBox').innerHTML=''; setMsg('✅ تم الحذف','success'); showToast('تم حذف البيانات','success'); playSound('delete'); await showAll(); setActiveTab('register');
     }
 
     async function reportProblem(){
+      playSound('click');
       const code = await DEVICE_CODE_PROMISE;
       const { data: me } = await supabase.from('student_reports').select('name').eq('code',code).single();
       const result = await showModal({ icon:'🆘', title:'أرسل مشكلتك', msg:'اكتب مشكلتك بالتفصيل:\nوسيتم إرسالها للمشرف مباشرة', withInput:true, isTextarea:true, inputPlaceholder:'اكتب مشكلتك هنا…', confirmText:'📤 إرسال', cancelText:'إلغاء' });
@@ -1630,8 +2267,8 @@
       const msgText = `🆘 <b>مشكلة من طالب — ONX-TAQE</b>\n\n👤 <b>الاسم:</b> ${studentName}\n📝 <b>المشكلة:</b>\n${result.trim()}\n\n🕐 <b>الوقت:</b> ${new Date().toLocaleString('ar-EG')}`;
       try{
         const res = await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ chat_id: TELEGRAM_CHAT_ID, text: msgText, parse_mode:'HTML' }) });
-        const json = await res.json(); if(json.ok){ setMsg('✅ تم الإرسال للمشرف','success'); showToast('تم الإرسال ✨','success'); } else { throw new Error(json.description || 'Telegram error'); }
-      }catch(e){ console.error('Telegram:', e); setMsg('❌ فشل الإرسال','error'); showToast('حاول لاحقاً','error'); }
+        const json = await res.json(); if(json.ok){ setMsg('✅ تم الإرسال للمشرف','success'); showToast('تم الإرسال ✨','success'); playSound('success'); } else { throw new Error(json.description || 'Telegram error'); }
+      }catch(e){ console.error('Telegram:', e); setMsg('❌ فشل الإرسال','error'); showToast('حاول لاحقاً','error'); playSound('error'); }
     }
 
     /* ===== BIND UI ===== */
@@ -1642,8 +2279,9 @@
     $('#btnDelete2')?.addEventListener('click', (e)=>{e.stopPropagation();deleteMyData();});
     $('#btnProblem')?.addEventListener('click', (e)=>{e.stopPropagation();reportProblem();});
     $('#btnProblem2')?.addEventListener('click', (e)=>{e.stopPropagation();reportProblem();});
-    $('#panelRefreshBtn')?.addEventListener('click', (e)=>{e.stopPropagation();showAll(); showToast('تم التحديث ✨','success');});
-    $('#notifCloseBtn')?.addEventListener('click', (e)=>{e.stopPropagation(); const b = $('#notifBanner'); b.classList.remove('visible'); b.style.display='none';});
+    $('#importantBtn')?.addEventListener('click', (e)=>{ e.stopPropagation(); playSound('click'); const gc = $('#guidelinesContent'), toggleBtn = $('#guidelinesToggle'); if(gc && toggleBtn){ const isExpanded = gc.classList.contains('expanded'); gc.classList.toggle('expanded', !isExpanded); toggleBtn.innerHTML = '🔽 عرض التفاصيل'; toggleBtn.classList.toggle('expanded', isExpanded); } });
+    $('#panelRefreshBtn')?.addEventListener('click', (e)=>{e.stopPropagation();showAll(); showToast('تم التحديث ✨','success'); playSound('success');});
+    $('#notifCloseBtn')?.addEventListener('click', (e)=>{e.stopPropagation(); playSound('click'); const b = $('#notifBanner'); b.classList.remove('visible'); b.style.display='none';});
     $('#searchInput')?.addEventListener('input', (e)=>{ e.stopPropagation(); clearTimeout(SEARCH_TIMER); SEARCH_TIMER = setTimeout(renderAllList, 90); });
     $$('.themeOption')?.forEach(opt=>{ opt.addEventListener('click', (e)=>{ e.stopPropagation(); applyTheme(parseInt(opt.dataset.theme)); }); });
 
@@ -1656,11 +2294,14 @@
     function setupRealtime(){
       supabase.channel('site_ctrl_student').on('postgres_changes', { event:'*', schema:'public', table:'site_control' }, ()=>{ loadSiteControlData(); }).subscribe();
       supabase.channel('reports_student').on('postgres_changes', { event:'*', schema:'public', table:'student_reports' }, async ()=>{ showMyInfo().catch(()=>{}); const allVisible = $('#tab-all')?.classList.contains('active'); if(allVisible){ const { data, error } = await supabase.from('student_reports').select('id,name,title,subject,date,code,badge,color,alert_text,alert_color,alert_type').order('id', { ascending:true }); if(!error && data){ ALL_CACHE = data; updateCounter(data.length); updateStats(); renderAllList(); } } }).subscribe();
+      supabase.channel('comments_student').on('postgres_changes', { event:'*', schema:'public', table:'comments' }, ()=>{ if($('#tab-comments')?.classList.contains('active')) loadComments(); }).subscribe();
     }
 
     /* ===== BOOT ===== */
     (async function boot(){
       initLoadingScreen();
+      initMode();
+      initSounds();
       const open = await checkSiteStatus(); if(!open) return;
       loadSiteControlData().catch(()=>{}); setupRealtime();
       setActiveTab('register');
