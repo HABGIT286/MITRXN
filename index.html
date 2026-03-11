@@ -3,26 +3,26 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>لوحة تحكم تقارير الطلبة — إصدار ألتيميت | ONX-TAQE ULTIMATE</title>
+  <title>لوحة تحكم تقارير الطلبة — تصميم احترافي | ONX-TAQE PRO</title>
 
   <!--
-    ✅ ملف HTML كامل (إصدار ألتيميت - ONX-TAQE ULTIMATE)
+    ✅ ملف HTML كامل (إصدار احترافي - ONX-TAQE PRO)
     الميزات الجديدة:
-      - 10 ثيمات فريدة تغير ألوان وكل تأثيرات الكروت الزجاجية
-      - زر "متطلبات الاستخدام" يطوي/يفتح النص كاملاً مع تأثير ضبابي
-      - شريط جانبي يُفتح ويُغلق بنقرة (موبايل + كمبيوتر)
-      - خلفية ضبابية عند فتح القائمة على الموبايل
-      - تأثيرات زجاجية ديناميكية تتغير مع كل ثيم
+      - ثيمات بألوان وأسماء مرئية مع معاينة فورية
+      - جدول طلاب قابل للتمرير عموديًا وأفقيًا
+      - إخفاء كل تأثيرات التركيز المزعجة
+      - زر "متطلبات الاستخدام" يطوي/يفتح المحتوى
+      - تخطيط مرن: شريط جانبي حتى 50% + محتوى رئيسي
       - كل العناصر غير قابلة للتحديد (اختياري)
-      - تحسينات أداء وتجربة مستخدم فائقة
+      - تحسينات أداء وتجربة مستخدم احترافية
 
     ⚠️ أمان مهم:
-      - وجود TELEGRAM_BOT_TOKEN في الواجهة مخاطرة.
-        الأفضل استخدامه عبر سيرفر/Edge Function.
+      - وجود TELEGRAM_BOT_TOKEN في الواجهة مخاطرة (أي حد يقدر يسرقه).
+        الأفضل تخليه على سيرفر/Edge Function وتستدعي Endpoint.
   -->
 
   <style>
-    /* ===== Fonts ===== */
+    /* ===== Fonts (local) ===== */
     @font-face{font-family:'TitelFont';src:url('TITEL.ttf');font-display:swap;}
     @font-face{font-family:'WriteFont';src:url('WRITE.otf');font-display:swap;}
 
@@ -48,7 +48,7 @@
     :focus{outline:none!important;box-shadow:none!important}
     ::selection{background:transparent}
 
-    /* ===== Design Tokens (Base) ===== */
+    /* ===== Design Tokens ===== */
     :root{
       --bg0:#07080d;
       --bg1:#0b1022;
@@ -78,88 +78,6 @@
       --sideW-max:50vw;
     }
 
-    /* ===== Theme System - 10 Themes (GLASS EFFECTS) ===== */
-    /* Theme 0: كلاسيكي ذهبي */
-    html[data-theme="0"]{
-      --gold:#f5c842;--cyan:#7dd3fc;--purple:#b28dff;
-      --glass:rgba(245,200,66,.08);--glass2:rgba(125,211,252,.05);
-      --stroke:rgba(245,200,66,.25);--stroke2:rgba(125,211,252,.18);
-      --cardGlow:radial-gradient(600px 220px at 15% 0%, rgba(245,200,66,.15), transparent 55%),
-                 radial-gradient(600px 220px at 90% 100%, rgba(125,211,252,.12), transparent 60%);
-    }
-    /* Theme 1: ليلي أزرق */
-    html[data-theme="1"]{
-      --gold:#e3e7ff;--cyan:#6fa8ff;--purple:#3f6fff;
-      --glass:rgba(111,168,255,.08);--glass2:rgba(63,111,255,.05);
-      --stroke:rgba(111,168,255,.25);--stroke2:rgba(63,111,255,.18);
-      --cardGlow:radial-gradient(600px 220px at 15% 0%, rgba(111,168,255,.15), transparent 55%),
-                 radial-gradient(600px 220px at 90% 100%, rgba(63,111,255,.12), transparent 60%);
-    }
-    /* Theme 2: ربيعي أخضر */
-    html[data-theme="2"]{
-      --gold:#d8ff44;--cyan:#bff7ff;--purple:#7dfc8e;
-      --glass:rgba(216,255,68,.08);--glass2:rgba(125,252,142,.05);
-      --stroke:rgba(216,255,68,.25);--stroke2:rgba(125,252,142,.18);
-      --cardGlow:radial-gradient(600px 220px at 15% 0%, rgba(216,255,68,.15), transparent 55%),
-                 radial-gradient(600px 220px at 90% 100%, rgba(125,252,142,.12), transparent 60%);
-    }
-    /* Theme 3: وردي ناعم */
-    html[data-theme="3"]{
-      --gold:#caa2ff;--cyan:#8be9ff;--purple:#ff79c6;
-      --glass:rgba(202,162,255,.08);--glass2:rgba(255,121,198,.05);
-      --stroke:rgba(202,162,255,.25);--stroke2:rgba(255,121,198,.18);
-      --cardGlow:radial-gradient(600px 220px at 15% 0%, rgba(202,162,255,.15), transparent 55%),
-                 radial-gradient(600px 220px at 90% 100%, rgba(255,121,198,.12), transparent 60%);
-    }
-    /* Theme 4: نيون ساطع */
-    html[data-theme="4"]{
-      --gold:#ff6b6b;--cyan:#00d4ff;--purple:#ffe66d;
-      --glass:rgba(255,107,107,.08);--glass2:rgba(0,212,255,.05);
-      --stroke:rgba(255,107,107,.25);--stroke2:rgba(0,212,255,.18);
-      --cardGlow:radial-gradient(600px 220px at 15% 0%, rgba(255,107,107,.15), transparent 55%),
-                 radial-gradient(600px 220px at 90% 100%, rgba(0,212,255,.12), transparent 60%);
-    }
-    /* Theme 5: حلمي بنفسجي */
-    html[data-theme="5"]{
-      --gold:#ff9ad9;--cyan:#7dd3fc;--purple:#6a5cff;
-      --glass:rgba(255,154,217,.08);--glass2:rgba(106,92,255,.05);
-      --stroke:rgba(255,154,217,.25);--stroke2:rgba(106,92,255,.18);
-      --cardGlow:radial-gradient(600px 220px at 15% 0%, rgba(255,154,217,.15), transparent 55%),
-                 radial-gradient(600px 220px at 90% 100%, rgba(106,92,255,.12), transparent 60%);
-    }
-    /* Theme 6: غروب برتقالي */
-    html[data-theme="6"]{
-      --gold:#ff8c42;--cyan:#ff6b9d;--purple:#c445ff;
-      --glass:rgba(255,140,66,.08);--glass2:rgba(255,107,157,.05);
-      --stroke:rgba(255,140,66,.25);--stroke2:rgba(255,107,157,.18);
-      --cardGlow:radial-gradient(600px 220px at 15% 0%, rgba(255,140,66,.15), transparent 55%),
-                 radial-gradient(600px 220px at 90% 100%, rgba(255,107,157,.12), transparent 60%);
-    }
-    /* Theme 7: محيط أزرق داكن */
-    html[data-theme="7"]{
-      --gold:#4facfe;--cyan:#00f2fe;--purple:#667eea;
-      --glass:rgba(79,172,254,.08);--glass2:rgba(0,242,254,.05);
-      --stroke:rgba(79,172,254,.25);--stroke2:rgba(0,242,254,.18);
-      --cardGlow:radial-gradient(600px 220px at 15% 0%, rgba(79,172,254,.15), transparent 55%),
-                 radial-gradient(600px 220px at 90% 100%, rgba(0,242,254,.12), transparent 60%);
-    }
-    /* Theme 8: غابة زمردية */
-    html[data-theme="8"]{
-      --gold:#11998e;--cyan:#38ef7d;--purple:#11998e;
-      --glass:rgba(17,153,142,.08);--glass2:rgba(56,239,125,.05);
-      --stroke:rgba(17,153,142,.25);--stroke2:rgba(56,239,125,.18);
-      --cardGlow:radial-gradient(600px 220px at 15% 0%, rgba(17,153,142,.15), transparent 55%),
-                 radial-gradient(600px 220px at 90% 100%, rgba(56,239,125,.12), transparent 60%);
-    }
-    /* Theme 9: ملكي أرجواني */
-    html[data-theme="9"]{
-      --gold:#9d50ff;--cyan:#6e48aa;--purple:#4776e6;
-      --glass:rgba(157,80,255,.08);--glass2:rgba(71,118,230,.05);
-      --stroke:rgba(157,80,255,.25);--stroke2:rgba(71,118,230,.18);
-      --cardGlow:radial-gradient(600px 220px at 15% 0%, rgba(157,80,255,.15), transparent 55%),
-                 radial-gradient(600px 220px at 90% 100%, rgba(71,118,230,.12), transparent 60%);
-    }
-
     /* ===== Background ===== */
     .bg{
       position:fixed;inset:0;z-index:-10;
@@ -170,7 +88,6 @@
         linear-gradient(180deg, rgba(0,0,0,.65), rgba(0,0,0,.40)),
         url('M.jpg') center/cover no-repeat fixed;
       filter:saturate(1.05);
-      transition:background .4s ease;
     }
     .noise{position:fixed;inset:0;z-index:-9;pointer-events:none;opacity:.07;mix-blend-mode:overlay;
       background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='.65'/%3E%3C/svg%3E");}
@@ -182,30 +99,12 @@
       grid-template-columns: minmax(280px, var(--sideW-max)) 1fr;
       gap:14px;
       padding:14px;
-      position:relative;
-    }
-
-    /* ===== Sidebar Overlay (Mobile) ===== */
-    .sidebar-overlay{
-      position:fixed;
-      inset:0;
-      background:rgba(0,0,0,.6);
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-      z-index:45;
-      display:none;
-      opacity:0;
-      transition:opacity .25s ease;
-    }
-    .sidebar-overlay.active{
-      display:block;
-      opacity:1;
     }
 
     /* ===== Sidebar ===== */
     .sidebar{
       border-radius:var(--r1);
-      background:linear-gradient(180deg, var(--glass), var(--glass2));
+      background:linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.04));
       border:1px solid var(--stroke);
       box-shadow:var(--shadow2);
       backdrop-filter: blur(var(--blur));
@@ -215,24 +114,11 @@
       flex-direction:column;
       min-height:0;
       position:relative;
-      transition:transform .3s ease, opacity .3s ease;
-      z-index:50;
-    }
-    .sidebar::before{
-      content:'';
-      position:absolute;
-      inset:0;
-      background:var(--cardGlow);
-      opacity:.6;
-      pointer-events:none;
-      transition:background .4s ease;
     }
     .side-top{
       padding:18px 18px 14px;
       border-bottom:1px solid rgba(255,255,255,.10);
       background:linear-gradient(135deg, rgba(245,200,66,.11), rgba(125,211,252,.07));
-      position:relative;
-      z-index:1;
     }
     .brandRow{display:flex;align-items:center;gap:12px}
     .logo{
@@ -252,7 +138,7 @@
     }
     .brandText p{font-size:11px;color:rgba(255,255,255,.55);margin-top:4px;line-height:1.35}
 
-    .side-chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;position:relative;z-index:1}
+    .side-chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
     .chip{
       display:inline-flex;align-items:center;gap:8px;
       padding:8px 10px;border-radius:999px;
@@ -276,8 +162,6 @@
       gap:10px;
       overflow:auto;
       min-height:0;
-      position:relative;
-      z-index:1;
     }
     .nav::-webkit-scrollbar{width:6px}
     .nav::-webkit-scrollbar-thumb{background:rgba(255,255,255,.16);border-radius:10px}
@@ -317,8 +201,6 @@
       border-top:1px solid rgba(255,255,255,.10);
       display:flex;flex-direction:column;gap:10px;
       margin-top:auto;
-      position:relative;
-      z-index:1;
     }
     .side-foot .mini{
       display:flex;align-items:center;justify-content:space-between;gap:10px;
@@ -333,7 +215,7 @@
     /* ===== Main Area ===== */
     .main{
       border-radius:var(--r1);
-      background:linear-gradient(180deg, var(--glass), var(--glass2));
+      background:linear-gradient(180deg, rgba(255,255,255,.065), rgba(255,255,255,.035));
       border:1px solid var(--stroke);
       box-shadow:var(--shadow);
       backdrop-filter: blur(var(--blur));
@@ -343,16 +225,6 @@
       flex-direction:column;
       min-height:0;
       position:relative;
-      transition:background .4s ease, border-color .4s ease;
-    }
-    .main::before{
-      content:'';
-      position:absolute;
-      inset:0;
-      background:var(--cardGlow);
-      opacity:.5;
-      pointer-events:none;
-      transition:background .4s ease;
     }
 
     /* ===== Top Header ===== */
@@ -361,8 +233,6 @@
       display:flex;align-items:center;justify-content:space-between;gap:12px;
       border-bottom:1px solid rgba(255,255,255,.10);
       background:linear-gradient(135deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
-      position:relative;
-      z-index:2;
     }
     .topLeft{display:flex;align-items:center;gap:10px;min-width:0}
     .hamb{
@@ -427,8 +297,6 @@
       align-items:center;
       user-select:none;
       -webkit-user-select:none;
-      position:relative;
-      z-index:2;
     }
     #notifBanner.visible{display:flex}
     .notifClose{margin-right:auto;cursor:pointer;border-radius:12px;padding:6px 10px;
@@ -442,8 +310,6 @@
       min-height:0;
       scrollbar-width:thin;
       scrollbar-color: rgba(255,255,255,.18) transparent;
-      position:relative;
-      z-index:2;
     }
     .content::-webkit-scrollbar{width:6px;height:6px}
     .content::-webkit-scrollbar-thumb{background:rgba(255,255,255,.18);border-radius:10px}
@@ -461,31 +327,25 @@
 
     .card{
       border-radius:var(--r1);
-      background:linear-gradient(180deg, var(--glass), var(--glass2));
-      border:1px solid var(--stroke);
+      background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.035));
+      border:1px solid rgba(255,255,255,.12);
       box-shadow:0 18px 50px rgba(0,0,0,.38);
       overflow:hidden;
       position:relative;
-      transition:background .4s ease, border-color .4s ease;
     }
-    .card::before{
-      content:'';
-      position:absolute;
-      inset:0;
-      pointer-events:none;
-      background:var(--cardGlow);
+    .card::before{content:'';position:absolute;inset:0;pointer-events:none;
+      background:radial-gradient(600px 220px at 15% 0%, rgba(125,211,252,.12), transparent 55%),
+                 radial-gradient(600px 220px at 90% 100%, rgba(245,200,66,.10), transparent 60%);
       opacity:.9;
-      transition:background .4s ease;
     }
     .cardHd{
       position:relative;
       padding:14px 16px;
       display:flex;align-items:center;justify-content:space-between;gap:10px;
       border-bottom:1px solid rgba(255,255,255,.08);
-      z-index:1;
     }
     .cardHd h3{font-family:'TitelFont',sans-serif;font-size:13px;letter-spacing:2px;color:rgba(245,200,66,.95);display:flex;align-items:center;gap:8px}
-    .cardBd{position:relative;padding:16px;z-index:1}
+    .cardBd{position:relative;padding:16px}
 
     .muted{color:var(--muted)}
 
@@ -655,48 +515,34 @@
       background-size:200% 100%;animation:shimmer 2.2s linear infinite;opacity:.75}
 
     /* ===== Guidelines / Deadline ===== */
-    .bigNote{
-      line-height:1.95;
-      color:rgba(255,255,255,.86);
-      white-space:pre-wrap;
-      max-height:100px;
-      overflow:hidden;
-      transition:max-height .4s ease, opacity .3s ease;
-      position:relative;
-    }
-    .bigNote::after{
-      content:'';
-      position:absolute;
-      bottom:0;
-      left:0;
-      right:0;
-      height:40px;
-      background:linear-gradient(transparent, rgba(0,0,0,.85));
-      opacity:1;
-      transition:opacity .3s ease;
-      pointer-events:none;
-    }
-    .bigNote.expanded{
-      max-height:2000px;
-    }
-    .bigNote.expanded::after{
-      opacity:0;
-    }
-    .bigNote-toggle{
-      display:inline-flex;
-      align-items:center;
-      gap:6px;
-      margin-top:8px;
-      padding:6px 12px;
-      border-radius:12px;
-      background:rgba(255,255,255,.05);
-      border:1px solid rgba(255,255,255,.12);
-      color:rgba(255,255,255,.75);
-      font-size:11px;
-      cursor:pointer;
-      transition:.2s;
-    }
-    .bigNote-toggle:hover{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.18)}
+.bigNote{
+  line-height:1.95;
+  color:rgba(255,255,255,.86);
+  white-space:pre-wrap;
+  max-height:100px;
+  overflow:hidden;
+  transition:max-height .4s ease;
+  position:relative;
+  /* ✅ لا يوجد تدرج أسود بعد الآن */
+}
+.bigNote.expanded{
+  max-height:2000px;
+}
+.bigNote-toggle{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  margin-top:8px;
+  padding:6px 12px;
+  border-radius:12px;
+  background:rgba(255,255,255,.05);
+  border:1px solid rgba(255,255,255,.12);
+  color:rgba(255,255,255,.75);
+  font-size:11px;
+  cursor:pointer;
+  transition:.2s;
+}
+.bigNote-toggle:hover{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.18)}
     
     .deadline{
       display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap;
@@ -726,8 +572,8 @@
     .modal{
       width:440px;max-width:92%;
       border-radius:22px;
-      background:linear-gradient(180deg, var(--glass), var(--glass2));
-      border:1px solid var(--stroke);
+      background:linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.06));
+      border:1px solid rgba(255,255,255,.16);
       box-shadow:0 25px 65px rgba(0,0,0,.75);
       padding:26px;
       text-align:center;
@@ -735,29 +581,20 @@
       -webkit-backdrop-filter: blur(var(--blur));
       animation: mi .26s cubic-bezier(.22,1,.36,1);
     }
-    .modal::before{
-      content:'';
-      position:absolute;
-      inset:0;
-      background:var(--cardGlow);
-      opacity:.7;
-      pointer-events:none;
-      border-radius:22px;
-    }
     @keyframes mi{from{opacity:0;transform:scale(.95) translateY(10px)}to{opacity:1;transform:scale(1) translateY(0)}}
-    .mIco{font-size:42px;margin-bottom:10px;display:block;position:relative;z-index:1}
-    .mT{font-family:'TitelFont',sans-serif;color:rgba(245,200,66,.95);font-size:17px;margin-bottom:8px;position:relative;z-index:1}
-    .mM{color:rgba(255,255,255,.68);font-size:13px;line-height:1.7;margin-bottom:14px;white-space:pre-line;position:relative;z-index:1}
+    .mIco{font-size:42px;margin-bottom:10px;display:block}
+    .mT{font-family:'TitelFont',sans-serif;color:rgba(245,200,66,.95);font-size:17px;margin-bottom:8px}
+    .mM{color:rgba(255,255,255,.68);font-size:13px;line-height:1.7;margin-bottom:14px;white-space:pre-line}
     .mInp{width:100%;padding:12px 14px;border-radius:16px;border:1px solid rgba(255,255,255,.14);
-      background:rgba(0,0,0,.18);color:#fff;margin-bottom:14px;position:relative;z-index:1}
+      background:rgba(0,0,0,.18);color:#fff;margin-bottom:14px}
     .mInp:focus{border-color:rgba(125,211,252,.30);box-shadow:0 0 0 3px rgba(125,211,252,.10)}
-    .mBtns{display:flex;gap:10px;position:relative;z-index:1}
+    .mBtns{display:flex;gap:10px}
     .mBtns button{flex:1;padding:12px 14px;border-radius:16px;border:none;cursor:pointer;font-weight:900}
     .mCancel{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);color:rgba(255,255,255,.80)}
     .mOk{background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.18);color:#fff}
 
     #toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(120px);
-      background:var(--glass);border:1px solid var(--stroke);
+      background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);
       padding:12px 18px;border-radius:999px;display:flex;gap:10px;align-items:center;
       box-shadow:0 18px 40px rgba(0,0,0,.45);z-index:9000;
       transition: transform .38s cubic-bezier(.22,1,.36,1);
@@ -767,7 +604,14 @@
     #toast.show{transform:translateX(-50%) translateY(0)}
     #toast span{color:#fff;font-size:13px}
 
-    /* ===== Theme Picker (10 Themes) ===== */
+    /* ===== Theme System (IMPROVED) ===== */
+    html[data-theme="0"]{--gold:#f5c842;--cyan:#7dd3fc;--purple:#b28dff}
+    html[data-theme="1"]{--gold:#e3e7ff;--cyan:#6fa8ff;--purple:#3f6fff}
+    html[data-theme="2"]{--gold:#d8ff44;--cyan:#bff7ff;--purple:#7dfc8e}
+    html[data-theme="3"]{--gold:#caa2ff;--cyan:#8be9ff;--purple:#ff79c6}
+    html[data-theme="4"]{--gold:#ff6b6b;--cyan:#00d4ff;--purple:#ffe66d}
+    html[data-theme="5"]{--gold:#ff9ad9;--cyan:#7dd3fc;--purple:#6a5cff}
+
     .themePicker{
       display:grid;
       grid-template-columns:repeat(2,1fr);
@@ -780,8 +624,8 @@
       gap:10px;
       padding:10px 12px;
       border-radius:14px;
-      background:var(--glass);
-      border:1px solid var(--stroke);
+      background:rgba(255,255,255,.04);
+      border:1px solid rgba(255,255,255,.10);
       cursor:pointer;
       transition:.2s;
       user-select:none;
@@ -790,7 +634,7 @@
     .themeOption:hover{
       transform:translateY(-2px);
       background:rgba(255,255,255,.07);
-      border-color:var(--stroke2);
+      border-color:rgba(255,255,255,.18);
     }
     .themeOption.active{
       border-color:var(--gold);
@@ -830,20 +674,8 @@
     }
     @media (max-width: 980px){
       .app{grid-template-columns: 1fr;}
-      .sidebar{
-        position:fixed;
-        inset:14px 14px auto 14px;
-        max-height:calc(100vh - 28px);
-        z-index:50;
-        display:none;
-        transform:translateX(100%);
-        opacity:0;
-      }
-      .sidebar.open{
-        display:flex;
-        transform:translateX(0);
-        opacity:1;
-      }
+      .sidebar{position:fixed;inset:14px 14px auto 14px;max-height:calc(100vh - 28px);z-index:50;display:none}
+      .sidebar.open{display:flex}
       .hamb{display:inline-flex;align-items:center;justify-content:center}
     }
     @media (max-width: 560px){
@@ -857,7 +689,6 @@
     @media (prefers-reduced-motion: reduce){
       .btn,.navBtn,.chip,.themeOption{transition:none}
       .miniAlert,.alert{animation:none}
-      .bigNote{transition:none}
     }
 
   </style>
@@ -866,9 +697,6 @@
 <body>
   <div class="bg" aria-hidden="true"></div>
   <div class="noise" aria-hidden="true"></div>
-
-  <!-- SIDEBAR OVERLAY (Mobile) -->
-  <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
   <!-- MODAL -->
   <div id="modal-overlay" aria-hidden="true">
@@ -896,13 +724,13 @@
         <div class="brandRow">
           <div class="logo">✦</div>
           <div class="brandText">
-            <h1>ONX-TAQE • ULTIMATE</h1>
-            <p>لوحة احترافية فائقة: 10 ثيمات • زجاج ديناميكي • تحكم كامل</p>
+            <h1>ONX-TAQE • Student Reports PRO</h1>
+            <p>لوحة احترافية: إدخال • عرض • إدارة • تصدير • ثيمات</p>
           </div>
         </div>
 
         <div class="side-chips">
-          <button class="chip cyan" id="themeBtn" type="button">🎨 10 ثيمات</button>
+          <button class="chip cyan" id="themeBtn" type="button">🎨 ثيمات</button>
           <button class="chip" id="viewPC" type="button">🖥️ PC</button>
           <button class="chip" id="viewPHONE" type="button">📱 PHONE</button>
           <a class="chip gold" href="https://t.me/ONX44" target="_blank" rel="noopener">💬 تواصل</a>
@@ -978,7 +806,7 @@
           <button class="hamb" id="hambBtn" type="button" title="القائمة">☰</button>
           <div class="topTitle">
             <h2 id="pageTitle">تسجيل البيانات</h2>
-            <p id="pageSub">واجهة ألتيميت — 10 ثيمات زجاجية ديناميكية</p>
+            <p id="pageSub">واجهة احترافية — مقسّمة ومرتبة (PRO)</p>
           </div>
         </div>
 
@@ -1042,7 +870,7 @@
                   </div>
                   <div class="cardBd">
                     <div id="guidelinesContent" class="bigNote">جارٍ التحميل…</div>
-                    <button id="guidelinesToggle" class="bigNote-toggle">🔽 عرض النص كاملاً</button>
+                    <button id="guidelinesToggle" class="bigNote-toggle">🔽 عرض المزيد</button>
                     <div style="margin-top:10px;color:rgba(255,255,255,.35);font-size:11px">
                       🔒 الإرشادات صادرة من الإدارة — يُرجى الالتزام بها
                     </div>
@@ -1140,11 +968,11 @@
             </div>
           </div>
 
-          <!-- RIGHT COLUMN (10 THEMES) -->
+          <!-- RIGHT COLUMN (THEME PICKER FIXED) -->
           <div class="card" id="cardSide">
             <div class="cardHd">
-              <h3>✦ 10 ثيمات زجاجية ✦</h3>
-              <button class="btn" id="themePickerBtn" type="button">🎨 عرض الكل</button>
+              <h3>✦ أدوات سريعة ✦</h3>
+              <button class="btn" id="themePickerBtn" type="button">🎨 تغيير الثيم</button>
             </div>
             <div class="cardBd">
               <div style="display:grid;gap:10px">
@@ -1155,20 +983,20 @@
 
                 <div class="kv">
                   <strong>نصائح</strong>
-                  <span class="muted">جرب كل ثيم وشوف التغيير في الكروت الزجاجية!</span>
+                  <span class="muted">احفظ بياناتك مرة واحدة، وبعدها استخدم تعديل العنوان فقط.</span>
                 </div>
 
                 <div class="kv">
-                  <strong>الثيمات المتاحة</strong>
-                  <span class="muted">10 ثيمات فريدة تغير كل شيء 🎨</span>
+                  <strong>الثيم</strong>
+                  <span class="muted">اختار شكل مختلف بالكامل (0 → 5)</span>
                 </div>
 
-                <!-- THEME PICKER (10 THEMES) -->
+                <!-- THEME PICKER (VISUAL) -->
                 <div class="themePicker" id="themePicker">
                   <div class="themeOption" data-theme="0">
                     <div class="themeSwatch" style="background:linear-gradient(135deg,#f5c842,#7dd3fc)"></div>
                     <div>
-                      <div class="themeName">0 • كلاسيكي ذهبي</div>
+                      <div class="themeName">كلاسيكي ذهبي</div>
                       <div class="themePreview">
                         <span style="background:#f5c842"></span>
                         <span style="background:#7dd3fc"></span>
@@ -1179,7 +1007,7 @@
                   <div class="themeOption" data-theme="1">
                     <div class="themeSwatch" style="background:linear-gradient(135deg,#e3e7ff,#6fa8ff)"></div>
                     <div>
-                      <div class="themeName">1 • ليلي أزرق</div>
+                      <div class="themeName">ليلي أزرق</div>
                       <div class="themePreview">
                         <span style="background:#e3e7ff"></span>
                         <span style="background:#6fa8ff"></span>
@@ -1190,7 +1018,7 @@
                   <div class="themeOption" data-theme="2">
                     <div class="themeSwatch" style="background:linear-gradient(135deg,#d8ff44,#bff7ff)"></div>
                     <div>
-                      <div class="themeName">2 • ربيعي أخضر</div>
+                      <div class="themeName">ربيعي أخضر</div>
                       <div class="themePreview">
                         <span style="background:#d8ff44"></span>
                         <span style="background:#bff7ff"></span>
@@ -1201,7 +1029,7 @@
                   <div class="themeOption" data-theme="3">
                     <div class="themeSwatch" style="background:linear-gradient(135deg,#caa2ff,#8be9ff)"></div>
                     <div>
-                      <div class="themeName">3 • وردي ناعم</div>
+                      <div class="themeName">وردي ناعم</div>
                       <div class="themePreview">
                         <span style="background:#caa2ff"></span>
                         <span style="background:#8be9ff"></span>
@@ -1212,7 +1040,7 @@
                   <div class="themeOption" data-theme="4">
                     <div class="themeSwatch" style="background:linear-gradient(135deg,#ff6b6b,#00d4ff)"></div>
                     <div>
-                      <div class="themeName">4 • نيون ساطع</div>
+                      <div class="themeName">نيون ساطع</div>
                       <div class="themePreview">
                         <span style="background:#ff6b6b"></span>
                         <span style="background:#00d4ff"></span>
@@ -1223,7 +1051,7 @@
                   <div class="themeOption" data-theme="5">
                     <div class="themeSwatch" style="background:linear-gradient(135deg,#ff9ad9,#7dd3fc)"></div>
                     <div>
-                      <div class="themeName">5 • حلمي بنفسجي</div>
+                      <div class="themeName">حلمي بنفسجي</div>
                       <div class="themePreview">
                         <span style="background:#ff9ad9"></span>
                         <span style="background:#7dd3fc"></span>
@@ -1231,54 +1059,10 @@
                       </div>
                     </div>
                   </div>
-                  <div class="themeOption" data-theme="6">
-                    <div class="themeSwatch" style="background:linear-gradient(135deg,#ff8c42,#ff6b9d)"></div>
-                    <div>
-                      <div class="themeName">6 • غروب برتقالي</div>
-                      <div class="themePreview">
-                        <span style="background:#ff8c42"></span>
-                        <span style="background:#ff6b9d"></span>
-                        <span style="background:#c445ff"></span>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="themeOption" data-theme="7">
-                    <div class="themeSwatch" style="background:linear-gradient(135deg,#4facfe,#00f2fe)"></div>
-                    <div>
-                      <div class="themeName">7 • محيط أزرق</div>
-                      <div class="themePreview">
-                        <span style="background:#4facfe"></span>
-                        <span style="background:#00f2fe"></span>
-                        <span style="background:#667eea"></span>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="themeOption" data-theme="8">
-                    <div class="themeSwatch" style="background:linear-gradient(135deg,#11998e,#38ef7d)"></div>
-                    <div>
-                      <div class="themeName">8 • غابة زمردية</div>
-                      <div class="themePreview">
-                        <span style="background:#11998e"></span>
-                        <span style="background:#38ef7d"></span>
-                        <span style="background:#11998e"></span>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="themeOption" data-theme="9">
-                    <div class="themeSwatch" style="background:linear-gradient(135deg,#9d50ff,#4776e6)"></div>
-                    <div>
-                      <div class="themeName">9 • ملكي أرجواني</div>
-                      <div class="themePreview">
-                        <span style="background:#9d50ff"></span>
-                        <span style="background:#6e48aa"></span>
-                        <span style="background:#4776e6"></span>
-                      </div>
-                    </div>
-                  </div>
                 </div>
 
                 <div style="margin-top:4px;color:rgba(255,255,255,.40);font-size:11px;line-height:1.6">
-                  © ONX-TAQE ULTIMATE — 10 ثيمات • زجاج ديناميكي • تحكم كامل
+                  © ONX-TAQE PRO — الواجهة دي إعادة تصميم كاملة مع تحسينات احترافية.
                 </div>
               </div>
             </div>
@@ -1298,8 +1082,12 @@
        ============================= */
     const SUPABASE_URL = "https://mcwemgjmqwbgxoyiwant.supabase.co";
     const SUPABASE_KEY = "sb_publishable_qmIUC4Rkb-VGOek8qkVqFg_Sn4x3WjI";
+
+    // ⚠️ تحذير أمان: لا تضع توكن بوت تيليجرام في الواجهة لو تقدر.
+    // الأفضل: Endpoint على سيرفرك/Edge Function.
     const TELEGRAM_BOT_TOKEN = "7769329974:AAHEwfIzPDZ1-KCSAKsxepmNtC35lYXvlMs";
     const TELEGRAM_CHAT_ID   = "910624538";
+
     const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
     /* =============================
@@ -1412,7 +1200,7 @@
     initClock();
 
     /* =============================
-       Theme System (10 THEMES - GLASS EFFECTS)
+       Theme System (FIXED)
        ============================= */
     const THEMES = [
       {id:0,name:'كلاسيكي ذهبي',colors:['#f5c842','#7dd3fc','#b28dff']},
@@ -1420,11 +1208,7 @@
       {id:2,name:'ربيعي أخضر',colors:['#d8ff44','#bff7ff','#7dfc8e']},
       {id:3,name:'وردي ناعم',colors:['#caa2ff','#8be9ff','#ff79c6']},
       {id:4,name:'نيون ساطع',colors:['#ff6b6b','#00d4ff','#ffe66d']},
-      {id:5,name:'حلمي بنفسجي',colors:['#ff9ad9','#7dd3fc','#6a5cff']},
-      {id:6,name:'غروب برتقالي',colors:['#ff8c42','#ff6b9d','#c445ff']},
-      {id:7,name:'محيط أزرق',colors:['#4facfe','#00f2fe','#667eea']},
-      {id:8,name:'غابة زمردية',colors:['#11998e','#38ef7d','#11998e']},
-      {id:9,name:'ملكي أرجواني',colors:['#9d50ff','#6e48aa','#4776e6']}
+      {id:5,name:'حلمي بنفسجي',colors:['#ff9ad9','#7dd3fc','#6a5cff']}
     ];
 
     function applyTheme(n, showToastMsg=true){
@@ -1438,13 +1222,15 @@
       
       if(showToastMsg){
         const theme = THEMES.find(t=>t.id===n);
-        showToast(`تم تطبيق ثيم "${theme?.name||n}" — يغير كل الكروت الزجاجية ✨`, 'success');
+        showToast(`تم تطبيق ثيم "${theme?.name||n}"`, 'success');
       }
     }
 
     function initTheme(){
       const saved = localStorage.getItem('onx_theme') || '0';
       document.documentElement.setAttribute('data-theme', saved);
+      
+      // Set active state
       $$('.themeOption').forEach(opt=>{
         opt.classList.toggle('active', parseInt(opt.dataset.theme)===parseInt(saved));
       });
@@ -1459,54 +1245,6 @@
       const saved = localStorage.getItem('onx_view') || 'pc';
       setViewMode(saved);
     })();
-
-    /* =============================
-       Sidebar Toggle (FIXED)
-       ============================= */
-    function toggleSidebar(){
-      const sidebar = $('#sidebar');
-      const overlay = $('#sidebarOverlay');
-      const isOpen = sidebar.classList.contains('open');
-      
-      if(isOpen){
-        sidebar.classList.remove('open');
-        overlay.classList.remove('active');
-      } else {
-        sidebar.classList.add('open');
-        overlay.classList.add('active');
-      }
-    }
-
-    function closeSidebar(){
-      const sidebar = $('#sidebar');
-      const overlay = $('#sidebarOverlay');
-      sidebar.classList.remove('open');
-      overlay.classList.remove('active');
-    }
-
-    // Hamburger button
-    $('#hambBtn')?.addEventListener('click', (e)=>{
-      e.stopPropagation();
-      toggleSidebar();
-    });
-
-    // Overlay click to close
-    $('#sidebarOverlay')?.addEventListener('click', (e)=>{
-      e.stopPropagation();
-      closeSidebar();
-    });
-
-    // Close sidebar when clicking nav button on mobile
-    $$('.navBtn').forEach(btn=>{
-      btn.addEventListener('click', (e)=>{
-        e.stopPropagation();
-        setActiveView(btn.dataset.view);
-        // Close on mobile after selection
-        if(window.matchMedia('(max-width: 980px)').matches){
-          closeSidebar();
-        }
-      });
-    });
 
     /* =============================
        Sidebar nav
@@ -1530,9 +1268,28 @@
       $('#pageTitle').textContent = viewTitles[key]?.t || 'لوحة التحكم';
       $('#pageSub').textContent   = viewTitles[key]?.s || '—';
 
+      // Lazy load all
       if(key==='all') showAll().catch(()=>{});
       if(key==='me')  showMyInfo().catch(()=>{});
+
+      // close sidebar on mobile
+      if(window.matchMedia('(max-width: 820px)').matches){
+        $('#sidebar').classList.remove('open');
+      }
     }
+
+    $$('.navBtn').forEach(btn=>{
+      btn.addEventListener('click', (e)=>{
+        e.stopPropagation();
+        setActiveView(btn.dataset.view);
+      });
+    });
+
+    // hamburger
+    $('#hambBtn')?.addEventListener('click', (e)=>{
+      e.stopPropagation();
+      $('#sidebar').classList.toggle('open');
+    });
 
     /* =============================
        Notification close
@@ -1645,7 +1402,7 @@
         dp.style.display='none';
       }
 
-      // Guidelines (FIXED TOGGLE)
+      // Guidelines
       const gp = document.getElementById('guidelinesPanel');
       const gc = document.getElementById('guidelinesContent');
       const toggleBtn = document.getElementById('guidelinesToggle');
@@ -1653,13 +1410,13 @@
         gc.textContent = data.usage_guidelines.trim();
         gp.style.display='block';
         
-        // Setup toggle functionality - FULL TEXT toggle
-        let isExpanded = false;
+        // Setup toggle functionality
+        let isCollapsed = false;
         toggleBtn.onclick = (e)=>{
           e.stopPropagation();
-          isExpanded = !isExpanded;
-          gc.classList.toggle('expanded', isExpanded);
-          toggleBtn.innerHTML = isExpanded ? '🔼 طوي النص' : '🔽 عرض النص كاملاً';
+          isCollapsed = !isCollapsed;
+          gc.classList.toggle('collapsed', isCollapsed);
+          toggleBtn.innerHTML = isCollapsed ? '🔼 عرض أقل' : '🔽 عرض المزيد';
         };
       }else{
         gp.style.display='none';
@@ -1691,6 +1448,7 @@
       try{
         const { data: sd } = await supabase.from('student_reports').select('name').eq('code',code).single();
         const name = sd?.name || null;
+
         const { data: existing } = await supabase.from('visitors').select('*').eq('code',code).single();
         if(existing){
           await supabase.from('visitors').update({
@@ -1705,7 +1463,7 @@
     }
 
     /* =============================
-       App State
+       App State (All list)
        ============================= */
     let ALL_CACHE = [];
     let SEARCH_TIMER = 0;
@@ -1724,11 +1482,12 @@
     /* =============================
        Core Actions
        ============================= */
+
     async function saveData(){
-      const name = document.getElementById('studentName').value.trim();
-      const title = document.getElementById('reportTitle').value.trim();
+      const name    = document.getElementById('studentName').value.trim();
+      const title   = document.getElementById('reportTitle').value.trim();
       const subject = document.getElementById('subjectName').value.trim();
-      const code = await DEVICE_CODE_PROMISE;
+      const code    = await DEVICE_CODE_PROMISE;
 
       if(name.split(/\s+/).length < 2){ setMsg('⚠️ الاسم لازم يكون ثنائي على الأقل','error'); showToast('الاسم لازم يكون ثنائي','error'); return; }
       if(!name || !title || !subject){ setMsg('⚠️ املا كل الحقول الأول','error'); showToast('املا كل الحقول','error'); return; }
@@ -1743,7 +1502,7 @@
         return;
       }
 
-      const [{ nameUsed, error:err1 }, { titleUsed, error:err2 }] = await Promise.all([
+      const [{ data:nameUsed, error:err1 }, { data:titleUsed, error:err2 }] = await Promise.all([
         supabase.from('student_reports').select('id').eq('name',name).limit(1),
         supabase.from('student_reports').select('id').eq('title',title).limit(1)
       ]);
@@ -1759,8 +1518,10 @@
       if(error){ console.log(error); setMsg('❌ فشل الحفظ','error'); showToast('فشل الحفظ','error'); return; }
 
       await supabase.from('visitors').update({ name }).eq('code', code);
+
       setMsg('✅ اتسجلت بياناتك بنجاح','success');
       showToast('تم الحفظ بنجاح','success');
+
       await showMyInfo().catch(()=>{});
       await showAll().catch(()=>{});
       setActiveView('me');
@@ -1772,10 +1533,16 @@
       if(e || !me || !me.length){ setMsg('⚠️ مفيش بيانات محفوظة ليك','error'); showToast('لا توجد بيانات','error'); return; }
 
       const newTitle = await showModal({
-        icon:'✏️', title:'تغيير عنوان التقرير', msg:'اكتب العنوان الجديد (لازم يكون فريد)',
-        withInput:true, inputPlaceholder:'العنوان الجديد...', confirmText:'تغيير', cancelText:'إلغاء'
+        icon:'✏️',
+        title:'تغيير عنوان التقرير',
+        msg:'اكتب العنوان الجديد (لازم يكون فريد)',
+        withInput:true,
+        inputPlaceholder:'العنوان الجديد...',
+        confirmText:'تغيير',
+        cancelText:'إلغاء'
       });
       if(!newTitle) return;
+
       const clean = newTitle.trim();
       if(!clean){ setMsg('⚠️ العنوان الجديد فاضي','error'); showToast('اكتب عنوان','error'); return; }
 
@@ -1783,11 +1550,14 @@
       if(titleUsed && titleUsed.length){ setMsg('❌ العنوان ده مستخدم قبل كده','error'); showToast('العنوان مستخدم','error'); return; }
 
       const { error } = await supabase.from('student_reports')
-        .update({ title:clean, date:new Date().toISOString() }).eq('code', code);
+        .update({ title:clean, date:new Date().toISOString() })
+        .eq('code', code);
+
       if(error){ console.log(error); setMsg('❌ فشل التحديث','error'); showToast('فشل التحديث','error'); return; }
 
       setMsg('✅ تم تغيير العنوان','success');
       showToast('تم تغيير العنوان','success');
+
       await showMyInfo().catch(()=>{});
       await showAll().catch(()=>{});
       setActiveView('me');
@@ -1803,17 +1573,30 @@
         setMsg('⚠️ مش لاقي بياناتك','error');
         return;
       }
+
       const nameColor = data.color || 'rgba(255,255,255,0.92)';
       const badgeStr = data.badge ? `${data.badge} ` : '';
+
       let alertHtml = '';
       if(data.alert_text){
         const ac = data.alert_color || '#ff4444';
         const typeLabel = data.alert_type === 'public' ? '🌐 عام' : '🔒 خاص';
-        alertHtml = `<div class="alert" style="--ac:${ac}"><div style="font-size:20px">⚠️</div><div style="flex:1;line-height:1.6"><div style="font-weight:900">${data.alert_text}</div><div style="opacity:.75;font-size:11px;margin-top:4px">تنبيه (${typeLabel})</div></div><small>${typeLabel}</small></div>`;
+        alertHtml = `
+          <div class="alert" style="--ac:${ac}">
+            <div style="font-size:20px">⚠️</div>
+            <div style="flex:1;line-height:1.6">
+              <div style="font-weight:900">${data.alert_text}</div>
+              <div style="opacity:.75;font-size:11px;margin-top:4px">تنبيه (${typeLabel})</div>
+            </div>
+            <small>${typeLabel}</small>
+          </div>
+        `;
       }
+
       infoBox.style.display='flex';
       infoBox.style.flexDirection='column';
       infoBox.style.gap='10px';
+
       infoBox.innerHTML = `
         ${alertHtml}
         <div class="kv"><strong>👤 الاسم</strong><span style="color:${nameColor};font-weight:800">${badgeStr}${data.name}</span></div>
@@ -1821,19 +1604,23 @@
         <div class="kv"><strong>📚 المادة</strong><span style="color:${nameColor}">${data.subject}</span></div>
         <div class="kv"><strong>🕐 آخر تحديث</strong><span class="muted">${formatDate(data.date)}</span></div>
       `;
+
       showToast('تم تحميل بياناتك', 'success');
     }
 
     async function showAll(){
       const allTitles = document.getElementById('allTitles');
       allTitles.innerHTML = `<div style="text-align:center;padding:22px;color:rgba(255,255,255,0.45)">جارٍ التحميل…</div>`;
+
       const { data, error } = await supabase.from('student_reports')
         .select('id,name,title,subject,date,code,badge,color,alert_text,alert_color,alert_type')
         .order('id', { ascending:true });
+
       if(error){
         allTitles.innerHTML = `<div style="text-align:center;padding:22px;color:#ff5c5c">❌ فشل تحميل البيانات</div>`;
         return;
       }
+
       ALL_CACHE = data || [];
       updateCounter(ALL_CACHE.length);
       renderAllList();
@@ -1843,26 +1630,63 @@
       const allTitles = document.getElementById('allTitles');
       const q = (document.getElementById('searchInput')?.value || '').trim().toLowerCase();
       const filtered = !q ? ALL_CACHE : ALL_CACHE.filter(d => (`${d.name} ${d.title} ${d.subject}`).toLowerCase().includes(q));
+
       DEVICE_CODE_PROMISE.then(myCode=>{
         if(filtered.length === 0){
-          allTitles.innerHTML = `<div style="text-align:center;padding:30px;color:rgba(255,255,255,0.38)"><div style="font-size:34px;margin-bottom:8px">🔍</div><div style="font-size:13px">لا توجد نتائج مطابقة</div></div>`;
+          allTitles.innerHTML = `<div style="text-align:center;padding:30px;color:rgba(255,255,255,0.38)">
+            <div style="font-size:34px;margin-bottom:8px">🔍</div>
+            <div style="font-size:13px">لا توجد نتائج مطابقة</div>
+          </div>`;
           return;
         }
+
         let rows = '';
         filtered.forEach((d,i)=>{
           const isMe = d.code === myCode;
           const rowClass = isMe ? 'mine' : '';
           const nameColor = d.color || 'rgba(255,255,255,0.92)';
           const displayName = d.badge ? `${d.badge} ${d.name}` : d.name;
+
           const subjectHtml = `<span class="badgeSub" style="color:${nameColor};border-color:${nameColor}33;background:${nameColor}0d">${d.subject}</span>`;
+
           let alertHtml = `<span style="color:rgba(255,255,255,.22);font-size:11px">—</span>`;
           if(d.alert_text && d.alert_type === 'public'){
             const ac = d.alert_color || '#ff4444';
             alertHtml = `<span class="miniAlert" style="--ac:${ac}">⚠️ <span style="position:relative;z-index:1">${d.alert_text}</span></span>`;
           }
-          rows += `<tr class="${rowClass}"><td style="width:52px">${i+1}</td><td style="width:15%"><div class="nameCell"><span style="color:${nameColor};font-weight:900">${displayName}</span>${isMe ? `<span class="meBadge">أنت</span>` : ''}</div></td><td style="text-align:right;padding-right:14px;color:${nameColor};width:30%">${d.title}</td><td style="width:15%">${subjectHtml}</td><td class="dateCell" style="width:15%">${formatDate(d.date)}</td><td style="width:10%">${alertHtml}</td></tr>`;
+
+          rows += `
+            <tr class="${rowClass}">
+              <td style="width:52px">${i+1}</td>
+              <td style="width:15%">
+                <div class="nameCell">
+                  <span style="color:${nameColor};font-weight:900">${displayName}</span>
+                  ${isMe ? `<span class="meBadge">أنت</span>` : ''}
+                </div>
+              </td>
+              <td style="text-align:right;padding-right:14px;color:${nameColor};width:30%">${d.title}</td>
+              <td style="width:15%">${subjectHtml}</td>
+              <td class="dateCell" style="width:15%">${formatDate(d.date)}</td>
+              <td style="width:10%">${alertHtml}</td>
+            </tr>
+          `;
         });
-        allTitles.innerHTML = `<table><thead><tr><th style="width:52px">#</th><th style="width:15%">الاسم</th><th style="width:30%">عنوان التقرير</th><th style="width:15%">المادة</th><th style="width:15%">آخر تحديث</th><th style="width:10%">التنبيه</th></tr></thead><tbody>${rows}</tbody></table>`;
+
+        allTitles.innerHTML = `
+          <table>
+            <thead>
+              <tr>
+                <th style="width:52px">#</th>
+                <th style="width:15%">الاسم</th>
+                <th style="width:30%">عنوان التقرير</th>
+                <th style="width:15%">المادة</th>
+                <th style="width:15%">آخر تحديث</th>
+                <th style="width:10%">التنبيه</th>
+              </tr>
+            </thead>
+            <tbody>${rows}</tbody>
+          </table>
+        `;
       });
     }
 
@@ -1870,17 +1694,25 @@
       const code = await DEVICE_CODE_PROMISE;
       const { data:me, error:e } = await supabase.from('student_reports').select('id').eq('code',code).limit(1);
       if(e || !me || !me.length){ setMsg('⚠️ مفيش بيانات محفوظة','error'); showToast('لا توجد بيانات','error'); return; }
+
       const confirmed = await showModal({
-        icon:'🗑️', title:'تأكيد الحذف', msg:'هل أنت متأكد إنك عايز تحذف بياناتك؟\nالإجراء نهائي ولا يمكن التراجع عنه.',
-        withInput:false, confirmText:'حذف', cancelText:'إلغاء'
+        icon:'🗑️',
+        title:'تأكيد الحذف',
+        msg:'هل أنت متأكد إنك عايز تحذف بياناتك؟\nالإجراء نهائي ولا يمكن التراجع عنه.',
+        withInput:false,
+        confirmText:'حذف',
+        cancelText:'إلغاء'
       });
       if(!confirmed) return;
+
       const { error } = await supabase.from('student_reports').delete().eq('code', code);
       if(error){ console.log(error); setMsg('❌ فشل الحذف','error'); showToast('فشل الحذف','error'); return; }
+
       document.getElementById('infoBox').style.display='none';
       document.getElementById('infoBox').innerHTML='';
       setMsg('✅ اتحذفت بياناتك','success');
       showToast('تم حذف البيانات','success');
+
       await showAll().catch(()=>{});
       setActiveView('form');
     }
@@ -1889,49 +1721,107 @@
       const code = await DEVICE_CODE_PROMISE;
       const { data, error } = await supabase.from('student_reports').select('*').eq('code',code).single();
       if(error || !data){ setMsg('⚠️ لازم تحفظ بياناتك الأول','error'); showToast('لا توجد بيانات','error'); return; }
+
       const choice = await showModal({
-        icon:'⬇️', title:'تحميل بياناتي', msg:'اختار صيغة التحميل:\nاكتب: JSON أو TXT',
-        withInput:true, inputPlaceholder:'اكتب JSON أو TXT', confirmText:'تحميل', cancelText:'إلغاء'
+        icon:'⬇️',
+        title:'تحميل بياناتي',
+        msg:'اختار صيغة التحميل:\nاكتب: JSON أو TXT',
+        withInput:true,
+        inputPlaceholder:'اكتب JSON أو TXT',
+        confirmText:'تحميل',
+        cancelText:'إلغاء'
       });
       if(!choice) return;
+
       const format = choice.trim().toUpperCase();
       const safeName = (data.name||'student').replace(/[^\u0600-\u06FFa-zA-Z0-9_-]+/g,'_');
+
       if(format === 'JSON'){
-        downloadBlob(`ONX-TAQE_${safeName}_report.json`, JSON.stringify({brand:'ONX-TAQE',exported_at:new Date().toISOString(),student:{ name:data.name, subject:data.subject, title:data.title, date:data.date }}, null, 2), 'application/json;charset=utf-8');
-        setMsg('✅ تم تحميل ملف JSON','success'); showToast('تم التحميل (JSON)','success'); return;
+        downloadBlob(
+          `ONX-TAQE_${safeName}_report.json`,
+          JSON.stringify({
+            brand:'ONX-TAQE',
+            exported_at:new Date().toISOString(),
+            student:{ name:data.name, subject:data.subject, title:data.title, date:data.date }
+          }, null, 2),
+          'application/json;charset=utf-8'
+        );
+        setMsg('✅ تم تحميل ملف JSON','success');
+        showToast('تم التحميل (JSON)','success');
+        return;
       }
+
       if(format === 'TXT'){
-        downloadBlob(`ONX-TAQE_${safeName}_report.txt`, `ONX-TAQE | Student Report Export\n--------------------------------\nName   : ${data.name}\nSubject: ${data.subject}\nTitle  : ${data.title}\nDate   : ${formatDate(data.date)}\n--------------------------------`, 'text/plain;charset=utf-8');
-        setMsg('✅ تم تحميل ملف TXT','success'); showToast('تم التحميل (TXT)','success'); return;
+        downloadBlob(
+          `ONX-TAQE_${safeName}_report.txt`,
+          `ONX-TAQE | Student Report Export\n--------------------------------\nName   : ${data.name}\nSubject: ${data.subject}\nTitle  : ${data.title}\nDate   : ${formatDate(data.date)}\n--------------------------------`,
+          'text/plain;charset=utf-8'
+        );
+        setMsg('✅ تم تحميل ملف TXT','success');
+        showToast('تم التحميل (TXT)','success');
+        return;
       }
-      setMsg('⚠️ اكتب JSON أو TXT بس','error'); showToast('صيغة غير مدعومة','error');
+
+      setMsg('⚠️ اكتب JSON أو TXT بس','error');
+      showToast('صيغة غير مدعومة','error');
     }
 
     async function reportProblem(){
       const code = await DEVICE_CODE_PROMISE;
       const { data: me } = await supabase.from('student_reports').select('name').eq('code',code).single();
+
       const result = await showModal({
-        icon:'🆘', title:'أرسل مشكلتك للمشرف', msg:'اكتب مشكلتك أو استفسارك بالتفصيل\nوسيتم إرسالها للمشرف مباشرة عبر تيليغرام',
-        withInput:true, isTextarea:true, inputPlaceholder:'اكتب مشكلتك هنا…', confirmText:'📤 إرسال', cancelText:'إلغاء'
+        icon:'🆘',
+        title:'أرسل مشكلتك للمشرف',
+        msg:'اكتب مشكلتك أو استفسارك بالتفصيل\nوسيتم إرسالها للمشرف مباشرة عبر تيليغرام',
+        withInput:true,
+        isTextarea:true,
+        inputPlaceholder:'اكتب مشكلتك هنا…',
+        confirmText:'📤 إرسال',
+        cancelText:'إلغاء'
       });
       if(!result || !result.trim()) return;
+
       const studentName = me?.name || 'طالب غير مسجل';
-      const msgText = `🆘 <b>مشكلة من طالب — ONX-TAQE</b>\n\n👤 <b>الاسم:</b> ${studentName}\n📝 <b>المشكلة:</b>\n${result.trim()}\n\n🕐 <b>الوقت:</b> ${new Date().toLocaleString('ar-EG')}`;
+      const msgText = `🆘 <b>مشكلة من طالب — ONX-TAQE</b>\n\n`
+        + `👤 <b>الاسم:</b> ${studentName}\n`
+        + `📝 <b>المشكلة:</b>\n${result.trim()}\n\n`
+        + `🕐 <b>الوقت:</b> ${new Date().toLocaleString('ar-EG')}`;
+
       try{
         const res = await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
-          method:'POST', headers:{'Content-Type':'application/json'},
+          method:'POST',
+          headers:{'Content-Type':'application/json'},
           body: JSON.stringify({ chat_id: TELEGRAM_CHAT_ID, text: msgText, parse_mode:'HTML' })
         });
         const json = await res.json();
-        if(json.ok){ setMsg('✅ تم إرسال مشكلتك للمشرف بنجاح','success'); showToast('تم الإرسال ✅','success'); }
-        else{ throw new Error(json.description || 'Telegram API error'); }
-      }catch(e){ console.error('Telegram:', e); setMsg('❌ فشل الإرسال — تواصل مع المشرف مباشرة','error'); showToast('فشل الإرسال ❌','error'); }
+        if(json.ok){
+          setMsg('✅ تم إرسال مشكلتك للمشرف بنجاح','success');
+          showToast('تم الإرسال ✅','success');
+        }else{
+          throw new Error(json.description || 'Telegram API error');
+        }
+      }catch(e){
+        console.error('Telegram:', e);
+        setMsg('❌ فشل الإرسال — تواصل مع المشرف مباشرة','error');
+        showToast('فشل الإرسال ❌','error');
+      }
     }
 
+    /* =============================
+       Full refresh
+       ============================= */
     async function fullRefresh(){
       const btn = document.getElementById('topbarRefreshBtn');
       btn.classList.add('spinning');
-      await Promise.all([loadSiteControlData(), showMyInfo().catch(()=>{}), (async()=>{ const allVisible = document.getElementById('view-all')?.style.display !== 'none'; if(allVisible) await showAll(); })()]);
+      await Promise.all([
+        loadSiteControlData(),
+        showMyInfo().catch(()=>{}),
+        (async()=>{
+          const allVisible = document.getElementById('view-all')?.style.display !== 'none';
+          if(allVisible) await showAll();
+        })()
+      ]);
       setTimeout(()=> btn.classList.remove('spinning'), 800);
       showToast('تم التحديث ✅','success');
     }
@@ -1945,38 +1835,43 @@
     }
 
     /* =============================
-       Bind UI
+       Bind UI (FIXED)
        ============================= */
     document.getElementById('btnSave')?.addEventListener('click', (e)=>{e.stopPropagation();saveData();});
     document.getElementById('btnChange')?.addEventListener('click', (e)=>{e.stopPropagation();changeTitle();});
     document.getElementById('btnShow')?.addEventListener('click', (e)=>{e.stopPropagation();setActiveView('me');showMyInfo().catch(()=>{});});
+
     document.getElementById('btnDownload')?.addEventListener('click', (e)=>{e.stopPropagation();downloadMyData();});
     document.getElementById('btnDownload2')?.addEventListener('click', (e)=>{e.stopPropagation();downloadMyData();});
+
     document.getElementById('btnDelete')?.addEventListener('click', (e)=>{e.stopPropagation();deleteMyData();});
     document.getElementById('btnDelete2')?.addEventListener('click', (e)=>{e.stopPropagation();deleteMyData();});
+
     document.getElementById('btnProblem')?.addEventListener('click', (e)=>{e.stopPropagation();reportProblem();});
     document.getElementById('btnProblem2')?.addEventListener('click', (e)=>{e.stopPropagation();reportProblem();});
-    
-    // Guidelines toggle button - FULL TEXT toggle
+
     document.getElementById('importantBtn')?.addEventListener('click', (e)=>{
       e.stopPropagation();
+      // Toggle guidelines collapse instead of opening problem modal
       const gc = document.getElementById('guidelinesContent');
       const toggleBtn = document.getElementById('guidelinesToggle');
       if(gc && toggleBtn){
-        const isExpanded = gc.classList.contains('expanded');
-        gc.classList.toggle('expanded', !isExpanded);
-        toggleBtn.innerHTML = !isExpanded ? '🔼 طوي النص' : '🔽 عرض النص كاملاً';
+        const isCollapsed = gc.classList.contains('collapsed');
+        gc.classList.toggle('collapsed', !isCollapsed);
+        toggleBtn.innerHTML = !isCollapsed ? '🔼 عرض أقل' : '🔽 عرض المزيد';
       }
     });
 
     document.getElementById('topbarRefreshBtn')?.addEventListener('click', (e)=>{e.stopPropagation();fullRefresh();});
     document.getElementById('panelRefreshBtn')?.addEventListener('click', (e)=>{e.stopPropagation();refreshAllPanel();});
+
     document.getElementById('quickMyInfo')?.addEventListener('click', (e)=>{e.stopPropagation();setActiveView('me');});
     document.getElementById('quickAll')?.addEventListener('click', (e)=>{e.stopPropagation();setActiveView('all');});
+
     document.getElementById('viewPC')?.addEventListener('click', (e)=>{e.stopPropagation();setViewMode('pc');});
     document.getElementById('viewPHONE')?.addEventListener('click', (e)=>{e.stopPropagation();setViewMode('phone');});
 
-    // Theme picker buttons (10 THEMES)
+    // Theme picker buttons (VISUAL)
     document.querySelectorAll('.themeOption')?.forEach(opt=>{
       opt.addEventListener('click', (e)=>{
         e.stopPropagation();
@@ -1985,13 +1880,27 @@
       });
     });
 
-    document.getElementById('themeBtn')?.addEventListener('click', (e)=>{e.stopPropagation(); showToast('اختار ثيم من الـ 10 في اللوحة الجانبية 🎨', 'info');});
-    document.getElementById('themePickerBtn')?.addEventListener('click', (e)=>{e.stopPropagation(); showToast('اختار ثيم من الـ 10 في اللوحة الجانبية 🎨', 'info');});
-    document.getElementById('searchInput')?.addEventListener('input', (e)=>{e.stopPropagation(); clearTimeout(SEARCH_TIMER); SEARCH_TIMER = setTimeout(renderAllList, 90);});
+    document.getElementById('themeBtn')?.addEventListener('click', async (e)=>{
+      e.stopPropagation();
+      showToast('اختار ثيم من الأزرار الملونة في اللوحة الجانبية', 'info');
+    });
 
-    // Prevent toast on empty clicks
+    document.getElementById('themePickerBtn')?.addEventListener('click', (e)=>{
+      e.stopPropagation();
+      showToast('اختار ثيم من الأزرار الملونة في اللوحة الجانبية', 'info');
+    });
+
+    document.getElementById('searchInput')?.addEventListener('input', (e)=>{
+      e.stopPropagation();
+      clearTimeout(SEARCH_TIMER);
+      SEARCH_TIMER = setTimeout(renderAllList, 90);
+    });
+
+    // Prevent toast messages on empty clicks
     document.addEventListener('click', (e)=>{
-      if(!e.target.closest('.themeOption') && !e.target.closest('.navBtn') && !e.target.closest('.btn') && !e.target.closest('.chip')){
+      // Only allow theme application on actual theme buttons
+      if(!e.target.closest('.themeOption') && !e.target.closest('.navBtn') && !e.target.closest('.btn')){
+        // Do nothing on empty space clicks
         return;
       }
     });
@@ -2000,15 +1909,26 @@
        Realtime subscriptions
        ============================= */
     function setupRealtime(){
-      supabase.channel('site_ctrl_student').on('postgres_changes', { event:'*', schema:'public', table:'site_control' }, ()=>{ loadSiteControlData(); }).subscribe();
-      supabase.channel('reports_student').on('postgres_changes', { event:'*', schema:'public', table:'student_reports' }, async ()=>{
-        showMyInfo().catch(()=>{});
-        const allVisible = document.getElementById('view-all')?.style.display !== 'none';
-        if(allVisible){
-          const { data, error } = await supabase.from('student_reports').select('id,name,title,subject,date,code,badge,color,alert_text,alert_color,alert_type').order('id', { ascending:true });
-          if(!error && data){ ALL_CACHE = data; updateCounter(data.length); renderAllList(); }
-        }
-      }).subscribe();
+      supabase.channel('site_ctrl_student')
+        .on('postgres_changes', { event:'*', schema:'public', table:'site_control' }, ()=>{
+          loadSiteControlData();
+        }).subscribe();
+
+      supabase.channel('reports_student')
+        .on('postgres_changes', { event:'*', schema:'public', table:'student_reports' }, async ()=>{
+          showMyInfo().catch(()=>{});
+          const allVisible = document.getElementById('view-all')?.style.display !== 'none';
+          if(allVisible){
+            const { data, error } = await supabase.from('student_reports')
+              .select('id,name,title,subject,date,code,badge,color,alert_text,alert_color,alert_type')
+              .order('id', { ascending:true });
+            if(!error && data){
+              ALL_CACHE = data;
+              updateCounter(data.length);
+              renderAllList();
+            }
+          }
+        }).subscribe();
     }
 
     /* =============================
@@ -2017,15 +1937,22 @@
     (async function boot(){
       const open = await checkSiteStatus();
       if(!open) return;
+
       trackVisitor().catch(()=>{});
       loadSiteControlData().catch(()=>{});
       setupRealtime();
+
       setActiveView('form');
       setTimeout(()=> showMyInfo().catch(()=>{}), 700);
+
     })();
+
   </script>
 
-  <script defer src="https://static.cloudflareinsights.com/beacon.min.js/v8c78df7c7c0f484497ecbca7046644da1771523124516" integrity="sha512-8DS7rgIrAmghBFwoOTujcf6D9rXvH8xm8JQ1Ja01h9QX8EzXldiszufYa4IFfKdLUKTTrnSFXLDkUEOTrZQ8Qg==" crossorigin="anonymous"></script>
+  <!-- Optional: Cloudflare beacon -->
+  <script defer src="https://static.cloudflareinsights.com/beacon.min.js/v8c78df7c7c0f484497ecbca7046644da1771523124516"
+          integrity="sha512-8DS7rgIrAmghBFwoOTujcf6D9rXvH8xm8JQ1Ja01h9QX8EzXldiszufYa4IFfKdLUKTTrnSFXLDkUEOTrZQ8Qg=="
+          crossorigin="anonymous"></script>
 </body>
 </html>
 
