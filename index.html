@@ -6,17 +6,12 @@
   <title>لوحة تحكم تقارير الطلبة — تصميم احترافي | ONX-TAQE PRO</title>
 
   <!--
-    ✅ ملف HTML كامل (إصدار احترافي - ONX-TAQE PRO)
+    ✅ ملف HTML كامل (إصدار احترافي - ONX-TAQE PRO) - مع 10 ثيمات فاخرة
     الميزات الجديدة:
-      - شاشة تحميل أنيميشن فخم عند فتح الصفحة
-      - ثيمات بألوان وأسماء مرئية مع معاينة فورية
-      - جدول طلاب قابل للتمرير عموديًا (أكثر من 7 صفوف) مع تثبيت الهيدر
-      - زر إغلاق للشريط الجانبي
-      - إخفاء كل تأثيرات التركيز المزعجة
-      - زر "متطلبات الاستخدام" يطوي/يفتح المحتوى مع خلفية شفافة
-      - تخطيط مرن: شريط جانبي حتى 50% + محتوى رئيسي
-      - كل العناصر غير قابلة للتحديد (اختياري)
-      - تحسينات أداء وتجربة مستخدم احترافية
+      - 10 ثيمات بألوان وخلفيات متدرجة مختلفة
+      - كل ثيم يُطبّق على الكارد الزجاجي بالكامل (خلفية + حدود + توهج)
+      - تأثيرات انتقال ناعمة عند تغيير الثيم
+      - معاينة مرئية لكل ثيم مع ألوانه المميزة
 
     ⚠️ أمان مهم:
       - وجود TELEGRAM_BOT_TOKEN في الواجهة مخاطرة (أي حد يقدر يسرقه).
@@ -39,6 +34,7 @@
       -ms-user-select:none;
       user-select:none;
       background:#07080d;
+      transition: background 0.4s ease;
     }
     button,input,textarea,select{
       font-family:inherit;
@@ -50,7 +46,7 @@
     :focus{outline:none!important;box-shadow:none!important}
     ::selection{background:transparent}
 
-    /* ===== Design Tokens ===== */
+    /* ===== Design Tokens (Base) ===== */
     :root{
       --bg0:#07080d;
       --bg1:#0b1022;
@@ -78,6 +74,14 @@
 
       --sideW:320px;
       --sideW-max:50vw;
+      
+      /* ✅ متغيرات الثيمات للكارد الزجاجي */
+      --card-gradient-start: rgba(255,255,255,.065);
+      --card-gradient-end: rgba(255,255,255,.035);
+      --card-border: rgba(255,255,255,.12);
+      --card-glow: rgba(125,211,252,.15);
+      --card-radial-1: rgba(125,211,252,.12);
+      --card-radial-2: rgba(245,200,66,.10);
     }
 
     /* ===== Loading Screen (NEW) ===== */
@@ -183,6 +187,7 @@
         linear-gradient(180deg, rgba(0,0,0,.65), rgba(0,0,0,.40)),
         url('M.jpg') center/cover no-repeat fixed;
       filter:saturate(1.05);
+      transition: background 0.5s ease;
     }
     .noise{position:fixed;inset:0;z-index:-9;pointer-events:none;opacity:.07;mix-blend-mode:overlay;
       background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='.65'/%3E%3C/svg%3E");}
@@ -199,9 +204,9 @@
     /* ===== Sidebar ===== */
     .sidebar{
       border-radius:var(--r1);
-      background:linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.04));
-      border:1px solid var(--stroke);
-      box-shadow:var(--shadow2);
+      background:linear-gradient(180deg, var(--card-gradient-start), var(--card-gradient-end));
+      border:1px solid var(--card-border);
+      box-shadow:var(--shadow2), 0 0 40px var(--card-glow);
       backdrop-filter: blur(var(--blur));
       -webkit-backdrop-filter: blur(var(--blur));
       overflow:hidden;
@@ -209,6 +214,7 @@
       flex-direction:column;
       min-height:0;
       position:relative;
+      transition: background 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
     }
     .side-top{
       padding:18px 18px 14px;
@@ -339,9 +345,9 @@
     /* ===== Main Area ===== */
     .main{
       border-radius:var(--r1);
-      background:linear-gradient(180deg, rgba(255,255,255,.065), rgba(255,255,255,.035));
-      border:1px solid var(--stroke);
-      box-shadow:var(--shadow);
+      background:linear-gradient(180deg, var(--card-gradient-start), var(--card-gradient-end));
+      border:1px solid var(--card-border);
+      box-shadow:var(--shadow), 0 0 60px var(--card-glow);
       backdrop-filter: blur(var(--blur));
       -webkit-backdrop-filter: blur(var(--blur));
       overflow:hidden;
@@ -349,6 +355,18 @@
       flex-direction:column;
       min-height:0;
       position:relative;
+      transition: background 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
+    }
+    .main::before{
+      content:'';
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      background:
+        radial-gradient(600px 220px at 15% 0%, var(--card-radial-1), transparent 55%),
+        radial-gradient(600px 220px at 90% 100%, var(--card-radial-2), transparent 60%);
+      opacity:.9;
+      transition: background 0.4s ease;
     }
 
     /* ===== Top Header ===== */
@@ -451,16 +469,23 @@
 
     .card{
       border-radius:var(--r1);
-      background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.035));
-      border:1px solid rgba(255,255,255,.12);
-      box-shadow:0 18px 50px rgba(0,0,0,.38);
+      background:linear-gradient(180deg, var(--card-gradient-start), var(--card-gradient-end));
+      border:1px solid var(--card-border);
+      box-shadow:0 18px 50px rgba(0,0,0,.38), 0 0 40px var(--card-glow);
       overflow:hidden;
       position:relative;
+      transition: background 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
     }
-    .card::before{content:'';position:absolute;inset:0;pointer-events:none;
-      background:radial-gradient(600px 220px at 15% 0%, rgba(125,211,252,.12), transparent 55%),
-                 radial-gradient(600px 220px at 90% 100%, rgba(245,200,66,.10), transparent 60%);
+    .card::before{
+      content:'';
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      background:
+        radial-gradient(600px 220px at 15% 0%, var(--card-radial-1), transparent 55%),
+        radial-gradient(600px 220px at 90% 100%, var(--card-radial-2), transparent 60%);
       opacity:.9;
+      transition: background 0.4s ease;
     }
     .cardHd{
       position:relative;
@@ -745,13 +770,117 @@
     #toast.show{transform:translateX(-50%) translateY(0)}
     #toast span{color:#fff;font-size:13px}
 
-    /* ===== Theme System (IMPROVED) ===== */
-    html[data-theme="0"]{--gold:#f5c842;--cyan:#7dd3fc;--purple:#b28dff}
-    html[data-theme="1"]{--gold:#e3e7ff;--cyan:#6fa8ff;--purple:#3f6fff}
-    html[data-theme="2"]{--gold:#d8ff44;--cyan:#bff7ff;--purple:#7dfc8e}
-    html[data-theme="3"]{--gold:#caa2ff;--cyan:#8be9ff;--purple:#ff79c6}
-    html[data-theme="4"]{--gold:#ff6b6b;--cyan:#00d4ff;--purple:#ffe66d}
-    html[data-theme="5"]{--gold:#ff9ad9;--cyan:#7dd3fc;--purple:#6a5cff}
+    /* ===== Theme System (10 THEMES - FULL CARD EFFECT) ===== */
+    
+    /* Theme 0: Classic Gold */
+    html[data-theme="0"]{
+      --gold:#f5c842;--cyan:#7dd3fc;--purple:#b28dff;
+      --card-gradient-start: rgba(255,255,255,.065);
+      --card-gradient-end: rgba(255,255,255,.035);
+      --card-border: rgba(255,255,255,.12);
+      --card-glow: rgba(245,200,66,.15);
+      --card-radial-1: rgba(125,211,252,.12);
+      --card-radial-2: rgba(245,200,66,.10);
+    }
+    
+    /* Theme 1: Midnight Blue */
+    html[data-theme="1"]{
+      --gold:#a8c0ff;--cyan:#6fa8ff;--purple:#3f6fff;
+      --card-gradient-start: rgba(18,25,45,.75);
+      --card-gradient-end: rgba(12,18,35,.55);
+      --card-border: rgba(111,168,255,.28);
+      --card-glow: rgba(63,111,255,.25);
+      --card-radial-1: rgba(111,168,255,.18);
+      --card-radial-2: rgba(168,192,255,.12);
+    }
+    
+    /* Theme 2: Spring Green */
+    html[data-theme="2"]{
+      --gold:#d8ff44;--cyan:#bff7ff;--purple:#7dfc8e;
+      --card-gradient-start: rgba(20,40,30,.70);
+      --card-gradient-end: rgba(12,28,20,.50);
+      --card-border: rgba(125,252,142,.25);
+      --card-glow: rgba(216,255,68,.20);
+      --card-radial-1: rgba(191,247,255,.15);
+      --card-radial-2: rgba(216,255,68,.12);
+    }
+    
+    /* Theme 3: Rose Pink */
+    html[data-theme="3"]{
+      --gold:#ff9ec9;--cyan:#ffb3d9;--purple:#ff79c6;
+      --card-gradient-start: rgba(45,20,35,.72);
+      --card-gradient-end: rgba(30,12,25,.52);
+      --card-border: rgba(255,121,198,.30);
+      --card-glow: rgba(255,158,201,.22);
+      --card-radial-1: rgba(255,179,217,.16);
+      --card-radial-2: rgba(255,121,198,.14);
+    }
+    
+    /* Theme 4: Neon Bright */
+    html[data-theme="4"]{
+      --gold:#ff6b6b;--cyan:#00d4ff;--purple:#ffe66d;
+      --card-gradient-start: rgba(35,15,40,.78);
+      --card-gradient-end: rgba(22,8,28,.58);
+      --card-border: rgba(0,212,255,.35);
+      --card-glow: rgba(255,107,107,.30);
+      --card-radial-1: rgba(0,212,255,.20);
+      --card-radial-2: rgba(255,230,109,.16);
+    }
+    
+    /* Theme 5: Dreamy Purple */
+    html[data-theme="5"]{
+      --gold:#ff9ad9;--cyan:#7dd3fc;--purple:#6a5cff;
+      --card-gradient-start: rgba(30,20,45,.74);
+      --card-gradient-end: rgba(18,12,32,.54);
+      --card-border: rgba(106,92,255,.28);
+      --card-glow: rgba(255,154,217,.24);
+      --card-radial-1: rgba(125,211,252,.14);
+      --card-radial-2: rgba(106,92,255,.16);
+    }
+    
+    /* Theme 6: Sunset Orange 🔥 NEW */
+    html[data-theme="6"]{
+      --gold:#ff9a5c;--cyan:#ffcc80;--purple:#ff7043;
+      --card-gradient-start: rgba(45,25,20,.76);
+      --card-gradient-end: rgba(32,16,12,.56);
+      --card-border: rgba(255,154,92,.32);
+      --card-glow: rgba(255,112,67,.28);
+      --card-radial-1: rgba(255,204,128,.18);
+      --card-radial-2: rgba(255,154,92,.14);
+    }
+    
+    /* Theme 7: Ocean Teal 🌊 NEW */
+    html[data-theme="7"]{
+      --gold:#4dd0e1;--cyan:#80deea;--purple:#26c6da;
+      --card-gradient-start: rgba(15,40,45,.75);
+      --card-gradient-end: rgba(10,28,32,.55);
+      --card-border: rgba(77,208,225,.30);
+      --card-glow: rgba(38,198,218,.26);
+      --card-radial-1: rgba(128,222,234,.16);
+      --card-radial-2: rgba(77,208,225,.14);
+    }
+    
+    /* Theme 8: Monochrome Silver ⚪ NEW */
+    html[data-theme="8"]{
+      --gold:#e0e0e0;--cyan:#c0c0c0;--purple:#a0a0a0;
+      --card-gradient-start: rgba(35,35,40,.72);
+      --card-gradient-end: rgba(22,22,28,.52);
+      --card-border: rgba(224,224,224,.25);
+      --card-glow: rgba(192,192,192,.20);
+      --card-radial-1: rgba(224,224,224,.12);
+      --card-radial-2: rgba(160,160,160,.10);
+    }
+    
+    /* Theme 9: Cosmic Dark 🌌 NEW */
+    html[data-theme="9"]{
+      --gold:#c9a0ff;--cyan:#7eb3ff;--purple:#e08dff;
+      --card-gradient-start: rgba(20,15,35,.80);
+      --card-gradient-end: rgba(12,8,24,.60);
+      --card-border: rgba(201,160,255,.30);
+      --card-glow: rgba(126,179,255,.28);
+      --card-radial-1: rgba(224,141,255,.20);
+      --card-radial-2: rgba(201,160,255,.16);
+    }
 
     .themePicker{
       display:grid;
@@ -828,7 +957,7 @@
     }
 
     @media (prefers-reduced-motion: reduce){
-      .btn,.navBtn,.chip,.themeOption{transition:none}
+      .btn,.navBtn,.chip,.themeOption,.card,.sidebar,.main{transition:none}
       .miniAlert,.alert{animation:none}
       .loaderTitle,.loaderBar::after,.loaderDots span{animation:none}
     }
@@ -1122,7 +1251,7 @@
             </div>
           </div>
 
-          <!-- RIGHT COLUMN (THEME PICKER FIXED) -->
+          <!-- RIGHT COLUMN (THEME PICKER - 10 THEMES) -->
           <div class="card" id="cardSide">
             <div class="cardHd">
               <h3>✦ أدوات سريعة ✦</h3>
@@ -1142,10 +1271,10 @@
 
                 <div class="kv">
                   <strong>الثيم</strong>
-                  <span class="muted">اختار شكل مختلف بالكامل (0 → 5)</span>
+                  <span class="muted">اختار شكل مختلف بالكامل (0 → 9)</span>
                 </div>
 
-                <!-- THEME PICKER (VISUAL) -->
+                <!-- THEME PICKER (10 VISUAL OPTIONS) -->
                 <div class="themePicker" id="themePicker">
                   <div class="themeOption" data-theme="0">
                     <div class="themeSwatch" style="background:linear-gradient(135deg,#f5c842,#7dd3fc)"></div>
@@ -1159,18 +1288,18 @@
                     </div>
                   </div>
                   <div class="themeOption" data-theme="1">
-                    <div class="themeSwatch" style="background:linear-gradient(135deg,#e3e7ff,#6fa8ff)"></div>
+                    <div class="themeSwatch" style="background:linear-gradient(135deg,#1e2a4a,#3f6fff)"></div>
                     <div>
                       <div class="themeName">ليلي أزرق</div>
                       <div class="themePreview">
-                        <span style="background:#e3e7ff"></span>
+                        <span style="background:#a8c0ff"></span>
                         <span style="background:#6fa8ff"></span>
                         <span style="background:#3f6fff"></span>
                       </div>
                     </div>
                   </div>
                   <div class="themeOption" data-theme="2">
-                    <div class="themeSwatch" style="background:linear-gradient(135deg,#d8ff44,#bff7ff)"></div>
+                    <div class="themeSwatch" style="background:linear-gradient(135deg,#14281e,#7dfc8e)"></div>
                     <div>
                       <div class="themeName">ربيعي أخضر</div>
                       <div class="themePreview">
@@ -1181,18 +1310,18 @@
                     </div>
                   </div>
                   <div class="themeOption" data-theme="3">
-                    <div class="themeSwatch" style="background:linear-gradient(135deg,#caa2ff,#8be9ff)"></div>
+                    <div class="themeSwatch" style="background:linear-gradient(135deg,#2d1423,#ff79c6)"></div>
                     <div>
                       <div class="themeName">وردي ناعم</div>
                       <div class="themePreview">
-                        <span style="background:#caa2ff"></span>
-                        <span style="background:#8be9ff"></span>
+                        <span style="background:#ff9ec9"></span>
+                        <span style="background:#ffb3d9"></span>
                         <span style="background:#ff79c6"></span>
                       </div>
                     </div>
                   </div>
                   <div class="themeOption" data-theme="4">
-                    <div class="themeSwatch" style="background:linear-gradient(135deg,#ff6b6b,#00d4ff)"></div>
+                    <div class="themeSwatch" style="background:linear-gradient(135deg,#230f28,#ff6b6b)"></div>
                     <div>
                       <div class="themeName">نيون ساطع</div>
                       <div class="themePreview">
@@ -1203,7 +1332,7 @@
                     </div>
                   </div>
                   <div class="themeOption" data-theme="5">
-                    <div class="themeSwatch" style="background:linear-gradient(135deg,#ff9ad9,#7dd3fc)"></div>
+                    <div class="themeSwatch" style="background:linear-gradient(135deg,#1e142d,#6a5cff)"></div>
                     <div>
                       <div class="themeName">حلمي بنفسجي</div>
                       <div class="themePreview">
@@ -1213,10 +1342,55 @@
                       </div>
                     </div>
                   </div>
+                  <!-- NEW THEMES -->
+                  <div class="themeOption" data-theme="6">
+                    <div class="themeSwatch" style="background:linear-gradient(135deg,#2d1914,#ff7043)"></div>
+                    <div>
+                      <div class="themeName">غروب برتقالي 🔥</div>
+                      <div class="themePreview">
+                        <span style="background:#ff9a5c"></span>
+                        <span style="background:#ffcc80"></span>
+                        <span style="background:#ff7043"></span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="themeOption" data-theme="7">
+                    <div class="themeSwatch" style="background:linear-gradient(135deg,#0f282d,#26c6da)"></div>
+                    <div>
+                      <div class="themeName">محيط أزرق 🌊</div>
+                      <div class="themePreview">
+                        <span style="background:#4dd0e1"></span>
+                        <span style="background:#80deea"></span>
+                        <span style="background:#26c6da"></span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="themeOption" data-theme="8">
+                    <div class="themeSwatch" style="background:linear-gradient(135deg,#232328,#e0e0e0)"></div>
+                    <div>
+                      <div class="themeName">فضي كلاسيك ⚪</div>
+                      <div class="themePreview">
+                        <span style="background:#e0e0e0"></span>
+                        <span style="background:#c0c0c0"></span>
+                        <span style="background:#a0a0a0"></span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="themeOption" data-theme="9">
+                    <div class="themeSwatch" style="background:linear-gradient(135deg,#140f23,#e08dff)"></div>
+                    <div>
+                      <div class="themeName">كوني مظلم 🌌</div>
+                      <div class="themePreview">
+                        <span style="background:#c9a0ff"></span>
+                        <span style="background:#7eb3ff"></span>
+                        <span style="background:#e08dff"></span>
+                      </div>
+                    </div>
+                  </div>
                 </div>
 
                 <div style="margin-top:4px;color:rgba(255,255,255,.40);font-size:11px;line-height:1.6">
-                  © ONX-TAQE PRO — الواجهة دي إعادة تصميم كاملة مع تحسينات احترافية.
+                  © ONX-TAQE PRO — 10 ثيمات فاخرة تُطبّق على الكارد الزجاجي بالكامل ✨
                 </div>
               </div>
             </div>
@@ -1374,15 +1548,19 @@
     }
 
     /* =============================
-       Theme System (FIXED)
+       Theme System (10 THEMES - FULL CARD)
        ============================= */
     const THEMES = [
       {id:0,name:'كلاسيكي ذهبي',colors:['#f5c842','#7dd3fc','#b28dff']},
-      {id:1,name:'ليلي أزرق',colors:['#e3e7ff','#6fa8ff','#3f6fff']},
+      {id:1,name:'ليلي أزرق',colors:['#a8c0ff','#6fa8ff','#3f6fff']},
       {id:2,name:'ربيعي أخضر',colors:['#d8ff44','#bff7ff','#7dfc8e']},
-      {id:3,name:'وردي ناعم',colors:['#caa2ff','#8be9ff','#ff79c6']},
+      {id:3,name:'وردي ناعم',colors:['#ff9ec9','#ffb3d9','#ff79c6']},
       {id:4,name:'نيون ساطع',colors:['#ff6b6b','#00d4ff','#ffe66d']},
-      {id:5,name:'حلمي بنفسجي',colors:['#ff9ad9','#7dd3fc','#6a5cff']}
+      {id:5,name:'حلمي بنفسجي',colors:['#ff9ad9','#7dd3fc','#6a5cff']},
+      {id:6,name:'غروب برتقالي 🔥',colors:['#ff9a5c','#ffcc80','#ff7043']},
+      {id:7,name:'محيط أزرق 🌊',colors:['#4dd0e1','#80deea','#26c6da']},
+      {id:8,name:'فضي كلاسيك ⚪',colors:['#e0e0e0','#c0c0c0','#a0a0a0']},
+      {id:9,name:'كوني مظلم 🌌',colors:['#c9a0ff','#7eb3ff','#e08dff']}
     ];
 
     function applyTheme(n, showToastMsg=true){
@@ -1396,7 +1574,7 @@
       
       if(showToastMsg){
         const theme = THEMES.find(t=>t.id===n);
-        showToast(`تم تطبيق ثيم "${theme?.name||n}"`, 'success');
+        showToast(`تم تطبيق ثيم "${theme?.name||n}" ✨`, 'success');
       }
     }
 
@@ -2051,7 +2229,7 @@
     document.getElementById('viewPC')?.addEventListener('click', (e)=>{e.stopPropagation();setViewMode('pc');});
     document.getElementById('viewPHONE')?.addEventListener('click', (e)=>{e.stopPropagation();setViewMode('phone');});
 
-    // Theme picker buttons (VISUAL)
+    // Theme picker buttons (10 THEMES - VISUAL)
     document.querySelectorAll('.themeOption')?.forEach(opt=>{
       opt.addEventListener('click', (e)=>{
         e.stopPropagation();
