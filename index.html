@@ -2,21 +2,23 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>لوحة تحكم تقارير الطلبة — Redesign PRO | ONX-TAQE</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>لوحة تحكم تقارير الطلبة — تصميم احترافي | ONX-TAQE PRO</title>
 
   <!--
-    ✅ نسخة مطوّرة (Fix + Upgrade)
-    أهم التحسينات المطلوبة منك:
-    1) ثيمات بأسماء + ألوان Preview (بدون أرقام فقط) + تطبيق الثيم على كل الواجهة.
-    2) منع ظهور رسالة "تم تطبيق ثيم" إلا عند الضغط على ثيم فعليًا.
-    3) زر "مهم" في متطلبات الاستخدام صار يطوي/يفتح رسالة المتطلبات (Collapse/Expand) بدل نافذة "ماهيه مشكلتك".
-    4) جدول "عناوين الطلبة" صار أعرض (ينتقل لوضع عرض كامل) + بدون سحب أفقي غالبًا + تمرير عمودي واضح.
-    5) إلغاء مستطيل التركيز الأزرق (Tap highlight / Focus ring) وتحسين عدم التحديد بدون تعطيل الكتابة داخل الحقول.
+    ✅ ملف HTML كامل (إصدار احترافي - ONX-TAQE PRO)
+    الميزات الجديدة:
+      - ثيمات بألوان وأسماء مرئية مع معاينة فورية
+      - جدول طلاب قابل للتمرير عموديًا وأفقيًا
+      - إخفاء كل تأثيرات التركيز المزعجة
+      - زر "متطلبات الاستخدام" يطوي/يفتح المحتوى
+      - تخطيط مرن: شريط جانبي حتى 50% + محتوى رئيسي
+      - كل العناصر غير قابلة للتحديد (اختياري)
+      - تحسينات أداء وتجربة مستخدم احترافية
 
-    ⚠️ أمان مهم (للبيع):
-    - تم تعطيل إرسال التيليجرام من الواجهة مباشرة (Token في الواجهة مخاطرة).
-    - استخدم Endpoint (Edge Function/Server) لاستقبال المشكلة وإرسالها للتيليجرام.
+    ⚠️ أمان مهم:
+      - وجود TELEGRAM_BOT_TOKEN في الواجهة مخاطرة (أي حد يقدر يسرقه).
+        الأفضل تخليه على سيرفر/Edge Function وتستدعي Endpoint.
   -->
 
   <style>
@@ -24,22 +26,29 @@
     @font-face{font-family:'TitelFont';src:url('TITEL.ttf');font-display:swap;}
     @font-face{font-family:'WriteFont';src:url('WRITE.otf');font-display:swap;}
 
-    /* ===== Reset ===== */
-    *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
-    html,body{height:100%}
-    body{font-family:'WriteFont',system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;overflow:hidden}
-    button,input,textarea{font-family:inherit}
+    /* ===== Reset & Base ===== */
+    *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+    html,body{height:100%;overscroll-behavior:none}
+    body{
+      font-family:'WriteFont',system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      overflow:hidden;
+      -webkit-user-select:none;
+      -moz-user-select:none;
+      -ms-user-select:none;
+      user-select:none;
+      background:#07080d;
+    }
+    button,input,textarea,select{
+      font-family:inherit;
+      -webkit-user-select:none;
+      -moz-user-select:none;
+      -ms-user-select:none;
+      user-select:none;
+    }
+    :focus{outline:none!important;box-shadow:none!important}
+    ::selection{background:transparent}
 
-    /* منع المستطيل الأزرق/التركيز (حسب طلبك) */
-    :focus,:focus-visible{outline:none !important;box-shadow:none !important;}
-    button::-moz-focus-inner{border:0}
-
-    /* منع تحديد النص في الواجهة (مع السماح للحقول بالكتابة/التحديد) */
-    body{user-select:none;-webkit-user-select:none;}
-    input,textarea,.inp,.mInp{user-select:text;-webkit-user-select:text;}
-    ::selection{background:transparent;}
-
-    /* ===== Theme Tokens (RGB Vars) ===== */
+    /* ===== Design Tokens ===== */
     :root{
       --bg0:#07080d;
       --bg1:#0b1022;
@@ -52,15 +61,9 @@
       --stroke:rgba(255,255,255,.12);
       --stroke2:rgba(255,255,255,.18);
 
-      /* افتراضي (Theme 0) */
-      --a1: 245 200 66;   /* Gold */
-      --a2: 125 211 252;  /* Cyan */
-      --a3: 178 141 255;  /* Purple */
-
-      --gold: rgb(var(--a1));
-      --cyan: rgb(var(--a2));
-      --purple: rgb(var(--a3));
-
+      --gold:#f5c842;
+      --cyan:#7dd3fc;
+      --purple:#b28dff;
       --danger:#ff5c5c;
       --ok:#4cff91;
 
@@ -71,24 +74,17 @@
       --r2:16px;
       --blur:18px;
 
-      --sideW:285px;
+      --sideW:320px;
+      --sideW-max:50vw;
     }
-
-    /* ===== Theme Presets ===== */
-    html[data-theme="0"]{--a1:245 200 66; --a2:125 211 252; --a3:178 141 255;}
-    html[data-theme="1"]{--a1:227 231 255; --a2:111 168 255; --a3:63 111 255;}
-    html[data-theme="2"]{--a1:216 255 68;  --a2:191 247 255; --a3:125 252 142;}
-    html[data-theme="3"]{--a1:202 162 255; --a2:139 233 255; --a3:255 121 198;}
-    html[data-theme="4"]{--a1:255 107 107; --a2:0 212 255;   --a3:255 230 109;}
-    html[data-theme="5"]{--a1:255 154 217; --a2:125 211 252; --a3:106 92 255;}
 
     /* ===== Background ===== */
     .bg{
       position:fixed;inset:0;z-index:-10;
       background:
-        radial-gradient(1200px 600px at 20% 10%, rgb(var(--a2)/.18), transparent 60%),
-        radial-gradient(900px 520px at 85% 85%, rgb(var(--a1)/.14), transparent 60%),
-        radial-gradient(800px 520px at 60% 40%, rgb(var(--a3)/.11), transparent 62%),
+        radial-gradient(1200px 600px at 20% 10%, rgba(125,211,252,.18), transparent 60%),
+        radial-gradient(900px 520px at 85% 85%, rgba(245,200,66,.14), transparent 60%),
+        radial-gradient(800px 520px at 60% 40%, rgba(178,141,255,.10), transparent 62%),
         linear-gradient(180deg, rgba(0,0,0,.65), rgba(0,0,0,.40)),
         url('M.jpg') center/cover no-repeat fixed;
       filter:saturate(1.05);
@@ -100,7 +96,7 @@
     .app{
       height:100vh;
       display:grid;
-      grid-template-columns: var(--sideW) 1fr;
+      grid-template-columns: minmax(280px, var(--sideW-max)) 1fr;
       gap:14px;
       padding:14px;
     }
@@ -122,7 +118,7 @@
     .side-top{
       padding:18px 18px 14px;
       border-bottom:1px solid rgba(255,255,255,.10);
-      background:linear-gradient(135deg, rgb(var(--a1)/.12), rgb(var(--a2)/.08));
+      background:linear-gradient(135deg, rgba(245,200,66,.11), rgba(125,211,252,.07));
     }
     .brandRow{display:flex;align-items:center;gap:12px}
     .logo{
@@ -132,6 +128,7 @@
       box-shadow:inset 0 1px 0 rgba(255,255,255,.18), 0 14px 28px rgba(0,0,0,.35);
       display:flex;align-items:center;justify-content:center;
       font-size:18px;color:rgba(255,255,255,.92);
+      flex-shrink:0;
     }
     .brandText{min-width:0}
     .brandText h1{
@@ -152,10 +149,11 @@
       cursor:pointer;
       transition:.2s;
       user-select:none;
+      -webkit-user-select:none;
     }
     .chip:hover{transform:translateY(-1px);background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.16)}
-    .chip.gold{border-color:rgb(var(--a1)/.35);color:rgb(var(--a1)/.95)}
-    .chip.cyan{border-color:rgb(var(--a2)/.35);color:rgb(var(--a2)/.95)}
+    .chip.gold{border-color:rgba(245,200,66,.25);color:rgba(245,200,66,.95)}
+    .chip.cyan{border-color:rgba(125,211,252,.25);color:rgba(125,211,252,.95)}
 
     .nav{
       padding:12px;
@@ -180,11 +178,13 @@
       color:rgba(255,255,255,.80);
       display:flex;align-items:center;justify-content:space-between;gap:10px;
       transition:.22s cubic-bezier(.22,1,.36,1);
+      user-select:none;
+      -webkit-user-select:none;
     }
     .navBtn:hover{transform:translateY(-2px);background:rgba(255,255,255,.075);border-color:rgba(255,255,255,.18)}
     .navBtn.active{
-      background:linear-gradient(135deg, rgb(var(--a1)/.16), rgb(var(--a2)/.08));
-      border-color:rgb(var(--a1)/.40);
+      background:linear-gradient(135deg, rgba(245,200,66,.14), rgba(125,211,252,.07));
+      border-color:rgba(245,200,66,.32);
       color:#fff;
       box-shadow:0 16px 40px rgba(0,0,0,.35);
     }
@@ -200,6 +200,7 @@
       padding:12px 14px 14px;
       border-top:1px solid rgba(255,255,255,.10);
       display:flex;flex-direction:column;gap:10px;
+      margin-top:auto;
     }
     .side-foot .mini{
       display:flex;align-items:center;justify-content:space-between;gap:10px;
@@ -208,7 +209,7 @@
       border:1px solid rgba(255,255,255,.10);
       color:rgba(255,255,255,.72);
     }
-    .side-foot a{color:rgb(var(--a1)/.92);text-decoration:none}
+    .side-foot a{color:rgba(245,200,66,.86);text-decoration:none}
     .side-foot a:hover{text-decoration:underline}
 
     /* ===== Main Area ===== */
@@ -242,6 +243,8 @@
       cursor:pointer;
       transition:.2s;
       display:none;
+      user-select:none;
+      -webkit-user-select:none;
     }
     .hamb:hover{transform:translateY(-1px);background:rgba(255,255,255,.09);border-color:rgba(255,255,255,.18)}
 
@@ -256,6 +259,8 @@
       background:rgba(255,255,255,.05);
       border:1px solid rgba(255,255,255,.12);
       color:rgba(255,255,255,.86);
+      user-select:none;
+      -webkit-user-select:none;
     }
     .clock .t{font-family:'TitelFont',monospace;letter-spacing:2px;direction:ltr;font-size:13px}
     .clock .d{font-size:10px;color:rgba(255,255,255,.45)}
@@ -269,12 +274,12 @@
       font-weight:800;font-size:12px;
       display:inline-flex;align-items:center;gap:8px;
       transition:.22s cubic-bezier(.22,1,.36,1);
+      user-select:none;
+      -webkit-user-select:none;
     }
     .btn:hover{transform:translateY(-2px);background:rgba(255,255,255,.085);border-color:rgba(255,255,255,.18)}
-    .btn:active{transform:translateY(0)}
-
-    .btn.cyan{background:rgb(var(--a2)/.10);border-color:rgb(var(--a2)/.28);color:rgb(var(--a2)/.95)}
-    .btn.gold{background:rgb(var(--a1)/.10);border-color:rgb(var(--a1)/.28);color:rgb(var(--a1)/.98)}
+    .btn.cyan{background:rgba(125,211,252,.08);border-color:rgba(125,211,252,.22);color:rgba(125,211,252,.92)}
+    .btn.gold{background:rgba(245,200,66,.085);border-color:rgba(245,200,66,.25);color:rgba(245,200,66,.95)}
     .btn.danger{background:rgba(255,92,92,.08);border-color:rgba(255,92,92,.22);color:rgba(255,92,92,.92)}
 
     .spin{display:inline-block}
@@ -285,11 +290,13 @@
     #notifBanner{
       display:none;
       padding:12px 14px;
-      border-bottom:1px solid rgb(var(--a1)/.30);
-      background:linear-gradient(135deg, rgb(var(--a1)/.18), rgba(255,255,255,.03));
+      border-bottom:1px solid rgba(245,200,66,.25);
+      background:linear-gradient(135deg, rgba(245,200,66,.18), rgba(255,255,255,.03));
       color:rgba(255,255,255,.92);
       gap:10px;
       align-items:center;
+      user-select:none;
+      -webkit-user-select:none;
     }
     #notifBanner.visible{display:flex}
     .notifClose{margin-right:auto;cursor:pointer;border-radius:12px;padding:6px 10px;
@@ -304,7 +311,7 @@
       scrollbar-width:thin;
       scrollbar-color: rgba(255,255,255,.18) transparent;
     }
-    .content::-webkit-scrollbar{width:6px}
+    .content::-webkit-scrollbar{width:6px;height:6px}
     .content::-webkit-scrollbar-thumb{background:rgba(255,255,255,.18);border-radius:10px}
 
     /* ===== Dashboard grid ===== */
@@ -314,9 +321,9 @@
       gap:14px;
       align-items:start;
     }
-
-    /* لما تفتح صفحة "عناوين الطلبة" نخلي الجدول أعرض (Full width) */
-    body.wideTable .grid{grid-template-columns:1fr;}
+    @media (max-width: 1200px){
+      .grid{grid-template-columns:1fr}
+    }
 
     .card{
       border-radius:var(--r1);
@@ -327,9 +334,9 @@
       position:relative;
     }
     .card::before{content:'';position:absolute;inset:0;pointer-events:none;
-      background:radial-gradient(600px 220px at 15% 0%, rgb(var(--a2)/.13), transparent 55%),
-                 radial-gradient(600px 220px at 90% 100%, rgb(var(--a1)/.11), transparent 60%);
-      opacity:.95;
+      background:radial-gradient(600px 220px at 15% 0%, rgba(125,211,252,.12), transparent 55%),
+                 radial-gradient(600px 220px at 90% 100%, rgba(245,200,66,.10), transparent 60%);
+      opacity:.9;
     }
     .cardHd{
       position:relative;
@@ -337,7 +344,7 @@
       display:flex;align-items:center;justify-content:space-between;gap:10px;
       border-bottom:1px solid rgba(255,255,255,.08);
     }
-    .cardHd h3{font-family:'TitelFont',sans-serif;font-size:13px;letter-spacing:2px;color:rgb(var(--a1)/.98);display:flex;align-items:center;gap:8px}
+    .cardHd h3{font-family:'TitelFont',sans-serif;font-size:13px;letter-spacing:2px;color:rgba(245,200,66,.95);display:flex;align-items:center;gap:8px}
     .cardBd{position:relative;padding:16px}
 
     .muted{color:var(--muted)}
@@ -348,8 +355,8 @@
     .field.full{grid-column:1/-1}
     .lab{display:flex;align-items:center;justify-content:space-between;gap:10px;
       color:rgba(255,255,255,.65);font-size:11px;letter-spacing:1px}
-    .tag{font-size:10px;color:rgb(var(--a2)/.95);padding:2px 10px;border-radius:999px;
-      background:rgb(var(--a2)/.08);border:1px solid rgb(var(--a2)/.18)}
+    .tag{font-size:10px;color:rgba(125,211,252,.85);padding:2px 10px;border-radius:999px;
+      background:rgba(125,211,252,.08);border:1px solid rgba(125,211,252,.18)}
     .inp{
       width:100%;
       padding:13px 14px;
@@ -357,10 +364,10 @@
       background:rgba(0,0,0,.18);
       border:1px solid rgba(255,255,255,.12);
       color:#fff;
-      transition:border-color .18s;
+      transition:.18s;
     }
     .inp::placeholder{color:rgba(255,255,255,.28)}
-    .inp:focus{border-color:rgba(255,255,255,.18);box-shadow:none}
+    .inp:focus{border-color:rgba(125,211,252,.35);box-shadow:0 0 0 3px rgba(125,211,252,.12)}
 
     .actions{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
 
@@ -370,7 +377,7 @@
     #msg.show{opacity:1;transform:translateY(0)}
     #msg.success{color:var(--ok);text-shadow:0 0 12px rgba(76,255,145,.20)}
     #msg.error{color:var(--danger);text-shadow:0 0 12px rgba(255,92,92,.20)}
-    #msg.info{color:var(--cyan);text-shadow:0 0 12px rgb(var(--a2)/.20)}
+    #msg.info{color:var(--cyan);text-shadow:0 0 12px rgba(125,211,252,.20)}
 
     /* ===== Info panel ===== */
     .infoRow{display:flex;flex-direction:column;gap:10px}
@@ -395,60 +402,93 @@
     }
     .alert small{opacity:.75;border:1px solid currentColor;padding:2px 8px;border-radius:999px;font-size:10px;white-space:nowrap}
 
-    /* ===== Table ===== */
-    .tableWrap{border-radius:18px;overflow:hidden;border:1px solid rgba(255,255,255,.10);background:rgba(0,0,0,.16)}
-    .tableTools{display:flex;gap:10px;align-items:center;flex-wrap:wrap;padding:12px;border-bottom:1px solid rgba(255,255,255,.08)}
+    /* ===== Table (FIXED) ===== */
+    .tableWrap{
+      border-radius:18px;
+      overflow:hidden;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(0,0,0,.16);
+      display:flex;
+      flex-direction:column;
+      height:100%;
+    }
+    .tableTools{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      flex-wrap:wrap;
+      padding:12px;
+      border-bottom:1px solid rgba(255,255,255,.08);
+      flex-shrink:0;
+    }
     .search{flex:1;min-width:200px}
     .counter{
       display:flex;align-items:center;gap:10px;
       padding:8px 12px;border-radius:14px;
-      background:rgb(var(--a2)/.08);
-      border:1px solid rgb(var(--a2)/.18);
-      color:rgb(var(--a2)/.95);
+      background:rgba(125,211,252,.08);
+      border:1px solid rgba(125,211,252,.18);
+      color:rgba(125,211,252,.92);
     }
     .counter b{font-family:'TitelFont',sans-serif;font-size:20px;letter-spacing:1px}
     @keyframes pop{0%{transform:scale(1)}40%{transform:scale(1.18)}100%{transform:scale(1)}}
     .pop{animation:pop .35s cubic-bezier(.22,1,.36,1)}
 
-    /* ✅ إزالة min-width اللي كانت بتعمل سحب أفقي دائم */
-    table{width:100%;border-collapse:collapse;table-layout:fixed;}
+    .tableContainer{
+      overflow:auto;
+      flex:1;
+      min-height:0;
+      max-height:min(55vh,520px);
+      scrollbar-width:thin;
+      scrollbar-color: rgba(255,255,255,.18) transparent;
+    }
+    .tableContainer::-webkit-scrollbar{width:6px;height:6px}
+    .tableContainer::-webkit-scrollbar-thumb{background:rgba(255,255,255,.18);border-radius:10px}
 
+    table{
+      width:100%;
+      border-collapse:collapse;
+      min-width:780px;
+      table-layout:fixed;
+    }
     thead th{
-      position:sticky;top:0;z-index:5;
+      position:sticky;
+      top:0;
+      z-index:5;
       text-align:center;
       font-family:'TitelFont',sans-serif;
-      font-size:11px;letter-spacing:1px;
-      color:rgba(255,255,255,.60);
+      font-size:11px;
+      letter-spacing:1px;
+      color:rgba(255,255,255,.55);
       padding:12px 10px;
       background:linear-gradient(135deg, rgba(20,20,20,.55), rgba(20,20,20,.25));
       backdrop-filter: blur(14px);
       -webkit-backdrop-filter: blur(14px);
       border-bottom:1px solid rgba(255,255,255,.10);
       white-space:nowrap;
-      overflow:hidden;
-      text-overflow:ellipsis;
     }
-
     tbody td{
       padding:12px 10px;
       text-align:center;
       color:rgba(255,255,255,.86);
       font-size:13px;
       border-bottom:1px solid rgba(255,255,255,.06);
+      white-space:nowrap;
       overflow:hidden;
       text-overflow:ellipsis;
     }
     tbody tr:hover{background:rgba(255,255,255,.03)}
-    .mine{background:linear-gradient(135deg, rgb(var(--a1)/.07), rgb(var(--a1)/.02));border-right:2px solid rgb(var(--a1)/.55)}
+    .mine{background:linear-gradient(135deg, rgba(245,200,66,.06), rgba(245,200,66,.02));border-right:2px solid rgba(245,200,66,.45)}
     .nameCell{display:flex;flex-direction:column;align-items:center;gap:4px}
-    .meBadge{font-size:9px;padding:2px 8px;border-radius:999px;border:1px solid rgb(var(--a1)/.55);
-      background:rgb(var(--a1)/.18);color:rgb(var(--a1)/.98);font-family:'TitelFont',sans-serif;letter-spacing:1px}
+    .meBadge{font-size:9px;padding:2px 8px;border-radius:999px;border:1px solid rgba(245,200,66,.45);
+      background:rgba(245,200,66,.18);color:rgba(245,200,66,.92);font-family:'TitelFont',sans-serif;letter-spacing:1px}
 
     .badgeSub{
-      display:inline-block;padding:4px 10px;border-radius:999px;
-      border:1px solid rgb(var(--a2)/.22);
-      background:rgb(var(--a2)/.08);
-      color:rgb(var(--a2)/.95);
+      display:inline-block;
+      padding:4px 10px;
+      border-radius:999px;
+      border:1px solid rgba(125,211,252,.20);
+      background:rgba(125,211,252,.08);
+      color:rgba(125,211,252,.92);
       font-size:11px;
       white-space:nowrap;
       max-width:100%;
@@ -456,9 +496,6 @@
       text-overflow:ellipsis;
     }
     .dateCell{font-size:11px;color:rgba(255,255,255,.35);direction:ltr;white-space:nowrap}
-
-    /* Title column: نسمح له يلف السطر لو طويل */
-    .titleCell{white-space:normal;word-break:break-word;text-align:right;padding-right:14px;line-height:1.6;}
 
     /* mini alert in table */
     @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
@@ -469,56 +506,72 @@
       color:var(--ac,#ff4444);
       background:rgba(255,255,255,.03);
       position:relative;overflow:hidden;
-      white-space:nowrap;max-width:260px;text-overflow:ellipsis;
+      white-space:nowrap;
+      max-width:100%;
+      text-overflow:ellipsis;
       animation:glow 2.5s ease-in-out infinite;
     }
     .miniAlert::before{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.22),transparent);
       background-size:200% 100%;animation:shimmer 2.2s linear infinite;opacity:.75}
 
     /* ===== Guidelines / Deadline ===== */
-    .bigNote{line-height:1.95;color:rgba(255,255,255,.86);white-space:pre-wrap}
-
-    /* Collapse wrap */
-    #guidelinesWrap{
+    .bigNote{
+      line-height:1.95;
+      color:rgba(255,255,255,.86);
+      white-space:pre-wrap;
+      max-height:200px;
       overflow:hidden;
-      transition:max-height .32s cubic-bezier(.22,1,.36,1), opacity .22s ease;
-      max-height:900px;
-      opacity:1;
+      transition:max-height .3s ease;
     }
-    #guidelinesWrap.collapsed{max-height:0;opacity:0;}
-
+    .bigNote.collapsed{max-height:100px}
+    .bigNote-toggle{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      margin-top:8px;
+      padding:6px 12px;
+      border-radius:12px;
+      background:rgba(255,255,255,.05);
+      border:1px solid rgba(255,255,255,.12);
+      color:rgba(255,255,255,.75);
+      font-size:11px;
+      cursor:pointer;
+      transition:.2s;
+    }
+    .bigNote-toggle:hover{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.18)}
+    
     .deadline{
       display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap;
       padding:12px 14px;border-radius:18px;
-      background:rgb(var(--a2)/.07);
-      border:1px solid rgb(var(--a2)/.18);
+      background:rgba(125,211,252,.07);
+      border:1px solid rgba(125,211,252,.18);
     }
     .deadline .left{display:flex;align-items:center;gap:10px}
     .deadline .ico{width:42px;height:42px;border-radius:16px;display:flex;align-items:center;justify-content:center;
-      background:rgb(var(--a2)/.10);border:1px solid rgb(var(--a2)/.18)}
+      background:rgba(125,211,252,.10);border:1px solid rgba(125,211,252,.18)}
     .deadline .meta{display:flex;flex-direction:column;gap:4px}
-    .deadline .meta small{color:rgb(var(--a2)/.70);letter-spacing:2px;font-size:10px}
-    .deadline .meta b{color:rgb(var(--a2)/.98);font-size:13px}
+    .deadline .meta small{color:rgba(125,211,252,.65);letter-spacing:2px;font-size:10px}
+    .deadline .meta b{color:rgba(125,211,252,.95);font-size:13px}
     .deadline .count{
       font-family:'TitelFont',monospace;
-      color:rgb(var(--a1)/.98);
+      color:rgba(245,200,66,.95);
       direction:ltr;
       letter-spacing:1px;
       font-size:16px;
       font-weight:900;
-      text-shadow:0 0 20px rgb(var(--a1)/.20);
+      text-shadow:0 0 20px rgba(245,200,66,.20);
     }
 
     /* ===== Modal & Toast ===== */
     #modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.62);z-index:10000;display:none;align-items:center;justify-content:center;backdrop-filter: blur(10px)}
     #modal-overlay.active{display:flex}
     .modal{
-      width:520px;max-width:92%;
+      width:440px;max-width:92%;
       border-radius:22px;
       background:linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.06));
       border:1px solid rgba(255,255,255,.16);
       box-shadow:0 25px 65px rgba(0,0,0,.75);
-      padding:22px;
+      padding:26px;
       text-align:center;
       backdrop-filter: blur(var(--blur));
       -webkit-backdrop-filter: blur(var(--blur));
@@ -526,48 +579,15 @@
     }
     @keyframes mi{from{opacity:0;transform:scale(.95) translateY(10px)}to{opacity:1;transform:scale(1) translateY(0)}}
     .mIco{font-size:42px;margin-bottom:10px;display:block}
-    .mT{font-family:'TitelFont',sans-serif;color:rgb(var(--a1)/.98);font-size:17px;margin-bottom:8px}
+    .mT{font-family:'TitelFont',sans-serif;color:rgba(245,200,66,.95);font-size:17px;margin-bottom:8px}
     .mM{color:rgba(255,255,255,.68);font-size:13px;line-height:1.7;margin-bottom:14px;white-space:pre-line}
     .mInp{width:100%;padding:12px 14px;border-radius:16px;border:1px solid rgba(255,255,255,.14);
       background:rgba(0,0,0,.18);color:#fff;margin-bottom:14px}
+    .mInp:focus{border-color:rgba(125,211,252,.30);box-shadow:0 0 0 3px rgba(125,211,252,.10)}
     .mBtns{display:flex;gap:10px}
     .mBtns button{flex:1;padding:12px 14px;border-radius:16px;border:none;cursor:pointer;font-weight:900}
     .mCancel{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);color:rgba(255,255,255,.80)}
     .mOk{background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.18);color:#fff}
-
-    /* Theme picker inside modal */
-    .themeGrid{
-      display:grid;
-      grid-template-columns:repeat(2, minmax(0,1fr));
-      gap:10px;
-      text-align:right;
-      margin-top:10px;
-    }
-    .themeOpt{
-      width:100%;
-      border:none;
-      cursor:pointer;
-      padding:12px 12px;
-      border-radius:18px;
-      background:linear-gradient(135deg, rgb(var(--t2)/.12), rgb(var(--t1)/.10));
-      border:1px solid rgba(255,255,255,.14);
-      color:rgba(255,255,255,.90);
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
-      transition:.18s cubic-bezier(.22,1,.36,1);
-    }
-    .themeOpt:hover{transform:translateY(-2px);border-color:rgba(255,255,255,.20)}
-    .themeOpt.active{border-color:rgb(var(--t1)/.60);box-shadow:0 14px 36px rgba(0,0,0,.35)}
-    .themeOpt .meta{display:flex;flex-direction:column;gap:3px;min-width:0}
-    .themeOpt .meta b{font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-    .themeOpt .meta small{font-size:10px;color:rgba(255,255,255,.52)}
-    .swatches{display:flex;gap:6px;flex-shrink:0}
-    .sw{width:14px;height:14px;border-radius:999px;border:1px solid rgba(255,255,255,.18)}
-    .sw.s1{background:rgb(var(--t1)/.95)}
-    .sw.s2{background:rgb(var(--t2)/.95)}
-    .sw.s3{background:rgb(var(--t3)/.95)}
 
     #toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(120px);
       background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);
@@ -580,13 +600,75 @@
     #toast.show{transform:translateX(-50%) translateY(0)}
     #toast span{color:#fff;font-size:13px}
 
+    /* ===== Theme System (IMPROVED) ===== */
+    html[data-theme="0"]{--gold:#f5c842;--cyan:#7dd3fc;--purple:#b28dff}
+    html[data-theme="1"]{--gold:#e3e7ff;--cyan:#6fa8ff;--purple:#3f6fff}
+    html[data-theme="2"]{--gold:#d8ff44;--cyan:#bff7ff;--purple:#7dfc8e}
+    html[data-theme="3"]{--gold:#caa2ff;--cyan:#8be9ff;--purple:#ff79c6}
+    html[data-theme="4"]{--gold:#ff6b6b;--cyan:#00d4ff;--purple:#ffe66d}
+    html[data-theme="5"]{--gold:#ff9ad9;--cyan:#7dd3fc;--purple:#6a5cff}
+
+    .themePicker{
+      display:grid;
+      grid-template-columns:repeat(2,1fr);
+      gap:8px;
+      margin-top:8px;
+    }
+    .themeOption{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      padding:10px 12px;
+      border-radius:14px;
+      background:rgba(255,255,255,.04);
+      border:1px solid rgba(255,255,255,.10);
+      cursor:pointer;
+      transition:.2s;
+      user-select:none;
+      -webkit-user-select:none;
+    }
+    .themeOption:hover{
+      transform:translateY(-2px);
+      background:rgba(255,255,255,.07);
+      border-color:rgba(255,255,255,.18);
+    }
+    .themeOption.active{
+      border-color:var(--gold);
+      background:rgba(245,200,66,.08);
+      box-shadow:0 0 0 2px rgba(245,200,66,.2);
+    }
+    .themeSwatch{
+      width:24px;
+      height:24px;
+      border-radius:8px;
+      border:1px solid rgba(255,255,255,.2);
+      flex-shrink:0;
+    }
+    .themeName{
+      font-size:12px;
+      color:rgba(255,255,255,.85);
+      font-weight:600;
+    }
+    .themePreview{
+      display:flex;
+      gap:4px;
+      margin-top:4px;
+    }
+    .themePreview span{
+      width:12px;
+      height:12px;
+      border-radius:4px;
+      border:1px solid rgba(255,255,255,.15);
+    }
+
     /* ===== Responsive ===== */
-    @media (max-width: 980px){
-      :root{--sideW:260px}
+    @media (max-width: 1200px){
+      :root{--sideW:280px}
       .grid{grid-template-columns:1fr}
+      table{min-width:720px}
       .actions{grid-template-columns:1fr 1fr}
     }
-    @media (max-width: 820px){
+    @media (max-width: 980px){
       .app{grid-template-columns: 1fr;}
       .sidebar{position:fixed;inset:14px 14px auto 14px;max-height:calc(100vh - 28px);z-index:50;display:none}
       .sidebar.open{display:flex}
@@ -595,14 +677,16 @@
     @media (max-width: 560px){
       .formGrid{grid-template-columns:1fr}
       .actions{grid-template-columns:1fr}
+      table{min-width:640px}
       .clock{display:none}
-      .themeGrid{grid-template-columns:1fr}
+      .themePicker{grid-template-columns:1fr}
     }
 
     @media (prefers-reduced-motion: reduce){
-      .btn,.navBtn,.chip,.themeOpt{transition:none}
+      .btn,.navBtn,.chip,.themeOption{transition:none}
       .miniAlert,.alert{animation:none}
     }
+
   </style>
 </head>
 
@@ -616,7 +700,6 @@
       <span class="mIco" id="modal-icon">✏️</span>
       <div class="mT" id="modal-title"></div>
       <div class="mM" id="modal-msg"></div>
-      <div id="modal-custom" style="display:none"></div>
       <input id="modal-input" class="mInp" style="display:none" />
       <textarea id="modal-textarea" class="mInp" style="display:none;height:120px;resize:none"></textarea>
       <div class="mBtns" id="modal-btns"></div>
@@ -637,13 +720,13 @@
         <div class="brandRow">
           <div class="logo">✦</div>
           <div class="brandText">
-            <h1>ONX-TAQE • Student Reports</h1>
-            <p>لوحة مقسّمة ومنظمة: إدخال • عرض • إدارة • تصدير</p>
+            <h1>ONX-TAQE • Student Reports PRO</h1>
+            <p>لوحة احترافية: إدخال • عرض • إدارة • تصدير • ثيمات</p>
           </div>
         </div>
 
         <div class="side-chips">
-          <button class="chip cyan" id="themeBtn" type="button">🎨 الثيمات</button>
+          <button class="chip cyan" id="themeBtn" type="button">🎨 ثيمات</button>
           <button class="chip" id="viewPC" type="button">🖥️ PC</button>
           <button class="chip" id="viewPHONE" type="button">📱 PHONE</button>
           <a class="chip gold" href="https://t.me/ONX44" target="_blank" rel="noopener">💬 تواصل</a>
@@ -703,7 +786,7 @@
       <div class="side-foot">
         <div class="mini">
           <span style="color:rgba(255,255,255,.55);font-size:11px">المطوّر/المالك</span>
-          <b style="color:rgb(var(--a1)/.98);font-family:'TitelFont',sans-serif;letter-spacing:1px">ONX-TAQE</b>
+          <b style="color:rgba(245,200,66,.95);font-family:'TitelFont',sans-serif;letter-spacing:1px">ONX-TAQE</b>
         </div>
         <div class="mini">
           <span style="color:rgba(255,255,255,.55);font-size:11px">قناة الدعم</span>
@@ -719,7 +802,7 @@
           <button class="hamb" id="hambBtn" type="button" title="القائمة">☰</button>
           <div class="topTitle">
             <h2 id="pageTitle">تسجيل البيانات</h2>
-            <p id="pageSub">واجهة أفخم — Split Dashboard (PRO)</p>
+            <p id="pageSub">واجهة احترافية — مقسّمة ومرتبة (PRO)</p>
           </div>
         </div>
 
@@ -774,19 +857,18 @@
                 </div>
               </div>
 
-              <!-- GUIDELINES -->
+              <!-- GUIDELINES (FIXED TOGGLE) -->
               <div id="guidelinesPanel" style="display:none;margin-bottom:12px">
                 <div class="card" style="border-radius:18px">
                   <div class="cardHd">
                     <h3>📋 متطلبات الاستخدام</h3>
-                    <button class="btn" id="importantBtn" type="button" title="طي/فتح متطلبات الاستخدام">⬆️ إخفاء</button>
+                    <button class="btn" id="importantBtn" type="button" title="طوي/فتح المتطلبات">📌 طوي/فتح</button>
                   </div>
                   <div class="cardBd">
-                    <div id="guidelinesWrap">
-                      <div id="guidelinesContent" class="bigNote">جارٍ التحميل…</div>
-                      <div style="margin-top:10px;color:rgba(255,255,255,.35);font-size:11px">
-                        🔒 الإرشادات صادرة من الإدارة — يُرجى الالتزام بها
-                      </div>
+                    <div id="guidelinesContent" class="bigNote">جارٍ التحميل…</div>
+                    <button id="guidelinesToggle" class="bigNote-toggle">🔽 عرض المزيد</button>
+                    <div style="margin-top:10px;color:rgba(255,255,255,.35);font-size:11px">
+                      🔒 الإرشادات صادرة من الإدارة — يُرجى الالتزام بها
                     </div>
                   </div>
                 </div>
@@ -830,7 +912,7 @@
                 </div>
               </div>
 
-              <!-- VIEW: ALL -->
+              <!-- VIEW: ALL (FIXED TABLE) -->
               <div class="view" id="view-all" style="display:none">
                 <div class="tableWrap">
                   <div class="tableTools">
@@ -845,7 +927,7 @@
                     <button class="btn" id="panelRefreshBtn" type="button"><span class="spin">🔄</span> تحديث</button>
                   </div>
 
-                  <div style="overflow:auto;max-height:min(68vh,640px);overscroll-behavior:contain" id="allTitles">
+                  <div class="tableContainer" id="allTitles">
                     <div style="text-align:center;padding:22px;color:rgba(255,255,255,.45)">افتح القائمة لعرض البيانات…</div>
                   </div>
                 </div>
@@ -854,7 +936,7 @@
               <!-- VIEW: EXPORT -->
               <div class="view" id="view-export" style="display:none">
                 <div class="muted" style="line-height:1.9">
-                  تقدر تحمل بياناتك بصيغة <b style="color:rgb(var(--a1)/.98)">JSON</b> أو <b style="color:rgb(var(--a2)/.98)">TXT</b>.
+                  تقدر تحمل بياناتك بصيغة <b style="color:rgba(245,200,66,.95)">JSON</b> أو <b style="color:rgba(125,211,252,.95)">TXT</b>.
                   اضغط الزر تحت.
                 </div>
                 <div style="height:12px"></div>
@@ -868,9 +950,6 @@
                 </div>
                 <div style="height:12px"></div>
                 <button class="btn gold" id="btnProblem2" type="button">🆘 افتح نافذة إرسال المشكلة</button>
-                <div style="margin-top:10px;color:rgba(255,255,255,.38);font-size:11px;line-height:1.7">
-                  ملاحظة: للإصدار القابل للبيع — الإرسال يتم عبر Endpoint آمن (بدون Token في الواجهة).
-                </div>
               </div>
 
               <!-- VIEW: DANGER -->
@@ -885,11 +964,11 @@
             </div>
           </div>
 
-          <!-- RIGHT COLUMN -->
+          <!-- RIGHT COLUMN (THEME PICKER FIXED) -->
           <div class="card" id="cardSide">
             <div class="cardHd">
               <h3>✦ أدوات سريعة ✦</h3>
-              <button class="btn" id="themePickerBtn" type="button">🎨 اختيار ثيم</button>
+              <button class="btn" id="themePickerBtn" type="button">🎨 تغيير الثيم</button>
             </div>
             <div class="cardBd">
               <div style="display:grid;gap:10px">
@@ -904,15 +983,82 @@
                 </div>
 
                 <div class="kv">
-                  <strong>الثيم الحالي</strong>
-                  <span class="muted" id="themeLabel">—</span>
+                  <strong>الثيم</strong>
+                  <span class="muted">اختار شكل مختلف بالكامل (0 → 5)</span>
                 </div>
 
-                <!-- Theme buttons (named + color) -->
-                <div id="themeButtons" style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px"></div>
+                <!-- THEME PICKER (VISUAL) -->
+                <div class="themePicker" id="themePicker">
+                  <div class="themeOption" data-theme="0">
+                    <div class="themeSwatch" style="background:linear-gradient(135deg,#f5c842,#7dd3fc)"></div>
+                    <div>
+                      <div class="themeName">كلاسيكي ذهبي</div>
+                      <div class="themePreview">
+                        <span style="background:#f5c842"></span>
+                        <span style="background:#7dd3fc"></span>
+                        <span style="background:#b28dff"></span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="themeOption" data-theme="1">
+                    <div class="themeSwatch" style="background:linear-gradient(135deg,#e3e7ff,#6fa8ff)"></div>
+                    <div>
+                      <div class="themeName">ليلي أزرق</div>
+                      <div class="themePreview">
+                        <span style="background:#e3e7ff"></span>
+                        <span style="background:#6fa8ff"></span>
+                        <span style="background:#3f6fff"></span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="themeOption" data-theme="2">
+                    <div class="themeSwatch" style="background:linear-gradient(135deg,#d8ff44,#bff7ff)"></div>
+                    <div>
+                      <div class="themeName">ربيعي أخضر</div>
+                      <div class="themePreview">
+                        <span style="background:#d8ff44"></span>
+                        <span style="background:#bff7ff"></span>
+                        <span style="background:#7dfc8e"></span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="themeOption" data-theme="3">
+                    <div class="themeSwatch" style="background:linear-gradient(135deg,#caa2ff,#8be9ff)"></div>
+                    <div>
+                      <div class="themeName">وردي ناعم</div>
+                      <div class="themePreview">
+                        <span style="background:#caa2ff"></span>
+                        <span style="background:#8be9ff"></span>
+                        <span style="background:#ff79c6"></span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="themeOption" data-theme="4">
+                    <div class="themeSwatch" style="background:linear-gradient(135deg,#ff6b6b,#00d4ff)"></div>
+                    <div>
+                      <div class="themeName">نيون ساطع</div>
+                      <div class="themePreview">
+                        <span style="background:#ff6b6b"></span>
+                        <span style="background:#00d4ff"></span>
+                        <span style="background:#ffe66d"></span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="themeOption" data-theme="5">
+                    <div class="themeSwatch" style="background:linear-gradient(135deg,#ff9ad9,#7dd3fc)"></div>
+                    <div>
+                      <div class="themeName">حلمي بنفسجي</div>
+                      <div class="themePreview">
+                        <span style="background:#ff9ad9"></span>
+                        <span style="background:#7dd3fc"></span>
+                        <span style="background:#6a5cff"></span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
 
                 <div style="margin-top:4px;color:rgba(255,255,255,.40);font-size:11px;line-height:1.6">
-                  © ONX-TAQE — إصدار PRO (Split Dashboard + Theme Preview).
+                  © ONX-TAQE PRO — الواجهة دي إعادة تصميم كاملة مع تحسينات احترافية.
                 </div>
               </div>
             </div>
@@ -933,10 +1079,10 @@
     const SUPABASE_URL = "https://mcwemgjmqwbgxoyiwant.supabase.co";
     const SUPABASE_KEY = "sb_publishable_qmIUC4Rkb-VGOek8qkVqFg_Sn4x3WjI";
 
-    // ✅ آمن للبيع: خليك تستخدم Endpoint (Edge Function / Server) بدل Token هنا.
-    // مثال (غيّره حسب سيرفرك):
-    // const PROBLEM_ENDPOINT = "https://YOUR_DOMAIN/api/report-problem";
-    const PROBLEM_ENDPOINT = "";
+    // ⚠️ تحذير أمان: لا تضع توكن بوت تيليجرام في الواجهة لو تقدر.
+    // الأفضل: Endpoint على سيرفرك/Edge Function.
+    const TELEGRAM_BOT_TOKEN = "7769329974:AAHEwfIzPDZ1-KCSAKsxepmNtC35lYXvlMs";
+    const TELEGRAM_CHAT_ID   = "910624538";
 
     const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
@@ -987,18 +1133,14 @@
     }
 
     /* =============================
-       Modal (supports custom content)
+       Modal
        ============================= */
     function showModal({ icon='✏️', title='', msg='', inputPlaceholder='', withInput=false, isTextarea=false,
-                         confirmText='تأكيد', cancelText='إلغاء', customHTML='' }){
+                         confirmText='تأكيد', cancelText='إلغاء' }){
       return new Promise(resolve=>{
         $('#modal-icon').textContent  = icon;
         $('#modal-title').textContent = title;
         $('#modal-msg').textContent   = msg;
-
-        const custom = $('#modal-custom');
-        custom.style.display = customHTML ? 'block' : 'none';
-        custom.innerHTML = customHTML || '';
 
         const inp = $('#modal-input');
         const ta  = $('#modal-textarea');
@@ -1022,14 +1164,6 @@
 
         const overlay = $('#modal-overlay');
         overlay.classList.add('active');
-
-        // close on overlay click
-        overlay.onclick = (e)=>{
-          if(e.target === overlay){
-            overlay.classList.remove('active');
-            resolve(null);
-          }
-        };
 
         btns.querySelector('.mOk').onclick = ()=>{
           overlay.classList.remove('active');
@@ -1062,142 +1196,50 @@
     initClock();
 
     /* =============================
-       Theme System (named + preview)
+       Theme System (FIXED)
        ============================= */
     const THEMES = [
-      { id:0, name:'كلاسيك ذهبي', note:'ذهبي × سماوي × بنفسجي', a1:[245,200,66],  a2:[125,211,252], a3:[178,141,255] },
-      { id:1, name:'أزرق ملكي',   note:'ثيم بارد وأنيق',       a1:[227,231,255], a2:[111,168,255], a3:[63,111,255] },
-      { id:2, name:'نيون أخضر',   note:'ساطع ومميز',          a1:[216,255,68],  a2:[191,247,255], a3:[125,252,142] },
-      { id:3, name:'دراكولا',     note:'بنفسجي × وردي',       a1:[202,162,255], a2:[139,233,255], a3:[255,121,198] },
-      { id:4, name:'صيفي',        note:'أحمر × تركواز × أصفر',a1:[255,107,107], a2:[0,212,255],   a3:[255,230,109] },
-      { id:5, name:'وردي ليلي',   note:'وردي × أزرق × بنفسجي',a1:[255,154,217], a2:[125,211,252], a3:[106,92,255] },
+      {id:0,name:'كلاسيكي ذهبي',colors:['#f5c842','#7dd3fc','#b28dff']},
+      {id:1,name:'ليلي أزرق',colors:['#e3e7ff','#6fa8ff','#3f6fff']},
+      {id:2,name:'ربيعي أخضر',colors:['#d8ff44','#bff7ff','#7dfc8e']},
+      {id:3,name:'وردي ناعم',colors:['#caa2ff','#8be9ff','#ff79c6']},
+      {id:4,name:'نيون ساطع',colors:['#ff6b6b','#00d4ff','#ffe66d']},
+      {id:5,name:'حلمي بنفسجي',colors:['#ff9ad9','#7dd3fc','#6a5cff']}
     ];
 
-    function getSavedTheme(){
-      const saved = localStorage.getItem('onx_theme');
-      const n = saved==null ? 0 : parseInt(saved,10);
-      return Number.isFinite(n) ? Math.min(5, Math.max(0, n)) : 0;
-    }
-
-    function themeNameById(id){
-      return THEMES.find(t=>t.id===id)?.name || `ثيم ${id}`;
-    }
-
-    function applyTheme(n, {silent=false}={}){
+    function applyTheme(n, showToastMsg=true){
       document.documentElement.setAttribute('data-theme', String(n));
       localStorage.setItem('onx_theme', String(n));
-      updateThemeUI();
-      if(!silent) showToast(`تم تطبيق الثيم: ${themeNameById(n)}`, 'success');
-    }
-
-    function buildThemeButtons(){
-      const wrap = document.getElementById('themeButtons');
-      wrap.innerHTML = '';
-      THEMES.forEach(t=>{
-        const b = document.createElement('button');
-        b.type='button';
-        b.className='btn';
-        b.dataset.theme=String(t.id);
-        b.style.borderRadius='18px';
-        b.style.padding='10px 12px';
-        b.style.display='flex';
-        b.style.alignItems='center';
-        b.style.justifyContent='space-between';
-        b.style.gap='10px';
-        b.style.border='1px solid rgba(255,255,255,.14)';
-        b.style.background = `linear-gradient(135deg, rgb(${t.a2.join(' ')} / .12), rgb(${t.a1.join(' ')} / .10))`;
-
-        b.innerHTML = `
-          <span style="display:flex;flex-direction:column;align-items:flex-start;gap:2px;min-width:0">
-            <b style="font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${t.name}</b>
-            <small style="font-size:10px;color:rgba(255,255,255,.55);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${t.note}</small>
-          </span>
-          <span style="display:flex;gap:6px;flex-shrink:0">
-            <span style="width:14px;height:14px;border-radius:999px;border:1px solid rgba(255,255,255,.18);background:rgb(${t.a1.join(' ')} / .95)"></span>
-            <span style="width:14px;height:14px;border-radius:999px;border:1px solid rgba(255,255,255,.18);background:rgb(${t.a2.join(' ')} / .95)"></span>
-            <span style="width:14px;height:14px;border-radius:999px;border:1px solid rgba(255,255,255,.18);background:rgb(${t.a3.join(' ')} / .95)"></span>
-          </span>
-        `;
-
-        b.addEventListener('click', ()=> applyTheme(t.id));
-        wrap.appendChild(b);
+      
+      // Update active state in theme picker
+      $$('.themeOption').forEach(opt=>{
+        opt.classList.toggle('active', parseInt(opt.dataset.theme)===n);
       });
-    }
-
-    function updateThemeUI(){
-      const current = getSavedTheme();
-      document.getElementById('themeLabel').textContent = themeNameById(current);
-      // highlight buttons
-      document.querySelectorAll('#themeButtons [data-theme]').forEach(btn=>{
-        btn.style.outline = 'none';
-        btn.style.boxShadow = (parseInt(btn.dataset.theme,10)===current)
-          ? '0 14px 36px rgba(0,0,0,.35)'
-          : 'none';
-        btn.style.borderColor = (parseInt(btn.dataset.theme,10)===current)
-          ? 'rgba(255,255,255,.22)'
-          : 'rgba(255,255,255,.14)';
-      });
-    }
-
-    async function openThemePicker(){
-      const current = getSavedTheme();
-      const grid = `
-        <div class="themeGrid">
-          ${THEMES.map(t=>`
-            <button type="button" class="themeOpt ${t.id===current?'active':''}" data-theme="${t.id}"
-              style="--t1:${t.a1.join(' ')};--t2:${t.a2.join(' ')};--t3:${t.a3.join(' ')}">
-              <span class="meta">
-                <b>${t.name}</b>
-                <small>${t.note}</small>
-              </span>
-              <span class="swatches">
-                <span class="sw s1"></span>
-                <span class="sw s2"></span>
-                <span class="sw s3"></span>
-              </span>
-            </button>
-          `).join('')}
-        </div>
-        <div style="margin-top:10px;color:rgba(255,255,255,.42);font-size:11px;line-height:1.7">
-          يتم تطبيق الثيم <b>فقط</b> عند الضغط على أحد الثيمات.
-        </div>
-      `;
-
-      await showModal({
-        icon:'🎨',
-        title:'اختيار الثيم',
-        msg:'اختر ثيم بالاسم واللون:',
-        customHTML: grid,
-        withInput:false,
-        confirmText:'إغلاق',
-        cancelText:'إغلاق'
-      });
-
-      // attach handlers after modal is shown
-      document.querySelectorAll('#modal-custom [data-theme]')?.forEach(b=>{
-        b.addEventListener('click', ()=>{
-          const n = parseInt(b.dataset.theme,10);
-          if(Number.isFinite(n)) applyTheme(n);
-        }, { once:false });
-      });
+      
+      if(showToastMsg){
+        const theme = THEMES.find(t=>t.id===n);
+        showToast(`تم تطبيق ثيم "${theme?.name||n}"`, 'success');
+      }
     }
 
     function initTheme(){
-      buildThemeButtons();
-      applyTheme(getSavedTheme(), {silent:true});
+      const saved = localStorage.getItem('onx_theme') || '0';
+      document.documentElement.setAttribute('data-theme', saved);
+      
+      // Set active state
+      $$('.themeOption').forEach(opt=>{
+        opt.classList.toggle('active', parseInt(opt.dataset.theme)===parseInt(saved));
+      });
     }
     initTheme();
 
-    /* =============================
-       View mode (PC/PHONE)
-       ============================= */
-    function setViewMode(mode, {silent=false}={}){
+    function setViewMode(mode){
       localStorage.setItem('onx_view', mode);
-      if(!silent) showToast(mode==='phone' ? 'تم تفعيل وضع PHONE 📱' : 'تم تفعيل وضع PC 🖥️', 'success');
+      showToast(mode==='phone' ? 'تم تفعيل وضع PHONE 📱' : 'تم تفعيل وضع PC 🖥️', 'success');
     }
     (function initViewMode(){
       const saved = localStorage.getItem('onx_view') || 'pc';
-      setViewMode(saved, {silent:true});
+      setViewMode(saved);
     })();
 
     /* =============================
@@ -1222,10 +1264,7 @@
       $('#pageTitle').textContent = viewTitles[key]?.t || 'لوحة التحكم';
       $('#pageSub').textContent   = viewTitles[key]?.s || '—';
 
-      // ✅ جدول أعرض
-      document.body.classList.toggle('wideTable', key==='all');
-
-      // Lazy load
+      // Lazy load all
       if(key==='all') showAll().catch(()=>{});
       if(key==='me')  showMyInfo().catch(()=>{});
 
@@ -1236,25 +1275,30 @@
     }
 
     $$('.navBtn').forEach(btn=>{
-      btn.addEventListener('click', ()=> setActiveView(btn.dataset.view));
+      btn.addEventListener('click', (e)=>{
+        e.stopPropagation();
+        setActiveView(btn.dataset.view);
+      });
     });
 
     // hamburger
-    $('#hambBtn')?.addEventListener('click', ()=>{
+    $('#hambBtn')?.addEventListener('click', (e)=>{
+      e.stopPropagation();
       $('#sidebar').classList.toggle('open');
     });
 
     /* =============================
        Notification close
        ============================= */
-    $('#notifCloseBtn')?.addEventListener('click', ()=>{
+    $('#notifCloseBtn')?.addEventListener('click', (e)=>{
+      e.stopPropagation();
       const b = $('#notifBanner');
       b.classList.remove('visible');
       b.style.display='none';
     });
 
     /* =============================
-       Fingerprint
+       Device fingerprint
        ============================= */
     async function sha256(str){
       const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
@@ -1318,8 +1362,8 @@
         str += `${String(hours).padStart(2,'0')}:${String(mins).padStart(2,'0')}:${String(secs).padStart(2,'0')}`;
         el.textContent = str;
         const urgent = diff < 3600000;
-        el.style.color = urgent ? '#ff5c5c' : 'rgb(var(--a1) / .98)';
-        el.style.textShadow = urgent ? '0 0 20px rgba(255,92,92,0.25)' : '0 0 20px rgb(var(--a1) / .20)';
+        el.style.color = urgent ? '#ff5c5c' : 'rgba(245,200,66,0.95)';
+        el.style.textShadow = urgent ? '0 0 20px rgba(255,92,92,0.25)' : '0 0 20px rgba(245,200,66,0.20)';
       }
       update();
       countdownInterval = setInterval(update, 1000);
@@ -1357,9 +1401,19 @@
       // Guidelines
       const gp = document.getElementById('guidelinesPanel');
       const gc = document.getElementById('guidelinesContent');
+      const toggleBtn = document.getElementById('guidelinesToggle');
       if(data.usage_guidelines && data.usage_guidelines.trim()){
         gc.textContent = data.usage_guidelines.trim();
         gp.style.display='block';
+        
+        // Setup toggle functionality
+        let isCollapsed = false;
+        toggleBtn.onclick = (e)=>{
+          e.stopPropagation();
+          isCollapsed = !isCollapsed;
+          gc.classList.toggle('collapsed', isCollapsed);
+          toggleBtn.innerHTML = isCollapsed ? '🔼 عرض أقل' : '🔽 عرض المزيد';
+        };
       }else{
         gp.style.display='none';
       }
@@ -1546,6 +1600,8 @@
         <div class="kv"><strong>📚 المادة</strong><span style="color:${nameColor}">${data.subject}</span></div>
         <div class="kv"><strong>🕐 آخر تحديث</strong><span class="muted">${formatDate(data.date)}</span></div>
       `;
+
+      showToast('تم تحميل بياناتك', 'success');
     }
 
     async function showAll(){
@@ -1598,16 +1654,16 @@
           rows += `
             <tr class="${rowClass}">
               <td style="width:52px">${i+1}</td>
-              <td style="width:22%">
+              <td style="width:15%">
                 <div class="nameCell">
                   <span style="color:${nameColor};font-weight:900">${displayName}</span>
                   ${isMe ? `<span class="meBadge">أنت</span>` : ''}
                 </div>
               </td>
-              <td class="titleCell" style="width:36%;color:${nameColor}">${d.title}</td>
-              <td style="width:16%">${subjectHtml}</td>
-              <td class="dateCell" style="width:18%">${formatDate(d.date)}</td>
-              <td style="width:8%">${alertHtml}</td>
+              <td style="text-align:right;padding-right:14px;color:${nameColor};width:30%">${d.title}</td>
+              <td style="width:15%">${subjectHtml}</td>
+              <td class="dateCell" style="width:15%">${formatDate(d.date)}</td>
+              <td style="width:10%">${alertHtml}</td>
             </tr>
           `;
         });
@@ -1617,11 +1673,11 @@
             <thead>
               <tr>
                 <th style="width:52px">#</th>
-                <th style="width:22%">الاسم</th>
-                <th style="width:36%">عنوان التقرير</th>
-                <th style="width:16%">المادة</th>
-                <th style="width:18%">آخر تحديث</th>
-                <th style="width:8%">التنبيه</th>
+                <th style="width:15%">الاسم</th>
+                <th style="width:30%">عنوان التقرير</th>
+                <th style="width:15%">المادة</th>
+                <th style="width:15%">آخر تحديث</th>
+                <th style="width:10%">التنبيه</th>
               </tr>
             </thead>
             <tbody>${rows}</tbody>
@@ -1713,7 +1769,7 @@
       const result = await showModal({
         icon:'🆘',
         title:'أرسل مشكلتك للمشرف',
-        msg:'اكتب مشكلتك أو استفسارك بالتفصيل',
+        msg:'اكتب مشكلتك أو استفسارك بالتفصيل\nوسيتم إرسالها للمشرف مباشرة عبر تيليغرام',
         withInput:true,
         isTextarea:true,
         inputPlaceholder:'اكتب مشكلتك هنا…',
@@ -1722,34 +1778,28 @@
       });
       if(!result || !result.trim()) return;
 
-      const payload = {
-        code,
-        studentName: me?.name || 'طالب غير مسجل',
-        message: result.trim(),
-        at: new Date().toISOString(),
-        locale: 'ar-EG'
-      };
-
-      // ✅ إرسال عبر Endpoint آمن
-      if(!PROBLEM_ENDPOINT){
-        setMsg('⚠️ الإرسال غير مُفعّل لأن PROBLEM_ENDPOINT غير مضبوط','error');
-        showToast('اضبط PROBLEM_ENDPOINT أولاً', 'error');
-        return;
-      }
+      const studentName = me?.name || 'طالب غير مسجل';
+      const msgText = `🆘 <b>مشكلة من طالب — ONX-TAQE</b>\n\n`
+        + `👤 <b>الاسم:</b> ${studentName}\n`
+        + `📝 <b>المشكلة:</b>\n${result.trim()}\n\n`
+        + `🕐 <b>الوقت:</b> ${new Date().toLocaleString('ar-EG')}`;
 
       try{
-        const res = await fetch(PROBLEM_ENDPOINT, {
+        const res = await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
           method:'POST',
           headers:{'Content-Type':'application/json'},
-          body: JSON.stringify(payload)
+          body: JSON.stringify({ chat_id: TELEGRAM_CHAT_ID, text: msgText, parse_mode:'HTML' })
         });
-        if(!res.ok) throw new Error('Endpoint error');
-
-        setMsg('✅ تم إرسال مشكلتك للمشرف بنجاح','success');
-        showToast('تم الإرسال ✅','success');
+        const json = await res.json();
+        if(json.ok){
+          setMsg('✅ تم إرسال مشكلتك للمشرف بنجاح','success');
+          showToast('تم الإرسال ✅','success');
+        }else{
+          throw new Error(json.description || 'Telegram API error');
+        }
       }catch(e){
-        console.error('Problem endpoint:', e);
-        setMsg('❌ فشل الإرسال — راجع إعدادات السيرفر','error');
+        console.error('Telegram:', e);
+        setMsg('❌ فشل الإرسال — تواصل مع المشرف مباشرة','error');
         showToast('فشل الإرسال ❌','error');
       }
     }
@@ -1781,51 +1831,75 @@
     }
 
     /* =============================
-       Bind UI
+       Bind UI (FIXED)
        ============================= */
-    document.getElementById('btnSave')?.addEventListener('click', saveData);
-    document.getElementById('btnChange')?.addEventListener('click', changeTitle);
-    document.getElementById('btnShow')?.addEventListener('click', ()=>{ setActiveView('me'); showMyInfo().catch(()=>{}); });
+    document.getElementById('btnSave')?.addEventListener('click', (e)=>{e.stopPropagation();saveData();});
+    document.getElementById('btnChange')?.addEventListener('click', (e)=>{e.stopPropagation();changeTitle();});
+    document.getElementById('btnShow')?.addEventListener('click', (e)=>{e.stopPropagation();setActiveView('me');showMyInfo().catch(()=>{});});
 
-    document.getElementById('btnDownload')?.addEventListener('click', downloadMyData);
-    document.getElementById('btnDownload2')?.addEventListener('click', downloadMyData);
+    document.getElementById('btnDownload')?.addEventListener('click', (e)=>{e.stopPropagation();downloadMyData();});
+    document.getElementById('btnDownload2')?.addEventListener('click', (e)=>{e.stopPropagation();downloadMyData();});
 
-    document.getElementById('btnDelete')?.addEventListener('click', deleteMyData);
-    document.getElementById('btnDelete2')?.addEventListener('click', deleteMyData);
+    document.getElementById('btnDelete')?.addEventListener('click', (e)=>{e.stopPropagation();deleteMyData();});
+    document.getElementById('btnDelete2')?.addEventListener('click', (e)=>{e.stopPropagation();deleteMyData();});
 
-    document.getElementById('btnProblem')?.addEventListener('click', reportProblem);
-    document.getElementById('btnProblem2')?.addEventListener('click', reportProblem);
+    document.getElementById('btnProblem')?.addEventListener('click', (e)=>{e.stopPropagation();reportProblem();});
+    document.getElementById('btnProblem2')?.addEventListener('click', (e)=>{e.stopPropagation();reportProblem();});
 
-    document.getElementById('topbarRefreshBtn')?.addEventListener('click', fullRefresh);
-    document.getElementById('panelRefreshBtn')?.addEventListener('click', refreshAllPanel);
+    document.getElementById('importantBtn')?.addEventListener('click', (e)=>{
+      e.stopPropagation();
+      // Toggle guidelines collapse instead of opening problem modal
+      const gc = document.getElementById('guidelinesContent');
+      const toggleBtn = document.getElementById('guidelinesToggle');
+      if(gc && toggleBtn){
+        const isCollapsed = gc.classList.contains('collapsed');
+        gc.classList.toggle('collapsed', !isCollapsed);
+        toggleBtn.innerHTML = !isCollapsed ? '🔼 عرض أقل' : '🔽 عرض المزيد';
+      }
+    });
 
-    document.getElementById('quickMyInfo')?.addEventListener('click', ()=> setActiveView('me'));
-    document.getElementById('quickAll')?.addEventListener('click', ()=> setActiveView('all'));
+    document.getElementById('topbarRefreshBtn')?.addEventListener('click', (e)=>{e.stopPropagation();fullRefresh();});
+    document.getElementById('panelRefreshBtn')?.addEventListener('click', (e)=>{e.stopPropagation();refreshAllPanel();});
 
-    document.getElementById('viewPC')?.addEventListener('click', ()=> setViewMode('pc'));
-    document.getElementById('viewPHONE')?.addEventListener('click', ()=> setViewMode('phone'));
+    document.getElementById('quickMyInfo')?.addEventListener('click', (e)=>{e.stopPropagation();setActiveView('me');});
+    document.getElementById('quickAll')?.addEventListener('click', (e)=>{e.stopPropagation();setActiveView('all');});
 
-    // ✅ Theme picker (no numbers)
-    document.getElementById('themeBtn')?.addEventListener('click', openThemePicker);
-    document.getElementById('themePickerBtn')?.addEventListener('click', openThemePicker);
+    document.getElementById('viewPC')?.addEventListener('click', (e)=>{e.stopPropagation();setViewMode('pc');});
+    document.getElementById('viewPHONE')?.addEventListener('click', (e)=>{e.stopPropagation();setViewMode('phone');});
 
-    document.getElementById('searchInput')?.addEventListener('input', ()=>{
+    // Theme picker buttons (VISUAL)
+    document.querySelectorAll('.themeOption')?.forEach(opt=>{
+      opt.addEventListener('click', (e)=>{
+        e.stopPropagation();
+        const themeId = parseInt(opt.dataset.theme);
+        applyTheme(themeId);
+      });
+    });
+
+    document.getElementById('themeBtn')?.addEventListener('click', async (e)=>{
+      e.stopPropagation();
+      showToast('اختار ثيم من الأزرار الملونة في اللوحة الجانبية', 'info');
+    });
+
+    document.getElementById('themePickerBtn')?.addEventListener('click', (e)=>{
+      e.stopPropagation();
+      showToast('اختار ثيم من الأزرار الملونة في اللوحة الجانبية', 'info');
+    });
+
+    document.getElementById('searchInput')?.addEventListener('input', (e)=>{
+      e.stopPropagation();
       clearTimeout(SEARCH_TIMER);
       SEARCH_TIMER = setTimeout(renderAllList, 90);
     });
 
-    // ✅ زر "مهم" صار Collapse/Expand
-    (function initGuidelinesToggle(){
-      const btn = document.getElementById('importantBtn');
-      const wrap = document.getElementById('guidelinesWrap');
-      if(!btn || !wrap) return;
-      let collapsed = false;
-      btn.addEventListener('click', ()=>{
-        collapsed = !collapsed;
-        wrap.classList.toggle('collapsed', collapsed);
-        btn.textContent = collapsed ? '⬇️ إظهار' : '⬆️ إخفاء';
-      });
-    })();
+    // Prevent toast messages on empty clicks
+    document.addEventListener('click', (e)=>{
+      // Only allow theme application on actual theme buttons
+      if(!e.target.closest('.themeOption') && !e.target.closest('.navBtn') && !e.target.closest('.btn')){
+        // Do nothing on empty space clicks
+        return;
+      }
+    });
 
     /* =============================
        Realtime subscriptions
@@ -1839,7 +1913,6 @@
       supabase.channel('reports_student')
         .on('postgres_changes', { event:'*', schema:'public', table:'student_reports' }, async ()=>{
           showMyInfo().catch(()=>{});
-
           const allVisible = document.getElementById('view-all')?.style.display !== 'none';
           if(allVisible){
             const { data, error } = await supabase.from('student_reports')
@@ -1865,24 +1938,18 @@
       loadSiteControlData().catch(()=>{});
       setupRealtime();
 
-      // Start on form
       setActiveView('form');
-
-      // Prefetch my info after a moment
       setTimeout(()=> showMyInfo().catch(()=>{}), 700);
-
-      // Prevent accidental theme toasts on load
-      updateThemeUI();
 
     })();
 
   </script>
 
-  <!-- Optional: Cloudflare beacon (keep if you use it) -->
+  <!-- Optional: Cloudflare beacon -->
   <script defer src="https://static.cloudflareinsights.com/beacon.min.js/v8c78df7c7c0f484497ecbca7046644da1771523124516"
           integrity="sha512-8DS7rgIrAmghBFwoOTujcf6D9rXvH8xm8JQ1Ja01h9QX8EzXldiszufYa4IFfKdLUKTTrnSFXLDkUEOTrZQ8Qg=="
           crossorigin="anonymous"></script>
-<script defer src="https://static.cloudflareinsights.com/beacon.min.js/v8c78df7c7c0f484497ecbca7046644da1771523124516" integrity="sha512-8DS7rgIrAmghBFwoOTujcf6D9rXvH8xm8JQ1Ja01h9QX8EzXldiszufYa4IFfKdLUKTTrnSFXLDkUEOTrZQ8Qg==" data-cf-beacon='{"version":"2024.11.0","token":"4edd5f8ec12a48cfa682ab8261b80a79","server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
 </body>
 </html>
+
 
