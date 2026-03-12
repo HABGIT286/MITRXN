@@ -519,6 +519,38 @@
     .meBadge{font-size:8px;padding:2px 7px;border-radius:999px;border:1px solid rgba(245,200,66,.45);
       background:rgba(245,200,66,.18);color:rgba(245,200,66,.92);font-weight:700;letter-spacing:1px}
 
+    /* ✨ BADGE STYLES - SHINY EFFECT (جديد) */
+    .student-badge {
+      display:inline-flex; align-items:center; justify-content:center;
+      width:26px; height:26px; border-radius:50%;
+      font-size:15px; font-weight:900;
+      position:relative; overflow:hidden;
+      animation: badgeShine 2.5s ease-in-out infinite;
+      box-shadow: 0 0 12px currentColor, 0 0 24px currentColor;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.4);
+      flex-shrink: 0;
+      margin-left: 6px;
+      vertical-align: middle;
+    }
+    @keyframes badgeShine {
+      0%, 100% { filter: brightness(1); transform: scale(1); }
+      50% { filter: brightness(1.4); transform: scale(1.08); }
+    }
+    .student-badge::before {
+      content:''; position:absolute; inset:0;
+      background: linear-gradient(135deg, 
+        rgba(255,255,255,0) 0%, 
+        rgba(255,255,255,0.5) 45%, 
+        rgba(255,255,255,0) 55%, 
+        rgba(255,255,255,0) 100%);
+      transform: translateX(-100%);
+      animation: badgeShimmer 2s ease-in-out infinite;
+    }
+    @keyframes badgeShimmer {
+      0% { transform: translateX(-100%); }
+      50%, 100% { transform: translateX(100%); }
+    }
+
     /* ===== TABLE TOOLS ===== */
     .tableTools{
       display:flex; gap:8px; align-items:center; flex-wrap:wrap;
@@ -1301,16 +1333,13 @@
             </div>
           </div>
 
-          <!-- GUIDELINES (✅ زر طوي/فتح) -->
+          <!-- GUIDELINES (✅ تم حذف زر طوي/فتح) -->
           <div id="guidelinesPanel" style="display:none;margin-bottom:12px">
             <div class="glass-card" style="border-radius:16px;padding:16px">
-              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+              <div style="margin-bottom:10px">
                 <strong style="color:rgba(20,184,166,.95);font-size:12px">📋 متطلبات الاستخدام</strong>
-                <button class="btn btn-outline" id="importantBtn" style="padding:6px 12px;font-size:0.8rem">📌 طوي/فتح</button>
               </div>
-              <div id="guidelinesContent" class="bigNote">جارٍ التحميل…</div>
-              <!-- ✅ الزر ينزل للأسفل -->
-              <button id="guidelinesToggle" class="bigNote-toggle">🔽 عرض التفاصيل</button>
+              <div id="guidelinesContent" class="bigNote expanded">جارٍ التحميل…</div>
             </div>
           </div>
 
@@ -1620,6 +1649,11 @@
     /* ===== UI HELPERS ===== */
     const $ = (s) => document.querySelector(s);
     const $$ = (s) => Array.from(document.querySelectorAll(s));
+
+    // ✨ دالة لتحديد لون نص الشارة تلقائياً
+    function isLightColor(color) {
+      return ['#ffd700','#ffaa00','#ffffff','#ffcc00','#ffff00'].includes(color?.toLowerCase());
+    }
 
     /* ===== SOUND EFFECTS (جديد) ===== */
     const sounds = {
@@ -1940,18 +1974,11 @@
         $('#deadlineDateDisplay').textContent = dt.toLocaleDateString('ar-EG', { year:'numeric', month:'long', day:'numeric', hour:'2-digit', minute:'2-digit', hour12:true });
         dp.style.display='block'; startCountdown(dt);
       } else { dp.style.display='none'; }
-      const gp = $('#guidelinesPanel'), gc = $('#guidelinesContent'), toggleBtn = $('#guidelinesToggle');
+      const gp = $('#guidelinesPanel'), gc = $('#guidelinesContent');
       if(data.usage_guidelines && data.usage_guidelines.trim()){
         gc.textContent = data.usage_guidelines.trim(); gp.style.display='block';
-        let isCollapsed = false;
-        toggleBtn.onclick = (e)=>{ 
-          e.stopPropagation(); 
-          playSound('click');
-          isCollapsed = !isCollapsed; 
-          gc.classList.toggle('expanded', !isCollapsed); 
-          toggleBtn.innerHTML = '🔽 عرض التفاصيل';
-          toggleBtn.classList.toggle('expanded', isCollapsed);
-        };
+        // ✅ جعل الإرشادات مفتوحة دائماً بدون زر طوي/فتح
+        gc.classList.add('expanded');
       } else { gp.style.display='none'; }
       const st = $('#siteStatusBadge');
       if(!data.site_open){ st.innerHTML = 'الحالة: <strong style="color:#ff6b6b">مغلق</strong>'; }
@@ -2206,14 +2233,19 @@
       const code = await DEVICE_CODE_PROMISE, infoBox = $('#infoBox');
       const { data, error } = await supabase.from('student_reports').select('*').eq('code',code).single();
       if(error || !data){ infoBox.style.display='none'; infoBox.innerHTML=''; setMsg('⚠️ لا توجد بيانات لك','error'); return; }
-      const nameColor = data.color || 'rgba(255,255,255,0.92)', badgeStr = data.badge ? `${data.badge} ` : '';
+      const nameColor = data.color || 'rgba(255,255,255,0.92)';
+      
+      // ✨ عرض الشارة في معلوماتي
+      const badgeHTML = data.badge && data.badge.trim() ? 
+        `<span class="student-badge" style="background:${data.badge_color || '#ffd700'};color:${isLightColor(data.badge_color) ? '#000' : '#fff'}" title="شارة تميز">${data.badge}</span>` : '';
+      
       let alertHtml = '';
       if(data.alert_text){
         const ac = data.alert_color || '#ff4444', typeLabel = data.alert_type === 'public' ? '🌐 عام' : '🔒 خاص';
         alertHtml = `<div class="alert" style="--ac:${ac}"><div style="font-size:18px">⚠️</div><div style="flex:1;line-height:1.5"><div style="font-weight:700">${data.alert_text}</div><div style="opacity:.7;font-size:10px;margin-top:3px">تنبيه (${typeLabel})</div></div><small>${typeLabel}</small></div>`;
       }
       infoBox.style.display='flex'; infoBox.style.flexDirection='column'; infoBox.style.gap='8px';
-      infoBox.innerHTML = `${alertHtml}<div class="kv"><strong>👤 الاسم</strong><span style="color:${nameColor};font-weight:800">${badgeStr}${data.name}</span></div><div class="kv"><strong>📄 العنوان</strong><span style="color:${nameColor}">${data.title}</span></div><div class="kv"><strong>📚 المادة</strong><span style="color:${nameColor}">${data.subject}</span></div><div class="kv"><strong>🕐 آخر تحديث</strong><span class="muted">${formatDate(data.date)}</span></div>`;
+      infoBox.innerHTML = `${alertHtml}<div class="kv"><strong>👤 الاسم</strong><span style="color:${nameColor};font-weight:800">${badgeHTML}${data.name}</span></div><div class="kv"><strong>📄 العنوان</strong><span style="color:${nameColor}">${data.title}</span></div><div class="kv"><strong>📚 المادة</strong><span style="color:${nameColor}">${data.subject}</span></div><div class="kv"><strong>🕐 آخر تحديث</strong><span class="muted">${formatDate(data.date)}</span></div>`;
       showToast('تم تحميل بياناتك','success');
     }
 
@@ -2235,11 +2267,16 @@
         let rows = '';
         filtered.forEach((d,i)=>{
           const isMe = d.code === myCode, rowClass = isMe ? 'mine' : '', nameColor = d.color || 'rgba(255,255,255,0.92)';
-          const displayName = d.badge ? `${d.badge} ${d.name}` : d.name;
+          
+          // ✨ عرض الشارة مع تأثير لامع في الجدول
+          const badgeHTML = d.badge && d.badge.trim() ? 
+            `<span class="student-badge" style="background:${d.badge_color || '#ffd700'};color:${isLightColor(d.badge_color) ? '#000' : '#fff'}" title="شارة تميز">${d.badge}</span>` : '';
+          const displayName = `${badgeHTML}<span style="color:${nameColor};font-weight:700">${d.name}</span>`;
+          
           const subjectHtml = `<span class="badgeSub" style="color:${nameColor};border-color:${nameColor}33;background:${nameColor}0d">${d.subject}</span>`;
           let alertHtml = `<span style="color:rgba(255,255,255,.22);font-size:10px">—</span>`;
           if(d.alert_text && d.alert_type === 'public'){ const ac = d.alert_color || '#ff4444'; alertHtml = `<span class="miniAlert" style="--ac:${ac}">⚠️ <span style="position:relative;z-index:1">${d.alert_text.slice(0,15)}${d.alert_text.length>15?'…':''}</span></span>`; }
-          rows += `<tr class="${rowClass}"><td style="width:45px"><span class="row-num">${i+1}</span></td><td style="width:18%"><div style="display:flex;flex-direction:column;align-items:center;gap:3px"><span style="color:${nameColor};font-weight:700">${displayName}</span>${isMe ? `<span class="meBadge">أنت</span>` : ''}</div></td><td style="text-align:right;padding-right:12px;color:${nameColor};width:32%;font-size:0.9rem">${d.title}</td><td style="width:15%">${subjectHtml}</td><td class="date-cell" style="width:15%">${formatDate(d.date)}</td><td style="width:10%">${alertHtml}</td></tr>`;
+          rows += `<tr class="${rowClass}"><td style="width:45px"><span class="row-num">${i+1}</span></td><td style="width:18%"><div style="display:flex;flex-direction:column;align-items:center;gap:3px">${displayName}${isMe ? `<span class="meBadge">أنت</span>` : ''}</div></td><td style="text-align:right;padding-right:12px;color:${nameColor};width:32%;font-size:0.9rem">${d.title}</td><td style="width:15%">${subjectHtml}</td><td class="date-cell" style="width:15%">${formatDate(d.date)}</td><td style="width:10%">${alertHtml}</td></tr>`;
         });
         allTitles.innerHTML = `<table><thead><tr><th style="width:45px">#</th><th style="width:18%">الاسم</th><th style="width:32%">عنوان التقرير</th><th style="width:15%">المادة</th><th style="width:15%">آخر تحديث</th><th style="width:10%">تنبيه</th></tr></thead><tbody>${rows}</tbody></table>`;
       });
@@ -2279,7 +2316,7 @@
     $('#btnDelete2')?.addEventListener('click', (e)=>{e.stopPropagation();deleteMyData();});
     $('#btnProblem')?.addEventListener('click', (e)=>{e.stopPropagation();reportProblem();});
     $('#btnProblem2')?.addEventListener('click', (e)=>{e.stopPropagation();reportProblem();});
-    $('#importantBtn')?.addEventListener('click', (e)=>{ e.stopPropagation(); playSound('click'); const gc = $('#guidelinesContent'), toggleBtn = $('#guidelinesToggle'); if(gc && toggleBtn){ const isExpanded = gc.classList.contains('expanded'); gc.classList.toggle('expanded', !isExpanded); toggleBtn.innerHTML = '🔽 عرض التفاصيل'; toggleBtn.classList.toggle('expanded', isExpanded); } });
+    // ✅ تم حذف زر طوي/فتح من guidelinesPanel
     $('#panelRefreshBtn')?.addEventListener('click', (e)=>{e.stopPropagation();showAll(); showToast('تم التحديث ✨','success'); playSound('success');});
     $('#notifCloseBtn')?.addEventListener('click', (e)=>{e.stopPropagation(); playSound('click'); const b = $('#notifBanner'); b.classList.remove('visible'); b.style.display='none';});
     $('#searchInput')?.addEventListener('input', (e)=>{ e.stopPropagation(); clearTimeout(SEARCH_TIMER); SEARCH_TIMER = setTimeout(renderAllList, 90); });
