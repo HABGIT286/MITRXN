@@ -1422,7 +1422,6 @@
             </div>
           </div>
 
-          <!-- Form -->
           <div class="input-group">
             <label class="input-label">الاسم الثنائي <span style="color:var(--neon-blue);font-size:10px">(اسمين على الأقل)</span></label>
             <span class="input-icon">👤</span>
@@ -1448,7 +1447,7 @@
         </div>
       </div>
 
-      <!-- ===== TAB: معلوماتي (✅ تم حذف الأزرار الثلاثة) ===== -->
+      <!-- ===== TAB: معلوماتي ===== -->
       <div class="tab-content" id="tab-myinfo">
         <div class="glass-card card-glow-purple">
           <div class="card-header">
@@ -1484,8 +1483,6 @@
               <span class="slider"></span>
             </label>
           </div>
-
-          <!-- ✅ تم حذف الأزرار الثلاثة من هنا -->
         </div>
       </div>
 
@@ -1548,7 +1545,7 @@
         </div>
       </div>
 
-      <!-- ===== TAB: تعليقات (✅ تمرير عمودي + إظهار الردود) ===== -->
+      <!-- ===== TAB: تعليقات ===== -->
       <div class="tab-content" id="tab-comments">
         <div class="glass-card card-glow-teal">
           <div class="card-header">
@@ -1608,7 +1605,7 @@
         </div>
       </div>
 
-      <!-- ===== TAB: حذف (✅ تم إصلاح زر الحذف) ===== -->
+      <!-- ===== TAB: حذف ===== -->
       <div class="tab-content" id="tab-delete">
         <div class="glass-card card-glow-red">
           <div class="card-header">
@@ -2009,9 +2006,14 @@
         return (dbg ? gl.getParameter(dbg.UNMASKED_VENDOR_WEBGL) : 'v?') + '|' + (dbg ? gl.getParameter(dbg.UNMASKED_RENDERER_WEBGL) : 'r?');
       } catch { return 'no-webgl'; }
     }
+    
+    // ✅ تم إصلاح DEVICE_CODE_PROMISE لضمان الاتساق
+    let DEVICE_CODE_CACHE = null;
     const DEVICE_CODE_PROMISE = (async ()=>{
+      if (DEVICE_CODE_CACHE) return DEVICE_CODE_CACHE;
       const parts = [navigator.userAgent, navigator.platform||'', navigator.language||'', Intl.DateTimeFormat().resolvedOptions().timeZone||'', `${screen.width}x${screen.height}x${screen.colorDepth}`, navigator.hardwareConcurrency||'', navigator.deviceMemory||'', canvasFp(), webglFp()].join('||');
-      return (await sha256(parts)).slice(0, 28);
+      DEVICE_CODE_CACHE = (await sha256(parts)).slice(0, 28);
+      return DEVICE_CODE_CACHE;
     })();
 
     /* ===== SITE STATUS & CONTROL ===== */
@@ -2164,10 +2166,10 @@
     }
     window.downloadFancy = downloadFancy;
 
-    /* ===== COMMENTS SYSTEM (✅ مُحدّث مع الردود) ===== */
+    /* ===== COMMENTS SYSTEM ===== */
     async function loadComments(){
       const code = await DEVICE_CODE_PROMISE;
-      const {  comments, error } = await supabase.from('comments').select('*').order('created_at', { ascending: false }).limit(50);
+      const { data: comments, error } = await supabase.from('comments').select('*').order('created_at', { ascending: false }).limit(50);
       
       if(error || !comments){
         $('#commentsList').innerHTML = `<div style="text-align:center;padding:30px;color:rgba(255,255,255,.4)"><div style="font-size:40px;margin-bottom:10px">⚠️</div><div>تعذر تحميل التعليقات</div></div>`;
@@ -2239,7 +2241,7 @@
       }
       
       const code = await DEVICE_CODE_PROMISE;
-      const {  me } = await supabase.from('student_reports').select('name').eq('code',code).single();
+      const { data: me } = await supabase.from('student_reports').select('name').eq('code',code).single();
       
       const { error } = await supabase.from('comments').insert([{
         text,
@@ -2285,11 +2287,17 @@
       }
       
       const code = await DEVICE_CODE_PROMISE;
-      const {  me } = await supabase.from('student_reports').select('name').eq('code',code).single();
+      const { data: me } = await supabase.from('student_reports').select('name').eq('code',code).single();
       const replyAuthor = me?.name ? me.name.split(' ')[0] : 'طالب';
       
       // ✅ إضافة الرد إلى قاعدة البيانات
-      const {  comment } = await supabase.from('comments').select('replies').eq('id', commentId).single();
+      const { data: comment, error: fetchError } = await supabase.from('comments').select('replies').eq('id', commentId).single();
+      if(fetchError){
+        showToast('فشل جلب التعليق','error');
+        playSound('error');
+        return;
+      }
+      
       const existingReplies = comment?.replies || [];
       const newReplies = [...existingReplies, {
         text,
@@ -2323,22 +2331,38 @@
       if(e.key === 'Enter') submitComment();
     });
 
-    /* ===== CORE ACTIONS (✅ تم إصلاح جميع الدوال) ===== */
+    /* ✅ دالة مساعدة موحدة للتحقق من وجود بيانات الطالب */
+    async function getUserByCode() {
+      const code = await DEVICE_CODE_PROMISE;
+      const { data, error } = await supabase
+        .from('student_reports')
+        .select('*')
+        .eq('code', code)
+        .single();
+      
+      if (error || !data) {
+        console.error('خطأ في جلب بيانات المستخدم:', error);
+        return null;
+      }
+      return data;
+    }
+
+    /* ===== CORE ACTIONS (✅ تم الإصلاح الكامل) ===== */
     async function saveData(){
       playSound('click');
       const name = $('#studentName').value.trim(), title = $('#reportTitle').value.trim(), subject = $('#subjectName').value.trim(), code = await DEVICE_CODE_PROMISE;
       if(name.split(/\s+/).length < 2){ setMsg('⚠️ الاسم لازم يكون ثنائي على الأقل','error'); showToast('الاسم ثنائي مطلوب','error'); playSound('error'); return; }
       if(!name || !title || !subject){ setMsg('⚠️ املا كل الحقول','error'); showToast('املأ جميع الحقول','error'); playSound('error'); return; }
       
-      // ✅ إصلاح: استخدام data:already بدلاً من already
-      const { data: already } = await supabase.from('student_reports').select('id').eq('code',code).limit(1);
+      const { data: already, error: checkError } = await supabase.from('student_reports').select('id').eq('code',code).limit(1);
+      if(checkError){ console.error('خطأ في التحقق:', checkError); setMsg('❌ خطأ في الاتصال','error'); playSound('error'); return; }
       if(already?.length){ setMsg('⛔ لديك بيانات محفوظة','error'); showToast('لا يمكن التسجيل مرتين','error'); playSound('error'); await showMyInfo(); setActiveTab('myinfo'); return; }
       
-      // ✅ إصلاح: استخدام data:nameUsed و data:titleUsed
-      const [{ data: nameUsed }, { data: titleUsed }] = await Promise.all([
+      const [{ data: nameUsed, error: nameErr }, { data: titleUsed, error: titleErr }] = await Promise.all([
         supabase.from('student_reports').select('id').eq('name',name).limit(1),
         supabase.from('student_reports').select('id').eq('title',title).limit(1)
       ]);
+      if(nameErr || titleErr){ console.error('خطأ في التحقق من التكرار:', nameErr || titleErr); setMsg('❌ خطأ في التحقق','error'); playSound('error'); return; }
       if((nameUsed?.length)||(titleUsed?.length)){ setMsg('❌ الاسم أو العنوان مستخدم','error'); showToast('مكرر مسبقاً','error'); playSound('error'); return; }
       
       const { error } = await supabase.from('student_reports').insert([{ name, title, subject, date:new Date().toISOString(), code }]);
@@ -2348,41 +2372,52 @@
 
     async function changeTitle(){
       playSound('click');
-      const code = await DEVICE_CODE_PROMISE;
-      
-      // ✅ إصلاح: استخدام data:me بدلاً من me
-      const { data: me } = await supabase.from('student_reports').select('id').eq('code',code).limit(1);
-      if(!me?.length){ setMsg('⚠️ لا توجد بيانات لك','error'); showToast('سجل أولاً','error'); playSound('error'); return; }
+      // ✅ استخدام الدالة الموحدة للتحقق
+      const user = await getUserByCode();
+      if(!user){ 
+        setMsg('⚠️ لا توجد بيانات لك','error'); 
+        showToast('سجل أولاً','error'); 
+        playSound('error'); 
+        return; 
+      }
       
       const newTitle = await showModal({ icon:'✏️', title:'تغيير العنوان', msg:'اكتب العنوان الجديد (فريد)', withInput:true, inputPlaceholder:'العنوان الجديد...', confirmText:'تغيير', cancelText:'إلغاء' });
       if(!newTitle) return; const clean = newTitle.trim(); if(!clean){ setMsg('⚠️ العنوان فاضي','error'); playSound('error'); return; }
       
-      // ✅ إصلاح: استخدام data:titleUsed
-      const { data: titleUsed } = await supabase.from('student_reports').select('id').eq('title',clean).limit(1);
+      const { data: titleUsed, error: checkErr } = await supabase.from('student_reports').select('id').eq('title',clean).limit(1);
+      if(checkErr){ console.error('خطأ في التحقق:', checkErr); setMsg('❌ خطأ في التحقق','error'); playSound('error'); return; }
       if(titleUsed?.length){ setMsg('❌ العنوان مستخدم','error'); playSound('error'); return; }
       
-      const { error } = await supabase.from('student_reports').update({ title:clean, date:new Date().toISOString() }).eq('code', code);
+      const { error } = await supabase.from('student_reports').update({ title:clean, date:new Date().toISOString() }).eq('code', user.code);
       if(error){ setMsg('❌ فشل التحديث','error'); playSound('error'); return; }
       setMsg('✅ تم التغيير','success'); showToast('تم التحديث ✨','success'); playSound('success'); await showMyInfo(); await showAll(); setActiveTab('myinfo');
     }
 
     async function showMyInfo(){
-      const code = await DEVICE_CODE_PROMISE, infoBox = $('#infoBox');
-      const { data, error } = await supabase.from('student_reports').select('*').eq('code',code).single();
-      if(error || !data){ infoBox.style.display='none'; infoBox.innerHTML=''; setMsg('⚠️ لا توجد بيانات لك','error'); return; }
-      const nameColor = data.color || 'rgba(255,255,255,0.92)';
+      // ✅ استخدام الدالة الموحدة
+      const user = await getUserByCode();
+      const infoBox = $('#infoBox');
+      
+      if(!user){ 
+        infoBox.style.display='none'; 
+        infoBox.innerHTML=''; 
+        setMsg('⚠️ لا توجد بيانات لك','error'); 
+        return; 
+      }
+      
+      const nameColor = user.color || 'rgba(255,255,255,0.92)';
       
       // ✨ FIXED: Badge with correct color in My Info
-      const badgeHTML = data.badge && data.badge.trim() ? 
-        `<span class="student-badge" style="background: ${data.badge_color || '#ffd700'} !important; color: ${isLightColor(data.badge_color) ? '#000' : '#fff'} !important;" title="شارة تميز">${data.badge}</span>` : '';
+      const badgeHTML = user.badge && user.badge.trim() ? 
+        `<span class="student-badge" style="background: ${user.badge_color || '#ffd700'} !important; color: ${isLightColor(user.badge_color) ? '#000' : '#fff'} !important;" title="شارة تميز">${user.badge}</span>` : '';
       
       let alertHtml = '';
-      if(data.alert_text){
-        const ac = data.alert_color || '#ff4444', typeLabel = data.alert_type === 'public' ? '🌐 عام' : '🔒 خاص';
-        alertHtml = `<div class="alert" style="--ac:${ac}"><div style="font-size:18px">⚠️</div><div style="flex:1;line-height:1.5"><div style="font-weight:700">${data.alert_text}</div><div style="opacity:.7;font-size:10px;margin-top:3px">تنبيه (${typeLabel})</div></div><small>${typeLabel}</small></div>`;
+      if(user.alert_text){
+        const ac = user.alert_color || '#ff4444', typeLabel = user.alert_type === 'public' ? '🌐 عام' : '🔒 خاص';
+        alertHtml = `<div class="alert" style="--ac:${ac}"><div style="font-size:18px">⚠️</div><div style="flex:1;line-height:1.5"><div style="font-weight:700">${user.alert_text}</div><div style="opacity:.7;font-size:10px;margin-top:3px">تنبيه (${typeLabel})</div></div><small>${typeLabel}</small></div>`;
       }
       infoBox.style.display='flex'; infoBox.style.flexDirection='column'; infoBox.style.gap='8px';
-      infoBox.innerHTML = `${alertHtml}<div class="kv"><strong>👤 الاسم</strong><span style="color:${nameColor};font-weight:800">${badgeHTML}${data.name}</span></div><div class="kv"><strong>📄 العنوان</strong><span style="color:${nameColor}">${data.title}</span></div><div class="kv"><strong>📚 المادة</strong><span style="color:${nameColor}">${data.subject}</span></div><div class="kv"><strong>🕐 آخر تحديث</strong><span class="muted">${formatDate(data.date)}</span></div>`;
+      infoBox.innerHTML = `${alertHtml}<div class="kv"><strong>👤 الاسم</strong><span style="color:${nameColor};font-weight:800">${badgeHTML}${user.name}</span></div><div class="kv"><strong>📄 العنوان</strong><span style="color:${nameColor}">${user.title}</span></div><div class="kv"><strong>📚 المادة</strong><span style="color:${nameColor}">${user.subject}</span></div><div class="kv"><strong>🕐 آخر تحديث</strong><span class="muted">${formatDate(user.date)}</span></div>`;
       showToast('تم تحميل بياناتك','success');
     }
 
@@ -2419,14 +2454,16 @@
       });
     }
 
-    // ✅ تم إصلاح دالة الحذف لتعمل بشكل صحيح
+    // ✅ تم إصلاح دالة الحذف باستخدام الدالة الموحدة
     async function deleteMyData(){
       playSound('click');
-      const code = await DEVICE_CODE_PROMISE;
-      
-      // ✅ إصلاح: استخدام data:me بدلاً من me
-      const { data: me } = await supabase.from('student_reports').select('id').eq('code',code).limit(1);
-      if(!me?.length){ setMsg('⚠️ لا توجد بيانات','error'); playSound('error'); return; }
+      // ✅ استخدام الدالة الموحدة للتحقق
+      const user = await getUserByCode();
+      if(!user){ 
+        setMsg('⚠️ لا توجد بيانات','error'); 
+        playSound('error'); 
+        return; 
+      }
       
       // ✅ إظهار نافذة التأكيد
       const confirmed = await showModal({ 
@@ -2440,7 +2477,7 @@
       
       if(!confirmed) return;
       
-      const { error } = await supabase.from('student_reports').delete().eq('code', code);
+      const { error } = await supabase.from('student_reports').delete().eq('code', user.code);
       if(error){ setMsg('❌ فشل الحذف','error'); playSound('error'); return; }
       
       $('#infoBox').style.display='none'; 
@@ -2454,11 +2491,10 @@
 
     async function reportProblem(){
       playSound('click');
-      const code = await DEVICE_CODE_PROMISE;
-      const {  me } = await supabase.from('student_reports').select('name').eq('code',code).single();
+      const user = await getUserByCode();
+      const studentName = user?.name || 'طالب غير مسجل';
       const result = await showModal({ icon:'🆘', title:'أرسل مشكلتك', msg:'اكتب مشكلتك بالتفصيل:\nوسيتم إرسالها للمشرف مباشرة', withInput:true, isTextarea:true, inputPlaceholder:'اكتب مشكلتك هنا…', confirmText:'📤 إرسال', cancelText:'إلغاء' });
       if(!result || !result.trim()) return;
-      const studentName = me?.name || 'طالب غير مسجل';
       const msgText = `🆘 <b>مشكلة من طالب — ONX-TAQE</b>\n\n👤 <b>الاسم:</b> ${studentName}\n📝 <b>المشكلة:</b>\n${result.trim()}\n\n🕐 <b>الوقت:</b> ${new Date().toLocaleString('ar-EG')}`;
       try{
         const res = await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ chat_id: TELEGRAM_CHAT_ID, text: msgText, parse_mode:'HTML' }) });
@@ -2506,5 +2542,4 @@
   <script defer src="https://static.cloudflareinsights.com/beacon.min.js/v8c78df7c7c0f484497ecbca7046644da1771523124516" crossorigin="anonymous"></script>
 </body>
 </html>
-
 
