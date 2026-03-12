@@ -2,6 +2,10 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8" />
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>تقارير الطلبة — تصميم احترافي | ONX-TAQE PRO</title>
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
@@ -48,7 +52,7 @@
     html,body{height:100%;overscroll-behavior:none}
     body{
       font-family:'Cairo',system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
-      overflow:hidden; -webkit-user-select:none; -moz-user-select:none;
+      overflow-x:hidden; -webkit-user-select:none; -moz-user-select:none;
       -ms-user-select:none; user-select:none; background:var(--bg-color);
       color:var(--text-light); transition: background 0.4s ease;
     }
@@ -519,18 +523,26 @@
     .meBadge{font-size:8px;padding:2px 7px;border-radius:999px;border:1px solid rgba(245,200,66,.45);
       background:rgba(245,200,66,.18);color:rgba(245,200,66,.92);font-weight:700;letter-spacing:1px}
 
-    /* ✨ BADGE STYLES - SHINY EFFECT (جديد) */
+    /* ✨ BADGE STYLES - SHINY EFFECT (FIXED) */
     .student-badge {
-      display:inline-flex; align-items:center; justify-content:center;
-      width:26px; height:26px; border-radius:50%;
-      font-size:15px; font-weight:900;
-      position:relative; overflow:hidden;
-      animation: badgeShine 2.5s ease-in-out infinite;
-      box-shadow: 0 0 12px currentColor, 0 0 24px currentColor;
-      text-shadow: 0 1px 2px rgba(0,0,0,0.4);
-      flex-shrink: 0;
-      margin-left: 6px;
-      vertical-align: middle;
+      display:inline-flex !important;
+      align-items:center !important;
+      justify-content:center !important;
+      width:26px !important;
+      height:26px !important;
+      border-radius:50% !important;
+      font-size:15px !important;
+      font-weight:900 !important;
+      position:relative !important;
+      overflow:hidden !important;
+      animation: badgeShine 2.5s ease-in-out infinite !important;
+      box-shadow: 0 0 12px currentColor, 0 0 24px currentColor !important;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.4) !important;
+      flex-shrink: 0 !important;
+      margin-left: 6px !important;
+      vertical-align: middle !important;
+      background: var(--badge-bg, #ffd700) !important;
+      color: var(--badge-color, #000) !important;
     }
     @keyframes badgeShine {
       0%, 100% { filter: brightness(1); transform: scale(1); }
@@ -637,7 +649,7 @@
     }
     .bigNote:not(.expanded)::after{ opacity:1; }
     
-    /* ✅ زر طوي/فتح ينزل للأسفل */
+    /* ✅ زر طوي/فتح */
     .bigNote-toggle{
       display:inline-flex; align-items:center; gap:5px;
       margin-top:6px; padding:5px 10px; border-radius:10px;
@@ -753,7 +765,7 @@
     .export-desc { font-size:0.75rem; color:rgba(255,255,255,0.5); }
     html[data-mode="light"] .export-desc{ color:rgba(0,0,0,0.5); }
 
-    /* ===== COMMENTS SECTION (جديد) ===== */
+    /* ===== COMMENTS SECTION ===== */
     .comments-section {
       margin-top: 16px;
       border-top: 1px solid var(--glass-border);
@@ -1143,29 +1155,54 @@
     ::-webkit-scrollbar-thumb { background:rgba(0,212,255,0.3); border-radius:3px; }
     ::-webkit-scrollbar-thumb:hover { background:rgba(0,212,255,0.6); }
 
-    /* ===== RESPONSIVE ===== */
-    @media(max-width:768px){
-      .tabs-nav { flex-wrap:wrap; }
-      .tab-btn { padding:8px 12px; font-size:0.8rem; }
-      .header-title { font-size:1.5rem; }
+    /* ===== RESPONSIVE - iPad & Mobile ===== */
+    @media(max-width:1024px){
+      .tabs-container { max-width:100%; padding:0 15px 25px; }
+      .header-title { font-size:1.7rem; }
       .glass-card { padding:20px; }
+      .fancy-clock { max-width:380px; }
+    }
+    
+    @media(max-width:768px){
+      .tabs-nav { flex-wrap:wrap; padding:6px; }
+      .tab-btn { padding:8px 12px; font-size:0.8rem; white-space:normal; text-align:center; }
+      .header-title { font-size:1.5rem; }
+      .header-icon { width:60px; height:60px; font-size:28px; }
+      .glass-card { padding:18px; border-radius:18px; }
       .btn-row { flex-direction:column; }
       .btn { width:100%; }
-      .grid{grid-template-columns:1fr !important}
+      .stats-bar { gap:10px; padding:6px 15px 12px; }
+      .stat-badge { padding:6px 12px; font-size:0.8rem; }
       table{min-width:600px}
       .fancy-clock { flex-direction:column; gap:8px; padding:12px 16px; }
       .clock-date { padding-right:0; border-right:none; border-top:1px solid rgba(255,255,255,0.2); padding-top:8px; align-items:center; }
       .onx-rights, .dev-btn { position:static; margin:10px auto; width:fit-content; }
-    }
-    @media(max-width:480px){
-      .stats-bar { gap:10px; }
-      .stat-badge { padding:6px 12px; font-size:0.8rem; }
-      .tabs-nav { padding:6px; }
-      .tab-btn { padding:7px 10px; font-size:0.75rem; }
       .themePicker{grid-template-columns:1fr}
       .export-buttons { flex-direction:column; align-items:center; }
       .export-btn { width:100%; max-width:200px; }
+      .tableTools { flex-direction:column; }
+      .search { width:100%; min-width:100%; }
+      .counter { width:100%; justify-content:center; }
     }
+    
+    @media(max-width:480px){
+      .header-title { font-size:1.3rem; }
+      .header-subtitle { font-size:0.8rem; }
+      .stats-bar { flex-wrap:wrap; }
+      .stat-badge { width:100%; justify-content:center; }
+      .tabs-nav { gap:4px; }
+      .tab-btn { padding:7px 10px; font-size:0.75rem; }
+      .glass-card { padding:16px; }
+      .card-title { font-size:1rem; }
+      .input-label { font-size:0.65rem; }
+      .styled-input { padding:11px 12px 11px 40px; font-size:0.85rem; }
+      .btn { padding:10px 14px; font-size:0.85rem; }
+      .fancy-clock { padding:10px 14px; }
+      .clock-time { font-size:1.4rem; }
+      .modal { width:95%; padding:18px; }
+      .preview-content { width:95%; padding:18px; }
+    }
+    
     @media (prefers-reduced-motion: reduce){
       .btn,.tab-btn,.color-box,.themeOption,.glass-card{transition:none}
       .miniAlert,.alert,.onx-rights,.dev-btn,.fancy-clock{animation:none}
@@ -1207,7 +1244,7 @@
     </div>
   </div>
 
-  <!-- PREVIEW MODAL (جديد) -->
+  <!-- PREVIEW MODAL -->
   <div id="previewModal" aria-hidden="true">
     <div class="preview-content">
       <span class="mIco">👁️</span>
@@ -1333,13 +1370,14 @@
             </div>
           </div>
 
-          <!-- GUIDELINES (✅ تم حذف زر طوي/فتح) -->
+          <!-- GUIDELINES (✅ زر طوي/فتح) -->
           <div id="guidelinesPanel" style="display:none;margin-bottom:12px">
             <div class="glass-card" style="border-radius:16px;padding:16px">
-              <div style="margin-bottom:10px">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
                 <strong style="color:rgba(20,184,166,.95);font-size:12px">📋 متطلبات الاستخدام</strong>
+                <button class="btn btn-outline" id="guidelinesToggleBtn" style="padding:5px 10px;font-size:0.75rem">📌 طوي/فتح</button>
               </div>
-              <div id="guidelinesContent" class="bigNote expanded">جارٍ التحميل…</div>
+              <div id="guidelinesContent" class="bigNote">جارٍ التحميل…</div>
             </div>
           </div>
 
@@ -1445,7 +1483,7 @@
         </div>
       </div>
 
-      <!-- ===== TAB: تصدير (معاينة قبل التحميل) ===== -->
+      <!-- ===== TAB: تصدير ===== -->
       <div class="tab-content" id="tab-export">
         <div class="glass-card card-glow-gold">
           <div class="card-header">
@@ -1463,7 +1501,6 @@
             </p>
           </div>
 
-          <!-- ✅ زر TXT فقط مع معاينة -->
           <div class="export-buttons">
             <button class="export-btn txt" id="exportTXT" onclick="previewBeforeDownload('txt')">
               <span class="export-icon">📝</span>
@@ -1474,7 +1511,7 @@
         </div>
       </div>
 
-      <!-- ===== TAB: تعليقات (جديد) ===== -->
+      <!-- ===== TAB: تعليقات ===== -->
       <div class="tab-content" id="tab-comments">
         <div class="glass-card card-glow-teal">
           <div class="card-header">
@@ -1655,19 +1692,11 @@
       return ['#ffd700','#ffaa00','#ffffff','#ffcc00','#ffff00'].includes(color?.toLowerCase());
     }
 
-    /* ===== SOUND EFFECTS (جديد) ===== */
-    const sounds = {
-      click: new Audio('data:audio/wav;base64,UklGRl9vT19XQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YU'),
-      success: new Audio('data:audio/wav;base64,UklGRl9vT19XQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YU'),
-      error: new Audio('data:audio/wav;base64,UklGRl9vT19XQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YU'),
-      delete: new Audio('data:audio/wav;base64,UklGRl9vT19XQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YU')
-    };
-
+    /* ===== SOUND EFFECTS ===== */
     function playSound(type){
       const enabled = localStorage.getItem('sounds_enabled') !== 'false';
       if(!enabled) return;
       
-      // Simple beep using Web Audio API (better than empty base64)
       const audioContext = new (window.AudioContext || window.webkitAudioContext)();
       const oscillator = audioContext.createOscillator();
       const gainNode = audioContext.createGain();
@@ -1713,7 +1742,7 @@
       }
     }
 
-    /* ===== DARK/LIGHT MODE (جديد) ===== */
+    /* ===== DARK/LIGHT MODE ===== */
     function initMode(){
       const saved = localStorage.getItem('onx_mode') || 'dark';
       document.documentElement.setAttribute('data-mode', saved);
@@ -1728,7 +1757,7 @@
       showToast(`تم التبديل للوضع ${mode === 'light' ? 'النهاري ☀️' : 'الليلي 🌙'}`, 'success');
     });
 
-    /* ===== SOUNDS TOGGLE (جديد) ===== */
+    /* ===== SOUNDS TOGGLE ===== */
     function initSounds(){
       const enabled = localStorage.getItem('sounds_enabled') !== 'false';
       $('#soundsToggle').checked = enabled;
@@ -1834,7 +1863,7 @@
       });
     }
 
-    /* ===== PREVIEW MODAL (جديد) ===== */
+    /* ===== PREVIEW MODAL ===== */
     let pendingDownload = null;
     
     function showPreviewModal(content){
@@ -1974,12 +2003,26 @@
         $('#deadlineDateDisplay').textContent = dt.toLocaleDateString('ar-EG', { year:'numeric', month:'long', day:'numeric', hour:'2-digit', minute:'2-digit', hour12:true });
         dp.style.display='block'; startCountdown(dt);
       } else { dp.style.display='none'; }
-      const gp = $('#guidelinesPanel'), gc = $('#guidelinesContent');
+      
+      // ✅ GUIDELINES with toggle button
+      const gp = $('#guidelinesPanel'), gc = $('#guidelinesContent'), toggleBtn = $('#guidelinesToggleBtn');
       if(data.usage_guidelines && data.usage_guidelines.trim()){
         gc.textContent = data.usage_guidelines.trim(); gp.style.display='block';
-        // ✅ جعل الإرشادات مفتوحة دائماً بدون زر طوي/فتح
         gc.classList.add('expanded');
+        
+        // Toggle button functionality
+        if(toggleBtn){
+          toggleBtn.onclick = (e)=>{ 
+            e.stopPropagation(); 
+            playSound('click');
+            const isExpanded = gc.classList.contains('expanded');
+            gc.classList.toggle('expanded', !isExpanded);
+            toggleBtn.textContent = !isExpanded ? '📌 طوي' : '📌 فتح';
+            toggleBtn.classList.toggle('expanded', isExpanded);
+          };
+        }
       } else { gp.style.display='none'; }
+      
       const st = $('#siteStatusBadge');
       if(!data.site_open){ st.innerHTML = 'الحالة: <strong style="color:#ff6b6b">مغلق</strong>'; }
       else { st.innerHTML = 'الحالة: <strong style="color:#00ff88">مفتوح</strong>'; }
@@ -2037,7 +2080,7 @@
       return fancyHeader + fancyBody + fancyFooter;
     }
 
-    /* ===== PREVIEW BEFORE DOWNLOAD (جديد) ===== */
+    /* ===== PREVIEW BEFORE DOWNLOAD ===== */
     async function previewBeforeDownload(format){
       const code = await DEVICE_CODE_PROMISE;
       const { data, error } = await supabase.from('student_reports').select('*').eq('code',code).single();
@@ -2084,7 +2127,7 @@
     }
     window.downloadFancy = downloadFancy;
 
-    /* ===== COMMENTS SYSTEM (جديد) ===== */
+    /* ===== COMMENTS SYSTEM ===== */
     async function loadComments(){
       const code = await DEVICE_CODE_PROMISE;
       const { data, error } = await supabase.from('comments').select('*').order('created_at', { ascending: false }).limit(50);
@@ -2142,7 +2185,7 @@
       }
       
       const code = await DEVICE_CODE_PROMISE;
-      const { data: me } = await supabase.from('student_reports').select('name').eq('code',code).single();
+      const {  me } = await supabase.from('student_reports').select('name').eq('code',code).single();
       
       const { error } = await supabase.from('comments').insert([{
         text,
@@ -2206,7 +2249,7 @@
       const name = $('#studentName').value.trim(), title = $('#reportTitle').value.trim(), subject = $('#subjectName').value.trim(), code = await DEVICE_CODE_PROMISE;
       if(name.split(/\s+/).length < 2){ setMsg('⚠️ الاسم لازم يكون ثنائي على الأقل','error'); showToast('الاسم ثنائي مطلوب','error'); playSound('error'); return; }
       if(!name || !title || !subject){ setMsg('⚠️ املا كل الحقول','error'); showToast('املأ جميع الحقول','error'); playSound('error'); return; }
-      const { data:already } = await supabase.from('student_reports').select('id').eq('code',code).limit(1);
+      const { already } = await supabase.from('student_reports').select('id').eq('code',code).limit(1);
       if(already?.length){ setMsg('⛔ لديك بيانات محفوظة','error'); showToast('لا يمكن التسجيل مرتين','error'); playSound('error'); await showMyInfo(); setActiveTab('myinfo'); return; }
       const [{ nameUsed }, { titleUsed }] = await Promise.all([supabase.from('student_reports').select('id').eq('name',name).limit(1), supabase.from('student_reports').select('id').eq('title',title).limit(1)]);
       if((nameUsed?.length)||(titleUsed?.length)){ setMsg('❌ الاسم أو العنوان مستخدم','error'); showToast('مكرر مسبقاً','error'); playSound('error'); return; }
@@ -2218,7 +2261,7 @@
     async function changeTitle(){
       playSound('click');
       const code = await DEVICE_CODE_PROMISE;
-      const { data:me } = await supabase.from('student_reports').select('id').eq('code',code).limit(1);
+      const { me } = await supabase.from('student_reports').select('id').eq('code',code).limit(1);
       if(!me?.length){ setMsg('⚠️ لا توجد بيانات لك','error'); showToast('سجل أولاً','error'); playSound('error'); return; }
       const newTitle = await showModal({ icon:'✏️', title:'تغيير العنوان', msg:'اكتب العنوان الجديد (فريد)', withInput:true, inputPlaceholder:'العنوان الجديد...', confirmText:'تغيير', cancelText:'إلغاء' });
       if(!newTitle) return; const clean = newTitle.trim(); if(!clean){ setMsg('⚠️ العنوان فاضي','error'); playSound('error'); return; }
@@ -2235,9 +2278,9 @@
       if(error || !data){ infoBox.style.display='none'; infoBox.innerHTML=''; setMsg('⚠️ لا توجد بيانات لك','error'); return; }
       const nameColor = data.color || 'rgba(255,255,255,0.92)';
       
-      // ✨ عرض الشارة في معلوماتي
+      // ✨ FIXED: Badge display with correct color
       const badgeHTML = data.badge && data.badge.trim() ? 
-        `<span class="student-badge" style="background:${data.badge_color || '#ffd700'};color:${isLightColor(data.badge_color) ? '#000' : '#fff'}" title="شارة تميز">${data.badge}</span>` : '';
+        `<span class="student-badge" style="--badge-bg: ${data.badge_color || '#ffd700'}; --badge-color: ${isLightColor(data.badge_color) ? '#000' : '#fff'}; background: ${data.badge_color || '#ffd700'}; color: ${isLightColor(data.badge_color) ? '#000' : '#fff'};" title="شارة تميز">${data.badge}</span>` : '';
       
       let alertHtml = '';
       if(data.alert_text){
@@ -2268,9 +2311,9 @@
         filtered.forEach((d,i)=>{
           const isMe = d.code === myCode, rowClass = isMe ? 'mine' : '', nameColor = d.color || 'rgba(255,255,255,0.92)';
           
-          // ✨ عرض الشارة مع تأثير لامع في الجدول
+          // ✨ FIXED: Badge display with correct color in student panel
           const badgeHTML = d.badge && d.badge.trim() ? 
-            `<span class="student-badge" style="background:${d.badge_color || '#ffd700'};color:${isLightColor(d.badge_color) ? '#000' : '#fff'}" title="شارة تميز">${d.badge}</span>` : '';
+            `<span class="student-badge" style="--badge-bg: ${d.badge_color || '#ffd700'}; --badge-color: ${isLightColor(d.badge_color) ? '#000' : '#fff'}; background: ${d.badge_color || '#ffd700'}; color: ${isLightColor(d.badge_color) ? '#000' : '#fff'};" title="شارة تميز">${d.badge}</span>` : '';
           const displayName = `${badgeHTML}<span style="color:${nameColor};font-weight:700">${d.name}</span>`;
           
           const subjectHtml = `<span class="badgeSub" style="color:${nameColor};border-color:${nameColor}33;background:${nameColor}0d">${d.subject}</span>`;
@@ -2297,7 +2340,7 @@
     async function reportProblem(){
       playSound('click');
       const code = await DEVICE_CODE_PROMISE;
-      const { data: me } = await supabase.from('student_reports').select('name').eq('code',code).single();
+      const {  me } = await supabase.from('student_reports').select('name').eq('code',code).single();
       const result = await showModal({ icon:'🆘', title:'أرسل مشكلتك', msg:'اكتب مشكلتك بالتفصيل:\nوسيتم إرسالها للمشرف مباشرة', withInput:true, isTextarea:true, inputPlaceholder:'اكتب مشكلتك هنا…', confirmText:'📤 إرسال', cancelText:'إلغاء' });
       if(!result || !result.trim()) return;
       const studentName = me?.name || 'طالب غير مسجل';
@@ -2316,7 +2359,6 @@
     $('#btnDelete2')?.addEventListener('click', (e)=>{e.stopPropagation();deleteMyData();});
     $('#btnProblem')?.addEventListener('click', (e)=>{e.stopPropagation();reportProblem();});
     $('#btnProblem2')?.addEventListener('click', (e)=>{e.stopPropagation();reportProblem();});
-    // ✅ تم حذف زر طوي/فتح من guidelinesPanel
     $('#panelRefreshBtn')?.addEventListener('click', (e)=>{e.stopPropagation();showAll(); showToast('تم التحديث ✨','success'); playSound('success');});
     $('#notifCloseBtn')?.addEventListener('click', (e)=>{e.stopPropagation(); playSound('click'); const b = $('#notifBanner'); b.classList.remove('visible'); b.style.display='none';});
     $('#searchInput')?.addEventListener('input', (e)=>{ e.stopPropagation(); clearTimeout(SEARCH_TIMER); SEARCH_TIMER = setTimeout(renderAllList, 90); });
@@ -2349,5 +2391,4 @@
   <script defer src="https://static.cloudflareinsights.com/beacon.min.js/v8c78df7c7c0f484497ecbca7046644da1771523124516" crossorigin="anonymous"></script>
 </body>
 </html>
-
 
