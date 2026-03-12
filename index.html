@@ -760,7 +760,7 @@
     .export-desc { font-size:0.75rem; color:rgba(255,255,255,0.5); }
     html[data-mode="light"] .export-desc{ color:rgba(0,0,0,0.5); }
 
-    /* ===== COMMENTS SECTION (مُحدّث) ===== */
+    /* ===== COMMENTS SECTION ===== */
     .comments-section {
       margin-top: 16px;
       border-top: 1px solid var(--glass-border);
@@ -1195,54 +1195,29 @@
     ::-webkit-scrollbar-thumb { background:rgba(0,212,255,0.3); border-radius:3px; }
     ::-webkit-scrollbar-thumb:hover { background:rgba(0,212,255,0.6); }
 
-    /* ===== RESPONSIVE - iPad & Mobile ===== */
-    @media(max-width:1024px){
-      .tabs-container { max-width:100%; padding:0 15px 25px; }
-      .header-title { font-size:1.7rem; }
-      .glass-card { padding:20px; }
-      .fancy-clock { max-width:380px; }
-    }
-    
+    /* ===== RESPONSIVE ===== */
     @media(max-width:768px){
-      .tabs-nav { flex-wrap:wrap; padding:6px; }
-      .tab-btn { padding:8px 12px; font-size:0.8rem; white-space:normal; text-align:center; }
+      .tabs-nav { flex-wrap:wrap; }
+      .tab-btn { padding:8px 12px; font-size:0.8rem; }
       .header-title { font-size:1.5rem; }
-      .header-icon { width:60px; height:60px; font-size:28px; }
-      .glass-card { padding:18px; border-radius:18px; }
+      .glass-card { padding:20px; }
       .btn-row { flex-direction:column; }
       .btn { width:100%; }
-      .stats-bar { gap:10px; padding:6px 15px 12px; }
-      .stat-badge { padding:6px 12px; font-size:0.8rem; }
+      .grid{grid-template-columns:1fr !important}
       table{min-width:600px}
       .fancy-clock { flex-direction:column; gap:8px; padding:12px 16px; }
       .clock-date { padding-right:0; border-right:none; border-top:1px solid rgba(255,255,255,0.2); padding-top:8px; align-items:center; }
       .onx-rights, .dev-btn { position:static; margin:10px auto; width:fit-content; }
+    }
+    @media(max-width:480px){
+      .stats-bar { gap:10px; }
+      .stat-badge { padding:6px 12px; font-size:0.8rem; }
+      .tabs-nav { padding:6px; }
+      .tab-btn { padding:7px 10px; font-size:0.75rem; }
       .themePicker{grid-template-columns:1fr}
       .export-buttons { flex-direction:column; align-items:center; }
       .export-btn { width:100%; max-width:200px; }
-      .tableTools { flex-direction:column; }
-      .search { width:100%; min-width:100%; }
-      .counter { width:100%; justify-content:center; }
     }
-    
-    @media(max-width:480px){
-      .header-title { font-size:1.3rem; }
-      .header-subtitle { font-size:0.8rem; }
-      .stats-bar { flex-wrap:wrap; }
-      .stat-badge { width:100%; justify-content:center; }
-      .tabs-nav { gap:4px; }
-      .tab-btn { padding:7px 10px; font-size:0.75rem; }
-      .glass-card { padding:16px; }
-      .card-title { font-size:1rem; }
-      .input-label { font-size:0.65rem; }
-      .styled-input { padding:11px 12px 11px 40px; font-size:0.85rem; }
-      .btn { padding:10px 14px; font-size:0.85rem; }
-      .fancy-clock { padding:10px 14px; }
-      .clock-time { font-size:1.4rem; }
-      .modal { width:95%; padding:18px; }
-      .preview-content { width:95%; padding:18px; }
-    }
-    
     @media (prefers-reduced-motion: reduce){
       .btn,.tab-btn,.color-box,.themeOption,.glass-card{transition:none}
       .miniAlert,.alert,.onx-rights,.dev-btn,.fancy-clock{animation:none}
@@ -1410,18 +1385,18 @@
             </div>
           </div>
 
-          <!-- GUIDELINES (✅ زر طوي/فتح صغير وفي الأسفل) -->
+          <!-- GUIDELINES -->
           <div id="guidelinesPanel" style="display:none;margin-bottom:12px">
             <div class="glass-card" style="border-radius:16px;padding:16px">
               <div style="margin-bottom:10px">
                 <strong style="color:rgba(20,184,166,.95);font-size:12px">📋 متطلبات الاستخدام</strong>
               </div>
               <div id="guidelinesContent" class="bigNote expanded">جارٍ التحميل…</div>
-              <!-- ✅ زر صغير في الأسفل -->
               <button class="bigNote-toggle" id="guidelinesToggleBtn">📌 طوي</button>
             </div>
           </div>
 
+          <!-- Form -->
           <div class="input-group">
             <label class="input-label">الاسم الثنائي <span style="color:var(--neon-blue);font-size:10px">(اسمين على الأقل)</span></label>
             <span class="input-icon">👤</span>
@@ -1447,7 +1422,7 @@
         </div>
       </div>
 
-      <!-- ===== TAB: معلوماتي ===== -->
+      <!-- ===== TAB: معلوماتي (✅ مع الأزرار الثلاثة) ===== -->
       <div class="tab-content" id="tab-myinfo">
         <div class="glass-card card-glow-purple">
           <div class="card-header">
@@ -1482,6 +1457,13 @@
               <input type="checkbox" id="soundsToggle" checked>
               <span class="slider"></span>
             </label>
+          </div>
+
+          <!-- ✅ الأزرار الثلاثة -->
+          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px">
+            <button class="btn btn-outline" id="btnDownload"><span>⬇️</span> تحميل بياناتي</button>
+            <button class="btn btn-danger" id="btnDelete"><span>🗑️</span> حذف معلوماتي</button>
+            <button class="btn btn-gold" id="btnProblem"><span>🆘</span> أرسل مشكلتك</button>
           </div>
         </div>
       </div>
@@ -2007,7 +1989,7 @@
       } catch { return 'no-webgl'; }
     }
     
-    // ✅ تم إصلاح DEVICE_CODE_PROMISE لضمان الاتساق
+    // ✅ كود الجهاز مع الكاش لضمان الاتساق
     let DEVICE_CODE_CACHE = null;
     const DEVICE_CODE_PROMISE = (async ()=>{
       if (DEVICE_CODE_CACHE) return DEVICE_CODE_CACHE;
@@ -2043,13 +2025,11 @@
         dp.style.display='block'; startCountdown(dt);
       } else { dp.style.display='none'; }
       
-      // ✅ GUIDELINES with small toggle button at bottom
       const gp = $('#guidelinesPanel'), gc = $('#guidelinesContent'), toggleBtn = $('#guidelinesToggleBtn');
       if(data.usage_guidelines && data.usage_guidelines.trim()){
         gc.textContent = data.usage_guidelines.trim(); gp.style.display='block';
         gc.classList.add('expanded');
         
-        // Toggle button functionality
         if(toggleBtn){
           toggleBtn.onclick = (e)=>{ 
             e.stopPropagation(); 
@@ -2166,10 +2146,41 @@
     }
     window.downloadFancy = downloadFancy;
 
+    /* ===== DIRECT DOWNLOAD (جديد - زر التحميل المباشر) ===== */
+    async function directDownload(){
+      playSound('click');
+      const code = await DEVICE_CODE_PROMISE;
+      const { data, error } = await supabase.from('student_reports').select('*').eq('code',code).single();
+      
+      if(error || !data){ 
+        setMsg('⚠️ سجل بياناتك أولاً','error'); 
+        showToast('لا توجد بيانات','error'); 
+        playSound('error');
+        return; 
+      }
+      
+      const content = generateFancyContent(data, 'txt');
+      const safeName = (data.name||'student').replace(/[^\u0600-\u06FFa-zA-Z0-9_-]+/g,'_');
+      const filename = `ONX-TAQE_${safeName}_report.txt`;
+      
+      const blob = new Blob([content], {type: 'text/plain;charset=utf-8'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      
+      showToast(`تم التحميل بصيغة TXT ✨`, 'success');
+      playSound('success');
+    }
+
     /* ===== COMMENTS SYSTEM ===== */
     async function loadComments(){
       const code = await DEVICE_CODE_PROMISE;
-      const { data: comments, error } = await supabase.from('comments').select('*').order('created_at', { ascending: false }).limit(50);
+      const {  comments, error } = await supabase.from('comments').select('*').order('created_at', { ascending: false }).limit(50);
       
       if(error || !comments){
         $('#commentsList').innerHTML = `<div style="text-align:center;padding:30px;color:rgba(255,255,255,.4)"><div style="font-size:40px;margin-bottom:10px">⚠️</div><div>تعذر تحميل التعليقات</div></div>`;
@@ -2188,7 +2199,6 @@
         const timeAgo = getTimeAgo(comment.created_at);
         const isMe = comment.code === code;
         
-        // ✅ جلب الردود على هذا التعليق
         let repliesHtml = '';
         if(comment.replies && comment.replies.length > 0){
           repliesHtml = `<div class="comment-replies">`;
@@ -2241,7 +2251,7 @@
       }
       
       const code = await DEVICE_CODE_PROMISE;
-      const { data: me } = await supabase.from('student_reports').select('name').eq('code',code).single();
+      const {  me } = await supabase.from('student_reports').select('name').eq('code',code).single();
       
       const { error } = await supabase.from('comments').insert([{
         text,
@@ -2287,11 +2297,10 @@
       }
       
       const code = await DEVICE_CODE_PROMISE;
-      const { data: me } = await supabase.from('student_reports').select('name').eq('code',code).single();
+      const {  me } = await supabase.from('student_reports').select('name').eq('code',code).single();
       const replyAuthor = me?.name ? me.name.split(' ')[0] : 'طالب';
       
-      // ✅ إضافة الرد إلى قاعدة البيانات
-      const { data: comment, error: fetchError } = await supabase.from('comments').select('replies').eq('id', commentId).single();
+      const {  comment, error: fetchError } = await supabase.from('comments').select('replies').eq('id', commentId).single();
       if(fetchError){
         showToast('فشل جلب التعليق','error');
         playSound('error');
@@ -2331,7 +2340,9 @@
       if(e.key === 'Enter') submitComment();
     });
 
-    /* ✅ دالة مساعدة موحدة للتحقق من وجود بيانات الطالب */
+    /* ===== CORE ACTIONS (✅ معالجة الأخطاء مضافة) ===== */
+    
+    // ✅ دالة مساعدة موحدة للتحقق من وجود بيانات الطالب
     async function getUserByCode() {
       const code = await DEVICE_CODE_PROMISE;
       const { data, error } = await supabase
@@ -2347,18 +2358,17 @@
       return data;
     }
 
-    /* ===== CORE ACTIONS (✅ تم الإصلاح الكامل) ===== */
     async function saveData(){
       playSound('click');
       const name = $('#studentName').value.trim(), title = $('#reportTitle').value.trim(), subject = $('#subjectName').value.trim(), code = await DEVICE_CODE_PROMISE;
       if(name.split(/\s+/).length < 2){ setMsg('⚠️ الاسم لازم يكون ثنائي على الأقل','error'); showToast('الاسم ثنائي مطلوب','error'); playSound('error'); return; }
       if(!name || !title || !subject){ setMsg('⚠️ املا كل الحقول','error'); showToast('املأ جميع الحقول','error'); playSound('error'); return; }
       
-      const { data: already, error: checkError } = await supabase.from('student_reports').select('id').eq('code',code).limit(1);
+      const {  already, error: checkError } = await supabase.from('student_reports').select('id').eq('code',code).limit(1);
       if(checkError){ console.error('خطأ في التحقق:', checkError); setMsg('❌ خطأ في الاتصال','error'); playSound('error'); return; }
       if(already?.length){ setMsg('⛔ لديك بيانات محفوظة','error'); showToast('لا يمكن التسجيل مرتين','error'); playSound('error'); await showMyInfo(); setActiveTab('myinfo'); return; }
       
-      const [{ data: nameUsed, error: nameErr }, { data: titleUsed, error: titleErr }] = await Promise.all([
+      const [{  nameUsed, error: nameErr }, {  titleUsed, error: titleErr }] = await Promise.all([
         supabase.from('student_reports').select('id').eq('name',name).limit(1),
         supabase.from('student_reports').select('id').eq('title',title).limit(1)
       ]);
@@ -2384,7 +2394,7 @@
       const newTitle = await showModal({ icon:'✏️', title:'تغيير العنوان', msg:'اكتب العنوان الجديد (فريد)', withInput:true, inputPlaceholder:'العنوان الجديد...', confirmText:'تغيير', cancelText:'إلغاء' });
       if(!newTitle) return; const clean = newTitle.trim(); if(!clean){ setMsg('⚠️ العنوان فاضي','error'); playSound('error'); return; }
       
-      const { data: titleUsed, error: checkErr } = await supabase.from('student_reports').select('id').eq('title',clean).limit(1);
+      const {  titleUsed, error: checkErr } = await supabase.from('student_reports').select('id').eq('title',clean).limit(1);
       if(checkErr){ console.error('خطأ في التحقق:', checkErr); setMsg('❌ خطأ في التحقق','error'); playSound('error'); return; }
       if(titleUsed?.length){ setMsg('❌ العنوان مستخدم','error'); playSound('error'); return; }
       
@@ -2407,7 +2417,6 @@
       
       const nameColor = user.color || 'rgba(255,255,255,0.92)';
       
-      // ✨ FIXED: Badge with correct color in My Info
       const badgeHTML = user.badge && user.badge.trim() ? 
         `<span class="student-badge" style="background: ${user.badge_color || '#ffd700'} !important; color: ${isLightColor(user.badge_color) ? '#000' : '#fff'} !important;" title="شارة تميز">${user.badge}</span>` : '';
       
@@ -2440,7 +2449,6 @@
         filtered.forEach((d,i)=>{
           const isMe = d.code === myCode, rowClass = isMe ? 'mine' : '', nameColor = d.color || 'rgba(255,255,255,0.92)';
           
-          // ✨ FIXED: Badge with correct color in Student Titles Table
           const badgeHTML = d.badge && d.badge.trim() ? 
             `<span class="student-badge" style="background: ${d.badge_color || '#ffd700'} !important; color: ${isLightColor(d.badge_color) ? '#000' : '#fff'} !important;" title="شارة تميز">${d.badge}</span>` : '';
           const displayName = `${badgeHTML}<span style="color:${nameColor};font-weight:700">${d.name}</span>`;
@@ -2510,6 +2518,8 @@
     $('#btnDelete2')?.addEventListener('click', (e)=>{e.stopPropagation();deleteMyData();});
     $('#btnProblem')?.addEventListener('click', (e)=>{e.stopPropagation();reportProblem();});
     $('#btnProblem2')?.addEventListener('click', (e)=>{e.stopPropagation();reportProblem();});
+    $('#btnDownload')?.addEventListener('click', (e)=>{e.stopPropagation(); directDownload();});
+    $('#importantBtn')?.addEventListener('click', (e)=>{ e.stopPropagation(); playSound('click'); const gc = $('#guidelinesContent'), toggleBtn = $('#guidelinesToggleBtn'); if(gc && toggleBtn){ const isExpanded = gc.classList.contains('expanded'); gc.classList.toggle('expanded', !isExpanded); toggleBtn.innerHTML = '🔽 عرض التفاصيل'; toggleBtn.classList.toggle('expanded', isExpanded); } });
     $('#panelRefreshBtn')?.addEventListener('click', (e)=>{e.stopPropagation();showAll(); showToast('تم التحديث ✨','success'); playSound('success');});
     $('#notifCloseBtn')?.addEventListener('click', (e)=>{e.stopPropagation(); playSound('click'); const b = $('#notifBanner'); b.classList.remove('visible'); b.style.display='none';});
     $('#searchInput')?.addEventListener('input', (e)=>{ e.stopPropagation(); clearTimeout(SEARCH_TIMER); SEARCH_TIMER = setTimeout(renderAllList, 90); });
@@ -2542,4 +2552,5 @@
   <script defer src="https://static.cloudflareinsights.com/beacon.min.js/v8c78df7c7c0f484497ecbca7046644da1771523124516" crossorigin="anonymous"></script>
 </body>
 </html>
+
 
