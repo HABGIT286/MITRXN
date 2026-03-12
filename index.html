@@ -519,7 +519,7 @@
     .meBadge{font-size:8px;padding:2px 7px;border-radius:999px;border:1px solid rgba(245,200,66,.45);
       background:rgba(245,200,66,.18);color:rgba(245,200,66,.92);font-weight:700;letter-spacing:1px}
 
-    /* ✨ BADGE STYLES - SHINY EFFECT (FIXED) */
+    /* ✨ BADGE STYLES - SHINY EFFECT (FIXED COLOR) */
     .student-badge {
       display:inline-flex !important;
       align-items:center !important;
@@ -537,8 +537,6 @@
       flex-shrink: 0 !important;
       margin-left: 6px !important;
       vertical-align: middle !important;
-      background: var(--badge-bg, #ffd700) !important;
-      color: var(--badge-color, #000) !important;
     }
     @keyframes badgeShine {
       0%, 100% { filter: brightness(1); transform: scale(1); }
@@ -645,16 +643,17 @@
     }
     .bigNote:not(.expanded)::after{ opacity:1; }
     
-    /* ✅ زر طوي/فتح */
+    /* ✅ زر طوي/فتح - صغير وفي الأسفل */
     .bigNote-toggle{
-      display:inline-flex; align-items:center; gap:5px;
-      margin-top:6px; padding:5px 10px; border-radius:10px;
-      background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.12);
-      color:rgba(255,255,255,.75); font-size:10px; cursor:pointer; transition:.2s;
+      display:inline-flex; align-items:center; gap:4px;
+      margin-top:8px; padding:4px 10px; border-radius:8px;
+      background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.10);
+      color:rgba(255,255,255,.60); font-size:9px; cursor:pointer; transition:.2s;
+      font-weight:600; letter-spacing:0.5px;
     }
-    html[data-mode="light"] .bigNote-toggle{ background:rgba(0,0,0,.05); border-color:rgba(0,0,0,.12); color:rgba(0,0,0,.75); }
-    .bigNote-toggle:hover{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.18)}
-    html[data-mode="light"] .bigNote-toggle:hover{background:rgba(0,0,0,.08);border-color:rgba(0,0,0,.18)}
+    html[data-mode="light"] .bigNote-toggle{ background:rgba(0,0,0,.04); border-color:rgba(0,0,0,.10); color:rgba(0,0,0,.60); }
+    .bigNote-toggle:hover{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.18);color:rgba(255,255,255,.85)}
+    html[data-mode="light"] .bigNote-toggle:hover{background:rgba(0,0,0,.08);border-color:rgba(0,0,0,.18);color:rgba(0,0,0,.85)}
     .bigNote-toggle.expanded{ background:rgba(245,200,66,.08); border-color:rgba(245,200,66,.25); color:var(--gold); }
 
     /* ===== INFO BOX ===== */
@@ -1366,14 +1365,15 @@
             </div>
           </div>
 
-          <!-- GUIDELINES (✅ زر طوي/فتح) -->
+          <!-- GUIDELINES (✅ زر طوي/فتح صغير وفي الأسفل) -->
           <div id="guidelinesPanel" style="display:none;margin-bottom:12px">
             <div class="glass-card" style="border-radius:16px;padding:16px">
-              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+              <div style="margin-bottom:10px">
                 <strong style="color:rgba(20,184,166,.95);font-size:12px">📋 متطلبات الاستخدام</strong>
-                <button class="btn btn-outline" id="guidelinesToggleBtn" style="padding:5px 10px;font-size:0.75rem">📌 طوي/فتح</button>
               </div>
-              <div id="guidelinesContent" class="bigNote">جارٍ التحميل…</div>
+              <div id="guidelinesContent" class="bigNote expanded">جارٍ التحميل…</div>
+              <!-- ✅ زر صغير في الأسفل -->
+              <button class="bigNote-toggle" id="guidelinesToggleBtn">📌 طوي</button>
             </div>
           </div>
 
@@ -2000,7 +2000,7 @@
         dp.style.display='block'; startCountdown(dt);
       } else { dp.style.display='none'; }
       
-      // ✅ GUIDELINES with toggle button
+      // ✅ GUIDELINES with small toggle button at bottom
       const gp = $('#guidelinesPanel'), gc = $('#guidelinesContent'), toggleBtn = $('#guidelinesToggleBtn');
       if(data.usage_guidelines && data.usage_guidelines.trim()){
         gc.textContent = data.usage_guidelines.trim(); gp.style.display='block';
@@ -2013,7 +2013,7 @@
             playSound('click');
             const isExpanded = gc.classList.contains('expanded');
             gc.classList.toggle('expanded', !isExpanded);
-            toggleBtn.textContent = !isExpanded ? '📌 طوي' : '📌 فتح';
+            toggleBtn.textContent = !isExpanded ? '📌 فتح' : '📌 طوي';
             toggleBtn.classList.toggle('expanded', isExpanded);
           };
         }
@@ -2274,9 +2274,9 @@
       if(error || !data){ infoBox.style.display='none'; infoBox.innerHTML=''; setMsg('⚠️ لا توجد بيانات لك','error'); return; }
       const nameColor = data.color || 'rgba(255,255,255,0.92)';
       
-      // ✨ FIXED: Badge display with correct color
+      // ✨ FIXED: Badge with correct color in My Info
       const badgeHTML = data.badge && data.badge.trim() ? 
-        `<span class="student-badge" style="--badge-bg: ${data.badge_color || '#ffd700'}; --badge-color: ${isLightColor(data.badge_color) ? '#000' : '#fff'}; background: ${data.badge_color || '#ffd700'}; color: ${isLightColor(data.badge_color) ? '#000' : '#fff'};" title="شارة تميز">${data.badge}</span>` : '';
+        `<span class="student-badge" style="background: ${data.badge_color || '#ffd700'} !important; color: ${isLightColor(data.badge_color) ? '#000' : '#fff'} !important;" title="شارة تميز">${data.badge}</span>` : '';
       
       let alertHtml = '';
       if(data.alert_text){
@@ -2307,9 +2307,9 @@
         filtered.forEach((d,i)=>{
           const isMe = d.code === myCode, rowClass = isMe ? 'mine' : '', nameColor = d.color || 'rgba(255,255,255,0.92)';
           
-          // ✨ FIXED: Badge display with correct color in student panel
+          // ✨ FIXED: Badge with correct color in Student Titles Table
           const badgeHTML = d.badge && d.badge.trim() ? 
-            `<span class="student-badge" style="--badge-bg: ${d.badge_color || '#ffd700'}; --badge-color: ${isLightColor(d.badge_color) ? '#000' : '#fff'}; background: ${d.badge_color || '#ffd700'}; color: ${isLightColor(d.badge_color) ? '#000' : '#fff'};" title="شارة تميز">${d.badge}</span>` : '';
+            `<span class="student-badge" style="background: ${d.badge_color || '#ffd700'} !important; color: ${isLightColor(d.badge_color) ? '#000' : '#fff'} !important;" title="شارة تميز">${d.badge}</span>` : '';
           const displayName = `${badgeHTML}<span style="color:${nameColor};font-weight:700">${d.name}</span>`;
           
           const subjectHtml = `<span class="badgeSub" style="color:${nameColor};border-color:${nameColor}33;background:${nameColor}0d">${d.subject}</span>`;
