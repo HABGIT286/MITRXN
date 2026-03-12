@@ -1410,13 +1410,14 @@
             </div>
           </div>
 
-          <!-- GUIDELINES -->
+          <!-- GUIDELINES (✅ زر طوي/فتح صغير وفي الأسفل) -->
           <div id="guidelinesPanel" style="display:none;margin-bottom:12px">
             <div class="glass-card" style="border-radius:16px;padding:16px">
               <div style="margin-bottom:10px">
                 <strong style="color:rgba(20,184,166,.95);font-size:12px">📋 متطلبات الاستخدام</strong>
               </div>
               <div id="guidelinesContent" class="bigNote expanded">جارٍ التحميل…</div>
+              <!-- ✅ زر صغير في الأسفل -->
               <button class="bigNote-toggle" id="guidelinesToggleBtn">📌 طوي</button>
             </div>
           </div>
@@ -2040,11 +2041,13 @@
         dp.style.display='block'; startCountdown(dt);
       } else { dp.style.display='none'; }
       
+      // ✅ GUIDELINES with small toggle button at bottom
       const gp = $('#guidelinesPanel'), gc = $('#guidelinesContent'), toggleBtn = $('#guidelinesToggleBtn');
       if(data.usage_guidelines && data.usage_guidelines.trim()){
         gc.textContent = data.usage_guidelines.trim(); gp.style.display='block';
         gc.classList.add('expanded');
         
+        // Toggle button functionality
         if(toggleBtn){
           toggleBtn.onclick = (e)=>{ 
             e.stopPropagation(); 
@@ -2164,7 +2167,7 @@
     /* ===== COMMENTS SYSTEM (✅ مُحدّث مع الردود) ===== */
     async function loadComments(){
       const code = await DEVICE_CODE_PROMISE;
-      const { data: comments, error } = await supabase.from('comments').select('*').order('created_at', { ascending: false }).limit(50);
+      const {  comments, error } = await supabase.from('comments').select('*').order('created_at', { ascending: false }).limit(50);
       
       if(error || !comments){
         $('#commentsList').innerHTML = `<div style="text-align:center;padding:30px;color:rgba(255,255,255,.4)"><div style="font-size:40px;margin-bottom:10px">⚠️</div><div>تعذر تحميل التعليقات</div></div>`;
@@ -2286,7 +2289,7 @@
       const replyAuthor = me?.name ? me.name.split(' ')[0] : 'طالب';
       
       // ✅ إضافة الرد إلى قاعدة البيانات
-      const { data: comment } = await supabase.from('comments').select('replies').eq('id', commentId).single();
+      const {  comment } = await supabase.from('comments').select('replies').eq('id', commentId).single();
       const existingReplies = comment?.replies || [];
       const newReplies = [...existingReplies, {
         text,
@@ -2320,16 +2323,24 @@
       if(e.key === 'Enter') submitComment();
     });
 
-    /* ===== CORE ACTIONS ===== */
+    /* ===== CORE ACTIONS (✅ تم إصلاح جميع الدوال) ===== */
     async function saveData(){
       playSound('click');
       const name = $('#studentName').value.trim(), title = $('#reportTitle').value.trim(), subject = $('#subjectName').value.trim(), code = await DEVICE_CODE_PROMISE;
       if(name.split(/\s+/).length < 2){ setMsg('⚠️ الاسم لازم يكون ثنائي على الأقل','error'); showToast('الاسم ثنائي مطلوب','error'); playSound('error'); return; }
       if(!name || !title || !subject){ setMsg('⚠️ املا كل الحقول','error'); showToast('املأ جميع الحقول','error'); playSound('error'); return; }
-      const { already } = await supabase.from('student_reports').select('id').eq('code',code).limit(1);
+      
+      // ✅ إصلاح: استخدام data:already بدلاً من already
+      const { data: already } = await supabase.from('student_reports').select('id').eq('code',code).limit(1);
       if(already?.length){ setMsg('⛔ لديك بيانات محفوظة','error'); showToast('لا يمكن التسجيل مرتين','error'); playSound('error'); await showMyInfo(); setActiveTab('myinfo'); return; }
-      const [{ nameUsed }, { titleUsed }] = await Promise.all([supabase.from('student_reports').select('id').eq('name',name).limit(1), supabase.from('student_reports').select('id').eq('title',title).limit(1)]);
+      
+      // ✅ إصلاح: استخدام data:nameUsed و data:titleUsed
+      const [{ data: nameUsed }, { data: titleUsed }] = await Promise.all([
+        supabase.from('student_reports').select('id').eq('name',name).limit(1),
+        supabase.from('student_reports').select('id').eq('title',title).limit(1)
+      ]);
       if((nameUsed?.length)||(titleUsed?.length)){ setMsg('❌ الاسم أو العنوان مستخدم','error'); showToast('مكرر مسبقاً','error'); playSound('error'); return; }
+      
       const { error } = await supabase.from('student_reports').insert([{ name, title, subject, date:new Date().toISOString(), code }]);
       if(error){ console.log(error); setMsg('❌ فشل الحفظ','error'); showToast('خطأ في الحفظ','error'); playSound('error'); return; }
       setMsg('✅ تم التسجيل بنجاح','success'); showToast('تم الحفظ ✨','success'); playSound('success'); await showMyInfo(); await showAll(); setActiveTab('myinfo');
@@ -2338,12 +2349,18 @@
     async function changeTitle(){
       playSound('click');
       const code = await DEVICE_CODE_PROMISE;
-      const { me } = await supabase.from('student_reports').select('id').eq('code',code).limit(1);
+      
+      // ✅ إصلاح: استخدام data:me بدلاً من me
+      const { data: me } = await supabase.from('student_reports').select('id').eq('code',code).limit(1);
       if(!me?.length){ setMsg('⚠️ لا توجد بيانات لك','error'); showToast('سجل أولاً','error'); playSound('error'); return; }
+      
       const newTitle = await showModal({ icon:'✏️', title:'تغيير العنوان', msg:'اكتب العنوان الجديد (فريد)', withInput:true, inputPlaceholder:'العنوان الجديد...', confirmText:'تغيير', cancelText:'إلغاء' });
       if(!newTitle) return; const clean = newTitle.trim(); if(!clean){ setMsg('⚠️ العنوان فاضي','error'); playSound('error'); return; }
-      const { titleUsed } = await supabase.from('student_reports').select('id').eq('title',clean).limit(1);
+      
+      // ✅ إصلاح: استخدام data:titleUsed
+      const { data: titleUsed } = await supabase.from('student_reports').select('id').eq('title',clean).limit(1);
       if(titleUsed?.length){ setMsg('❌ العنوان مستخدم','error'); playSound('error'); return; }
+      
       const { error } = await supabase.from('student_reports').update({ title:clean, date:new Date().toISOString() }).eq('code', code);
       if(error){ setMsg('❌ فشل التحديث','error'); playSound('error'); return; }
       setMsg('✅ تم التغيير','success'); showToast('تم التحديث ✨','success'); playSound('success'); await showMyInfo(); await showAll(); setActiveTab('myinfo');
@@ -2355,6 +2372,7 @@
       if(error || !data){ infoBox.style.display='none'; infoBox.innerHTML=''; setMsg('⚠️ لا توجد بيانات لك','error'); return; }
       const nameColor = data.color || 'rgba(255,255,255,0.92)';
       
+      // ✨ FIXED: Badge with correct color in My Info
       const badgeHTML = data.badge && data.badge.trim() ? 
         `<span class="student-badge" style="background: ${data.badge_color || '#ffd700'} !important; color: ${isLightColor(data.badge_color) ? '#000' : '#fff'} !important;" title="شارة تميز">${data.badge}</span>` : '';
       
@@ -2387,6 +2405,7 @@
         filtered.forEach((d,i)=>{
           const isMe = d.code === myCode, rowClass = isMe ? 'mine' : '', nameColor = d.color || 'rgba(255,255,255,0.92)';
           
+          // ✨ FIXED: Badge with correct color in Student Titles Table
           const badgeHTML = d.badge && d.badge.trim() ? 
             `<span class="student-badge" style="background: ${d.badge_color || '#ffd700'} !important; color: ${isLightColor(d.badge_color) ? '#000' : '#fff'} !important;" title="شارة تميز">${d.badge}</span>` : '';
           const displayName = `${badgeHTML}<span style="color:${nameColor};font-weight:700">${d.name}</span>`;
@@ -2404,7 +2423,9 @@
     async function deleteMyData(){
       playSound('click');
       const code = await DEVICE_CODE_PROMISE;
-      const {  me } = await supabase.from('student_reports').select('id').eq('code',code).limit(1);
+      
+      // ✅ إصلاح: استخدام data:me بدلاً من me
+      const { data: me } = await supabase.from('student_reports').select('id').eq('code',code).limit(1);
       if(!me?.length){ setMsg('⚠️ لا توجد بيانات','error'); playSound('error'); return; }
       
       // ✅ إظهار نافذة التأكيد
@@ -2485,4 +2506,5 @@
   <script defer src="https://static.cloudflareinsights.com/beacon.min.js/v8c78df7c7c0f484497ecbca7046644da1771523124516" crossorigin="anonymous"></script>
 </body>
 </html>
+
 
