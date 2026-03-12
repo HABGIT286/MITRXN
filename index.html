@@ -519,7 +519,7 @@
     .meBadge{font-size:8px;padding:2px 7px;border-radius:999px;border:1px solid rgba(245,200,66,.45);
       background:rgba(245,200,66,.18);color:rgba(245,200,66,.92);font-weight:700;letter-spacing:1px}
 
-    /* ✨ BADGE STYLES - SHINY EFFECT (FIXED COLOR) */
+    /* ✨ BADGE STYLES - SHINY EFFECT */
     .student-badge {
       display:inline-flex !important;
       align-items:center !important;
@@ -760,7 +760,7 @@
     .export-desc { font-size:0.75rem; color:rgba(255,255,255,0.5); }
     html[data-mode="light"] .export-desc{ color:rgba(0,0,0,0.5); }
 
-    /* ===== COMMENTS SECTION ===== */
+    /* ===== COMMENTS SECTION (مُحدّث) ===== */
     .comments-section {
       margin-top: 16px;
       border-top: 1px solid var(--glass-border);
@@ -828,13 +828,29 @@
       transform: translateY(-2px);
       box-shadow: 0 6px 20px rgba(0, 212, 255, 0.3);
     }
+    
+    /* ✅ تمرير عمودي للتعليقات */
     .comments-list {
-      max-height: 300px;
+      max-height: 350px;
       overflow-y: auto;
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 12px;
+      padding: 8px;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(0, 212, 255, 0.3) transparent;
     }
+    .comments-list::-webkit-scrollbar {
+      width: 6px;
+    }
+    .comments-list::-webkit-scrollbar-thumb {
+      background: rgba(0, 212, 255, 0.3);
+      border-radius: 3px;
+    }
+    .comments-list::-webkit-scrollbar-thumb:hover {
+      background: rgba(0, 212, 255, 0.6);
+    }
+    
     .comment-item {
       background: rgba(255, 255, 255, 0.04);
       border: 1px solid rgba(255, 255, 255, 0.08);
@@ -859,6 +875,9 @@
       font-size: 0.85rem;
       font-weight: 700;
       color: var(--neon-blue);
+      display: flex;
+      align-items: center;
+      gap: 6px;
     }
     .comment-time {
       font-size: 0.7rem;
@@ -876,11 +895,36 @@
     html[data-mode="light"] .comment-text {
       color: rgba(0, 0, 0, 0.85);
     }
+    
+    /* ✅ الردود على التعليقات */
     .comment-replies {
-      margin-top: 10px;
-      padding-right: 12px;
-      border-right: 2px solid rgba(0, 212, 255, 0.2);
+      margin-top: 12px;
+      padding-right: 16px;
+      border-right: 2px solid rgba(0, 212, 255, 0.3);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
     }
+    .reply-item {
+      background: rgba(0, 212, 255, 0.06);
+      border-radius: 10px;
+      padding: 10px 12px;
+      font-size: 0.8rem;
+    }
+    .reply-item .reply-author {
+      font-weight: 700;
+      color: var(--neon-blue);
+      font-size: 0.8rem;
+      margin-bottom: 4px;
+    }
+    .reply-item .reply-text {
+      color: rgba(255, 255, 255, 0.8);
+      line-height: 1.5;
+    }
+    html[data-mode="light"] .reply-item .reply-text {
+      color: rgba(0, 0, 0, 0.8);
+    }
+    
     .reply-btn {
       font-size: 0.75rem;
       color: rgba(0, 212, 255, 0.7);
@@ -890,6 +934,7 @@
       padding: 4px 8px;
       border-radius: 6px;
       transition: var(--transition);
+      margin-top: 8px;
     }
     .reply-btn:hover {
       background: rgba(0, 212, 255, 0.1);
@@ -1365,14 +1410,13 @@
             </div>
           </div>
 
-          <!-- GUIDELINES (✅ زر طوي/فتح صغير وفي الأسفل) -->
+          <!-- GUIDELINES -->
           <div id="guidelinesPanel" style="display:none;margin-bottom:12px">
             <div class="glass-card" style="border-radius:16px;padding:16px">
               <div style="margin-bottom:10px">
                 <strong style="color:rgba(20,184,166,.95);font-size:12px">📋 متطلبات الاستخدام</strong>
               </div>
               <div id="guidelinesContent" class="bigNote expanded">جارٍ التحميل…</div>
-              <!-- ✅ زر صغير في الأسفل -->
               <button class="bigNote-toggle" id="guidelinesToggleBtn">📌 طوي</button>
             </div>
           </div>
@@ -1403,7 +1447,7 @@
         </div>
       </div>
 
-      <!-- ===== TAB: معلوماتي ===== -->
+      <!-- ===== TAB: معلوماتي (✅ تم حذف الأزرار الثلاثة) ===== -->
       <div class="tab-content" id="tab-myinfo">
         <div class="glass-card card-glow-purple">
           <div class="card-header">
@@ -1440,11 +1484,7 @@
             </label>
           </div>
 
-          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px">
-            <button class="btn btn-outline" id="btnDownload"><span>⬇️</span> تحميل بياناتي</button>
-            <button class="btn btn-danger" id="btnDelete"><span>🗑️</span> حذف معلوماتي</button>
-            <button class="btn btn-gold" id="btnProblem"><span>🆘</span> أرسل مشكلتك</button>
-          </div>
+          <!-- ✅ تم حذف الأزرار الثلاثة من هنا -->
         </div>
       </div>
 
@@ -1507,7 +1547,7 @@
         </div>
       </div>
 
-      <!-- ===== TAB: تعليقات ===== -->
+      <!-- ===== TAB: تعليقات (✅ تمرير عمودي + إظهار الردود) ===== -->
       <div class="tab-content" id="tab-comments">
         <div class="glass-card card-glow-teal">
           <div class="card-header">
@@ -1567,7 +1607,7 @@
         </div>
       </div>
 
-      <!-- ===== TAB: حذف ===== -->
+      <!-- ===== TAB: حذف (✅ تم إصلاح زر الحذف) ===== -->
       <div class="tab-content" id="tab-delete">
         <div class="glass-card card-glow-red">
           <div class="card-header">
@@ -2000,13 +2040,11 @@
         dp.style.display='block'; startCountdown(dt);
       } else { dp.style.display='none'; }
       
-      // ✅ GUIDELINES with small toggle button at bottom
       const gp = $('#guidelinesPanel'), gc = $('#guidelinesContent'), toggleBtn = $('#guidelinesToggleBtn');
       if(data.usage_guidelines && data.usage_guidelines.trim()){
         gc.textContent = data.usage_guidelines.trim(); gp.style.display='block';
         gc.classList.add('expanded');
         
-        // Toggle button functionality
         if(toggleBtn){
           toggleBtn.onclick = (e)=>{ 
             e.stopPropagation(); 
@@ -2123,35 +2161,52 @@
     }
     window.downloadFancy = downloadFancy;
 
-    /* ===== COMMENTS SYSTEM ===== */
+    /* ===== COMMENTS SYSTEM (✅ مُحدّث مع الردود) ===== */
     async function loadComments(){
       const code = await DEVICE_CODE_PROMISE;
-      const { data, error } = await supabase.from('comments').select('*').order('created_at', { ascending: false }).limit(50);
+      const { data: comments, error } = await supabase.from('comments').select('*').order('created_at', { ascending: false }).limit(50);
       
-      if(error || !data){
+      if(error || !comments){
         $('#commentsList').innerHTML = `<div style="text-align:center;padding:30px;color:rgba(255,255,255,.4)"><div style="font-size:40px;margin-bottom:10px">⚠️</div><div>تعذر تحميل التعليقات</div></div>`;
         return;
       }
       
-      $('#commentCount').textContent = data.length;
+      $('#commentCount').textContent = comments.length;
       
-      if(data.length === 0){
+      if(comments.length === 0){
         $('#commentsList').innerHTML = `<div style="text-align:center;padding:30px;color:rgba(255,255,255,.4)"><div style="font-size:40px;margin-bottom:10px">💬</div><div>كن أول من يعلق!</div></div>`;
         return;
       }
       
       let html = '';
-      data.forEach(comment => {
+      comments.forEach(comment => {
         const timeAgo = getTimeAgo(comment.created_at);
         const isMe = comment.code === code;
+        
+        // ✅ جلب الردود على هذا التعليق
+        let repliesHtml = '';
+        if(comment.replies && comment.replies.length > 0){
+          repliesHtml = `<div class="comment-replies">`;
+          comment.replies.forEach(reply => {
+            repliesHtml += `
+              <div class="reply-item">
+                <div class="reply-author">${reply.author_name || 'طالب'}</div>
+                <div class="reply-text">${reply.text}</div>
+              </div>
+            `;
+          });
+          repliesHtml += `</div>`;
+        }
+        
         html += `
           <div class="comment-item" style="${isMe ? 'border-color: rgba(245,197,24,0.3);' : ''}">
             <div class="comment-header">
-              <span class="comment-author">${isMe ? 'أنت' : comment.anonymous_name || 'طالب'}</span>
+              <span class="comment-author">${isMe ? '👤 أنت' : comment.anonymous_name || 'طالب'}</span>
               <span class="comment-time">${timeAgo}</span>
             </div>
             <div class="comment-text">${comment.text}</div>
             <button class="reply-btn" onclick="showReplyInput('${comment.id}')">💭 رد</button>
+            ${repliesHtml}
             <div id="reply-${comment.id}" style="display:none"></div>
           </div>
         `;
@@ -2187,7 +2242,8 @@
         text,
         code,
         anonymous_name: me?.name ? me.name.split(' ')[0] : 'طالب',
-        created_at: new Date().toISOString()
+        created_at: new Date().toISOString(),
+        replies: []
       }]);
       
       if(error){
@@ -2225,10 +2281,35 @@
         return;
       }
       
-      showToast('تم إرسال الرد (قريباً)','success');
+      const code = await DEVICE_CODE_PROMISE;
+      const {  me } = await supabase.from('student_reports').select('name').eq('code',code).single();
+      const replyAuthor = me?.name ? me.name.split(' ')[0] : 'طالب';
+      
+      // ✅ إضافة الرد إلى قاعدة البيانات
+      const { data: comment } = await supabase.from('comments').select('replies').eq('id', commentId).single();
+      const existingReplies = comment?.replies || [];
+      const newReplies = [...existingReplies, {
+        text,
+        author_name: replyAuthor,
+        code,
+        created_at: new Date().toISOString()
+      }];
+      
+      const { error } = await supabase.from('comments').update({
+        replies: newReplies
+      }).eq('id', commentId);
+      
+      if(error){
+        showToast('فشل إرسال الرد','error');
+        playSound('error');
+        return;
+      }
+      
+      showToast('تم إرسال الرد ✨','success');
       playSound('success');
       input.value = '';
       $(`#reply-${commentId}`).style.display = 'none';
+      loadComments();
     };
 
     $('#commentSubmit')?.addEventListener('click', ()=>{
@@ -2274,7 +2355,6 @@
       if(error || !data){ infoBox.style.display='none'; infoBox.innerHTML=''; setMsg('⚠️ لا توجد بيانات لك','error'); return; }
       const nameColor = data.color || 'rgba(255,255,255,0.92)';
       
-      // ✨ FIXED: Badge with correct color in My Info
       const badgeHTML = data.badge && data.badge.trim() ? 
         `<span class="student-badge" style="background: ${data.badge_color || '#ffd700'} !important; color: ${isLightColor(data.badge_color) ? '#000' : '#fff'} !important;" title="شارة تميز">${data.badge}</span>` : '';
       
@@ -2307,7 +2387,6 @@
         filtered.forEach((d,i)=>{
           const isMe = d.code === myCode, rowClass = isMe ? 'mine' : '', nameColor = d.color || 'rgba(255,255,255,0.92)';
           
-          // ✨ FIXED: Badge with correct color in Student Titles Table
           const badgeHTML = d.badge && d.badge.trim() ? 
             `<span class="student-badge" style="background: ${d.badge_color || '#ffd700'} !important; color: ${isLightColor(d.badge_color) ? '#000' : '#fff'} !important;" title="شارة تميز">${d.badge}</span>` : '';
           const displayName = `${badgeHTML}<span style="color:${nameColor};font-weight:700">${d.name}</span>`;
@@ -2321,16 +2400,35 @@
       });
     }
 
+    // ✅ تم إصلاح دالة الحذف لتعمل بشكل صحيح
     async function deleteMyData(){
       playSound('click');
       const code = await DEVICE_CODE_PROMISE;
       const {  me } = await supabase.from('student_reports').select('id').eq('code',code).limit(1);
       if(!me?.length){ setMsg('⚠️ لا توجد بيانات','error'); playSound('error'); return; }
-      const confirmed = await showModal({ icon:'🗑️', title:'تأكيد الحذف', msg:'هل أنت متأكد؟\nالإجراء نهائي ولا يمكن التراجع.', withInput:false, confirmText:'حذف', cancelText:'إلغاء' });
+      
+      // ✅ إظهار نافذة التأكيد
+      const confirmed = await showModal({ 
+        icon:'🗑️', 
+        title:'تأكيد الحذف', 
+        msg:'هل أنت متأكد؟\nالإجراء نهائي ولا يمكن التراجع.', 
+        withInput:false, 
+        confirmText:'حذف', 
+        cancelText:'إلغاء' 
+      });
+      
       if(!confirmed) return;
+      
       const { error } = await supabase.from('student_reports').delete().eq('code', code);
       if(error){ setMsg('❌ فشل الحذف','error'); playSound('error'); return; }
-      $('#infoBox').style.display='none'; $('#infoBox').innerHTML=''; setMsg('✅ تم الحذف','success'); showToast('تم حذف البيانات','success'); playSound('delete'); await showAll(); setActiveTab('register');
+      
+      $('#infoBox').style.display='none'; 
+      $('#infoBox').innerHTML=''; 
+      setMsg('✅ تم الحذف','success'); 
+      showToast('تم حذف البيانات','success'); 
+      playSound('delete'); 
+      await showAll(); 
+      setActiveTab('register');
     }
 
     async function reportProblem(){
@@ -2387,5 +2485,4 @@
   <script defer src="https://static.cloudflareinsights.com/beacon.min.js/v8c78df7c7c0f484497ecbca7046644da1771523124516" crossorigin="anonymous"></script>
 </body>
 </html>
-
 
