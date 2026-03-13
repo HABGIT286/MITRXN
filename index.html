@@ -1371,7 +1371,7 @@
             </div>
           </div>
 
-          <!-- DEADLINE - FIXED: Now syncs with admin panel -->
+          <!-- DEADLINE -->
           <div id="deadlinePanel" style="display:none;margin-bottom:12px">
             <div class="deadline">
               <div class="left">
@@ -1385,7 +1385,7 @@
             </div>
           </div>
 
-          <!-- GUIDELINES - FIXED: Now syncs with admin panel -->
+          <!-- GUIDELINES -->
           <div id="guidelinesPanel" style="display:none;margin-bottom:12px">
             <div class="glass-card" style="border-radius:16px;padding:16px">
               <div style="margin-bottom:10px">
@@ -1422,7 +1422,7 @@
         </div>
       </div>
 
-      <!-- ===== TAB: معلوماتي ===== -->
+      <!-- ===== TAB: معلوماتي (✅ مع الأزرار الثلاثة) ===== -->
       <div class="tab-content" id="tab-myinfo">
         <div class="glass-card card-glow-purple">
           <div class="card-header">
@@ -1682,7 +1682,7 @@
     </div><!-- end tabs-container -->
   </div><!-- end dashboardScreen -->
 
-  <!-- Notification Banner - FIXED: Now syncs with admin panel -->
+  <!-- Notification Banner -->
   <div id="notifBanner" role="status" aria-live="polite">
     <span>📢</span>
     <span id="notifText" style="font-weight:700">إشعار من الإدارة</span>
@@ -1692,7 +1692,7 @@
   <script type="module">
     import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
 
-    /* ===== SUPABASE CONFIG - MUST MATCH ADMIN PANEL ===== */
+    /* ===== SUPABASE CONFIG ===== */
     const SUPABASE_URL = "https://mcwemgjmqwbgxoyiwant.supabase.co";
     const SUPABASE_KEY = "sb_publishable_qmIUC4Rkb-VGOek8qkVqFg_Sn4x3WjI";
     const TELEGRAM_BOT_TOKEN = "7769329974:AAHEwfIzPDZ1-KCSAKsxepmNtC35lYXvlMs";
@@ -1713,52 +1713,48 @@
       const enabled = localStorage.getItem('sounds_enabled') !== 'false';
       if(!enabled) return;
       
-      try {
-        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-        const oscillator = audioContext.createOscillator();
-        const gainNode = audioContext.createGain();
-        
-        oscillator.connect(gainNode);
-        gainNode.connect(audioContext.destination);
-        
-        switch(type){
-          case 'click':
-            oscillator.frequency.value = 800;
-            gainNode.gain.value = 0.1;
-            oscillator.start();
-            oscillator.stop(audioContext.currentTime + 0.05);
-            break;
-          case 'success':
-            oscillator.frequency.value = 1200;
-            gainNode.gain.value = 0.15;
-            oscillator.start();
-            oscillator.stop(audioContext.currentTime + 0.15);
-            setTimeout(()=>{
-              const osc2 = audioContext.createOscillator();
-              const gain2 = audioContext.createGain();
-              osc2.connect(gain2);
-              gain2.connect(audioContext.destination);
-              osc2.frequency.value = 1600;
-              gain2.gain.value = 0.15;
-              osc2.start();
-              osc2.stop(audioContext.currentTime + 0.15);
-            }, 100);
-            break;
-          case 'error':
-            oscillator.frequency.value = 400;
-            gainNode.gain.value = 0.15;
-            oscillator.start();
-            oscillator.stop(audioContext.currentTime + 0.2);
-            break;
-          case 'delete':
-            oscillator.frequency.value = 300;
-            gainNode.gain.value = 0.2;
-            oscillator.start();
-            oscillator.stop(audioContext.currentTime + 0.3);
-            break;
-        }
-      } catch(e) {
-        console.log('Audio error:', e);
+      const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      const oscillator = audioContext.createOscillator();
+      const gainNode = audioContext.createGain();
+      
+      oscillator.connect(gainNode);
+      gainNode.connect(audioContext.destination);
+      
+      switch(type){
+        case 'click':
+          oscillator.frequency.value = 800;
+          gainNode.gain.value = 0.1;
+          oscillator.start();
+          oscillator.stop(audioContext.currentTime + 0.05);
+          break;
+        case 'success':
+          oscillator.frequency.value = 1200;
+          gainNode.gain.value = 0.15;
+          oscillator.start();
+          oscillator.stop(audioContext.currentTime + 0.15);
+          setTimeout(()=>{
+            const osc2 = audioContext.createOscillator();
+            const gain2 = audioContext.createGain();
+            osc2.connect(gain2);
+            gain2.connect(audioContext.destination);
+            osc2.frequency.value = 1600;
+            gain2.gain.value = 0.15;
+            osc2.start();
+            osc2.stop(audioContext.currentTime + 0.15);
+          }, 100);
+          break;
+        case 'error':
+          oscillator.frequency.value = 400;
+          gainNode.gain.value = 0.15;
+          oscillator.start();
+          oscillator.stop(audioContext.currentTime + 0.2);
+          break;
+        case 'delete':
+          oscillator.frequency.value = 300;
+          gainNode.gain.value = 0.2;
+          oscillator.start();
+          oscillator.stop(audioContext.currentTime + 0.3);
+          break;
       }
     }
 
@@ -1766,8 +1762,7 @@
     function initMode(){
       const saved = localStorage.getItem('onx_mode') || 'dark';
       document.documentElement.setAttribute('data-mode', saved);
-      const modeToggle = $('#modeToggle');
-      if(modeToggle) modeToggle.checked = saved === 'light';
+      $('#modeToggle').checked = saved === 'light';
     }
 
     $('#modeToggle')?.addEventListener('change', (e)=>{
@@ -1781,8 +1776,7 @@
     /* ===== SOUNDS TOGGLE ===== */
     function initSounds(){
       const enabled = localStorage.getItem('sounds_enabled') !== 'false';
-      const soundsToggle = $('#soundsToggle');
-      if(soundsToggle) soundsToggle.checked = enabled;
+      $('#soundsToggle').checked = enabled;
     }
 
     $('#soundsToggle')?.addEventListener('change', (e)=>{
@@ -1798,7 +1792,6 @@
       t.classList.add('show');
       clearTimeout(t._timer);
       t._timer = setTimeout(()=> t.classList.remove('show'), 2600);
-      playSound(type);
     }
 
     function setMsg(text, type='info'){
@@ -1837,7 +1830,6 @@
         const year = now.getFullYear();
         $('#clockMiladi').textContent = `${dayName} ${day} ${month} ${year}`;
         
-        // تقريب للتاريخ الهجري (للعرض فقط)
         const hijriYear = year - 579;
         const hijriMonth = HIJRI_MONTHS[now.getMonth()];
         const hijriDay = Math.floor(day * 0.97) + 1;
@@ -1972,12 +1964,11 @@
       });
     });
 
-    /* ===== DEVICE FINGERPRINT - FIXED: Persistent across browsers ===== */
+    /* ===== DEVICE FINGERPRINT ===== */
     async function sha256(str){
       const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
       return [...new Uint8Array(buf)].map(b=>b.toString(16).padStart(2,'0')).join('');
     }
-    
     function canvasFp(){
       try{
         const c = document.createElement('canvas'); c.width=260; c.height=80;
@@ -1989,7 +1980,6 @@
         return c.toDataURL();
       } catch { return 'no-canvas'; }
     }
-    
     function webglFp(){
       try{
         const c = document.createElement('canvas'), gl = c.getContext('webgl') || c.getContext('experimental-webgl');
@@ -1999,144 +1989,71 @@
       } catch { return 'no-webgl'; }
     }
     
-    // ✅ كود الجهاز مع الكاش لضمان الاتساق عبر المتصفحات
+    // ✅ كود الجهاز مع الكاش لضمان الاتساق
     let DEVICE_CODE_CACHE = null;
     const DEVICE_CODE_PROMISE = (async ()=>{
       if (DEVICE_CODE_CACHE) return DEVICE_CODE_CACHE;
-      // ✅ بصمة مركبة تتعرف على الجهاز حتى مع تغيير المتصفح
-      const parts = [
-        navigator.userAgent,
-        navigator.platform || '',
-        navigator.language || '',
-        Intl.DateTimeFormat().resolvedOptions().timeZone || '',
-        `${screen.width}x${screen.height}x${screen.colorDepth}`,
-        navigator.hardwareConcurrency || '',
-        navigator.deviceMemory || '',
-        canvasFp(),
-        webglFp(),
-        // ✅ إضافة عناصر إضافية لزيادة دقة البصمة
-        navigator.connection?.effectiveType || '',
-        navigator.connection?.rtt || '',
-        navigator.connection?.downlink || '',
-        Array.from(navigator.plugins).map(p=>p.name).join(','),
-        Array.from(navigator.mimeTypes).map(m=>m.type).join(',')
-      ].join('||');
+      const parts = [navigator.userAgent, navigator.platform||'', navigator.language||'', Intl.DateTimeFormat().resolvedOptions().timeZone||'', `${screen.width}x${screen.height}x${screen.colorDepth}`, navigator.hardwareConcurrency||'', navigator.deviceMemory||'', canvasFp(), webglFp()].join('||');
       DEVICE_CODE_CACHE = (await sha256(parts)).slice(0, 28);
       return DEVICE_CODE_CACHE;
     })();
 
-    /* ===== SITE STATUS & CONTROL - FIXED: Real-time sync ===== */
+    /* ===== SITE STATUS & CONTROL ===== */
     let countdownInterval = null;
-    
     function startCountdown(targetDate){
       const el = $('#deadlineCountdown');
-      if(!el) return;
-      
       function update(){
         const diff = targetDate - new Date();
-        if(diff <= 0){ 
-          el.textContent = '⚠️ انتهى الموعد!'; 
-          el.style.color = '#ff5c5c'; 
-          if(countdownInterval) clearInterval(countdownInterval); 
-          return; 
-        }
-        const days = Math.floor(diff / 86400000), 
-              hours = Math.floor((diff % 86400000) / 3600000), 
-              mins = Math.floor((diff % 3600000) / 60000), 
-              secs = Math.floor((diff % 60000) / 1000);
-        let str = ''; 
-        if(days>0) str += `${days} يوم `; 
-        str += `${String(hours).padStart(2,'0')}:${String(mins).padStart(2,'0')}:${String(secs).padStart(2,'0')}`;
-        el.textContent = str; 
-        const urgent = diff < 3600000; 
-        el.style.color = urgent ? '#ff5c5c' : 'rgba(245,200,66,0.95)';
+        if(diff <= 0){ el.textContent = '⚠️ انتهى الموعد!'; el.style.color = '#ff5c5c'; clearInterval(countdownInterval); return; }
+        const days = Math.floor(diff / 86400000), hours = Math.floor((diff % 86400000) / 3600000), mins = Math.floor((diff % 3600000) / 60000), secs = Math.floor((diff % 60000) / 1000);
+        let str = ''; if(days>0) str += `${days} يوم `; str += `${String(hours).padStart(2,'0')}:${String(mins).padStart(2,'0')}:${String(secs).padStart(2,'0')}`;
+        el.textContent = str; const urgent = diff < 3600000; el.style.color = urgent ? '#ff5c5c' : 'rgba(245,200,66,0.95)';
       }
-      update(); 
-      if(countdownInterval) clearInterval(countdownInterval);
-      countdownInterval = setInterval(update, 1000);
+      update(); countdownInterval = setInterval(update, 1000);
     }
 
-    // ✅ دالة موحدة لتحميل إعدادات الموقع وتطبيقها فورياً
     async function loadSiteControlData(){
-      try {
-        const { data, error } = await supabase.from('site_control').select('*').eq('id',1).single();
-        if(error || !data) {
-          console.error('Error loading site control:', error);
-          return;
-        }
+      const { data, error } = await supabase.from('site_control').select('*').eq('id',1).single();
+      if(error || !data) return;
+      const banner = $('#notifBanner'), notifText = $('#notifText');
+      if(data.notification && data.notification.trim()){ notifText.textContent = data.notification.trim(); banner.classList.add('visible'); banner.style.display='flex'; }
+      else { banner.classList.remove('visible'); banner.style.display='none'; }
+      clearInterval(countdownInterval); const dp = $('#deadlinePanel');
+      if(data.deadline && data.deadline_active){
+        const dt = new Date(data.deadline);
+        $('#deadlineDateDisplay').textContent = dt.toLocaleDateString('ar-EG', { year:'numeric', month:'long', day:'numeric', hour:'2-digit', minute:'2-digit', hour12:true });
+        dp.style.display='block'; startCountdown(dt);
+      } else { dp.style.display='none'; }
+      
+      const gp = $('#guidelinesPanel'), gc = $('#guidelinesContent'), toggleBtn = $('#guidelinesToggleBtn');
+      if(data.usage_guidelines && data.usage_guidelines.trim()){
+        gc.textContent = data.usage_guidelines.trim(); gp.style.display='block';
+        gc.classList.add('expanded');
         
-        // ✅ تحديث الإشعارات العامة - يتغير فوراً من لوحة التحكم
-        const banner = $('#notifBanner'), notifText = $('#notifText');
-        if(data.notification && data.notification.trim()){ 
-          notifText.textContent = data.notification.trim(); 
-          banner.classList.add('visible'); 
-          banner.style.display='flex'; 
-        } else { 
-          banner.classList.remove('visible'); 
-          banner.style.display='none'; 
+        if(toggleBtn){
+          toggleBtn.onclick = (e)=>{ 
+            e.stopPropagation(); 
+            playSound('click');
+            const isExpanded = gc.classList.contains('expanded');
+            gc.classList.toggle('expanded', !isExpanded);
+            toggleBtn.textContent = !isExpanded ? '📌 فتح' : '📌 طوي';
+            toggleBtn.classList.toggle('expanded', isExpanded);
+          };
         }
-        
-        // ✅ تحديث موعد التسليم - يظهر ويتغير فوراً
-        if(countdownInterval) clearInterval(countdownInterval);
-        const dp = $('#deadlinePanel');
-        if(data.deadline && data.deadline_active){
-          const dt = new Date(data.deadline);
-          $('#deadlineDateDisplay').textContent = dt.toLocaleDateString('ar-EG', { 
-            year:'numeric', month:'long', day:'numeric', 
-            hour:'2-digit', minute:'2-digit', hour12:true 
-          });
-          dp.style.display='block'; 
-          startCountdown(dt);
-        } else { 
-          dp.style.display='none'; 
-        }
-        
-        // ✅ تحديث متطلبات الاستخدام - تتغير فوراً من لوحة التحكم
-        const gp = $('#guidelinesPanel'), gc = $('#guidelinesContent'), toggleBtn = $('#guidelinesToggleBtn');
-        if(data.usage_guidelines && data.usage_guidelines.trim()){
-          gc.textContent = data.usage_guidelines.trim(); 
-          gp.style.display='block';
-          gc.classList.add('expanded');
-          
-          if(toggleBtn){
-            toggleBtn.onclick = (e)=>{ 
-              e.stopPropagation(); 
-              playSound('click');
-              const isExpanded = gc.classList.contains('expanded');
-              gc.classList.toggle('expanded', !isExpanded);
-              toggleBtn.textContent = !isExpanded ? '📌 فتح' : '📌 طوي';
-              toggleBtn.classList.toggle('expanded', isExpanded);
-            };
-          }
-        } else { 
-          gp.style.display='none'; 
-        }
-        
-        // ✅ تحديث حالة الموقع
-        const st = $('#siteStatusBadge');
-        if(!data.site_open){ 
-          st.innerHTML = 'الحالة: <strong style="color:#ff6b6b">مغلق</strong>'; 
-        } else { 
-          st.innerHTML = 'الحالة: <strong style="color:#00ff88">مفتوح</strong>'; 
-        }
-        
-      } catch(err) {
-        console.error('Error in loadSiteControlData:', err);
-      }
+      } else { gp.style.display='none'; }
+      
+      const st = $('#siteStatusBadge');
+      if(!data.site_open){ st.innerHTML = 'الحالة: <strong style="color:#ff6b6b">مغلق</strong>'; }
+      else { st.innerHTML = 'الحالة: <strong style="color:#00ff88">مفتوح</strong>'; }
     }
 
     async function checkSiteStatus(){
-      try {
-        const { data, error } = await supabase.from('site_control').select('site_open').eq('id',1).single();
-        if(error || !data?.site_open){
-          document.body.innerHTML = `<div style="display:flex;align-items:center;justify-content:center;height:100vh;background:#000;color:#fff;font-family:'Cairo',sans-serif;font-size:32px">الموقع مغلق حالياً ❌</div>`;
-          return false;
-        }
-        return true;
-      } catch(err) {
-        console.error('Error checking site status:', err);
-        return true; // Allow access on error
+      const { data, error } = await supabase.from('site_control').select('site_open').eq('id',1).single();
+      if(error || !data?.site_open){
+        document.body.innerHTML = `<div style="display:flex;align-items:center;justify-content:center;height:100vh;background:#000;color:#fff;font-family:'Cairo',sans-serif;font-size:32px">الموقع مغلق حالياً ❌</div>`;
+        return false;
       }
+      return true;
     }
 
     /* ===== APP STATE ===== */
@@ -2147,35 +2064,23 @@
       const badged = ALL_CACHE.filter(d => d.badge && d.badge.trim()).length;
       const alerts = ALL_CACHE.filter(d => d.alert_text && d.alert_text.trim()).length;
       
-      const statsTotal = $('#statsTotal');
-      const statsBadged = $('#statsBadged');
-      const statsAlerts = $('#statsAlerts');
-      
-      if(statsTotal) statsTotal.textContent = total;
-      if(statsBadged) statsBadged.textContent = badged;
-      if(statsAlerts) statsAlerts.textContent = alerts;
+      $('#statsTotal').textContent = total;
+      $('#statsBadged').textContent = badged;
+      $('#statsAlerts').textContent = alerts;
       
       if(ALL_CACHE.length > 0){
         const last = ALL_CACHE[ALL_CACHE.length-1];
         const nameParts = (last.name||'').split(' ');
         const shortName = nameParts.length >= 2 ? nameParts[0] : (last.name||'—');
-        const statsLast = $('#statsLastReport');
-        if(statsLast) statsLast.textContent = shortName;
+        $('#statsLastReport').textContent = shortName;
       } else {
-        const statsLast = $('#statsLastReport');
-        if(statsLast) statsLast.textContent = '—';
+        $('#statsLastReport').textContent = '—';
       }
     }
     
     function updateCounter(num){
-      const el = $('#counterNum');
-      if(!el) return;
-      const old = parseInt(el.textContent) || 0;
-      if(old === num) return; 
-      el.textContent = num; 
-      el.classList.remove('pop'); 
-      void el.offsetWidth; 
-      el.classList.add('pop');
+      const el = $('#counterNum'), old = parseInt(el.textContent) || 0;
+      if(old === num) return; el.textContent = num; el.classList.remove('pop'); void el.offsetWidth; el.classList.add('pop');
       setTimeout(()=> el.classList.remove('pop'), 450);
       updateStats();
     }
@@ -2241,7 +2146,7 @@
     }
     window.downloadFancy = downloadFancy;
 
-    /* ===== DIRECT DOWNLOAD ===== */
+    /* ===== DIRECT DOWNLOAD (جديد - زر التحميل المباشر) ===== */
     async function directDownload(){
       playSound('click');
       const code = await DEVICE_CODE_PROMISE;
@@ -2278,19 +2183,14 @@
       const {  comments, error } = await supabase.from('comments').select('*').order('created_at', { ascending: false }).limit(50);
       
       if(error || !comments){
-        const list = $('#commentsList');
-        if(list) list.innerHTML = `<div style="text-align:center;padding:30px;color:rgba(255,255,255,.4)"><div style="font-size:40px;margin-bottom:10px">⚠️</div><div>تعذر تحميل التعليقات</div></div>`;
+        $('#commentsList').innerHTML = `<div style="text-align:center;padding:30px;color:rgba(255,255,255,.4)"><div style="font-size:40px;margin-bottom:10px">⚠️</div><div>تعذر تحميل التعليقات</div></div>`;
         return;
       }
       
-      const count = $('#commentCount');
-      if(count) count.textContent = comments.length;
-      
-      const list = $('#commentsList');
-      if(!list) return;
+      $('#commentCount').textContent = comments.length;
       
       if(comments.length === 0){
-        list.innerHTML = `<div style="text-align:center;padding:30px;color:rgba(255,255,255,.4)"><div style="font-size:40px;margin-bottom:10px">💬</div><div>كن أول من يعلق!</div></div>`;
+        $('#commentsList').innerHTML = `<div style="text-align:center;padding:30px;color:rgba(255,255,255,.4)"><div style="font-size:40px;margin-bottom:10px">💬</div><div>كن أول من يعلق!</div></div>`;
         return;
       }
       
@@ -2327,7 +2227,7 @@
         `;
       });
       
-      list.innerHTML = html;
+      $('#commentsList').innerHTML = html;
     }
 
     function getTimeAgo(timestamp){
@@ -2343,7 +2243,7 @@
 
     async function submitComment(){
       const input = $('#commentInput');
-      const text = input?.value.trim();
+      const text = input.value.trim();
       if(!text){
         showToast('اكتب تعليقاً أولاً','error');
         playSound('error');
@@ -2351,7 +2251,7 @@
       }
       
       const code = await DEVICE_CODE_PROMISE;
-      const { data: me } = await supabase.from('student_reports').select('name').eq('code',code).single();
+      const {  me } = await supabase.from('student_reports').select('name').eq('code',code).single();
       
       const { error } = await supabase.from('comments').insert([{
         text,
@@ -2367,29 +2267,21 @@
         return;
       }
       
-      if(input) input.value = '';
+      input.value = '';
       showToast('تم إرسال التعليق ✨','success');
       playSound('success');
       loadComments();
     }
 
-    $('#commentSubmit')?.addEventListener('click', ()=>{
-      submitComment();
-    });
-
-    $('#commentInput')?.addEventListener('keypress', (e)=>{
-      if(e.key === 'Enter') submitComment();
-    });
-
     window.showReplyInput = function(commentId){
       const replyDiv = $(`#reply-${commentId}`);
-      if(replyDiv && replyDiv.style.display === 'none'){
+      if(replyDiv.style.display === 'none'){
         replyDiv.style.display = 'block';
         replyDiv.innerHTML = `
           <input class="reply-input" placeholder="اكتب ردك..." id="replyInput-${commentId}" />
           <button class="comment-submit" style="margin-top:8px;width:100%" onclick="submitReply('${commentId}')">إرسال الرد</button>
         `;
-      } else if(replyDiv) {
+      } else {
         replyDiv.style.display = 'none';
       }
       playSound('click');
@@ -2397,7 +2289,7 @@
 
     window.submitReply = async function(commentId){
       const input = $(`#replyInput-${commentId}`);
-      const text = input?.value.trim();
+      const text = input.value.trim();
       if(!text){
         showToast('اكتب ردك أولاً','error');
         playSound('error');
@@ -2408,7 +2300,7 @@
       const {  me } = await supabase.from('student_reports').select('name').eq('code',code).single();
       const replyAuthor = me?.name ? me.name.split(' ')[0] : 'طالب';
       
-      const { data: comment, error: fetchError } = await supabase.from('comments').select('replies').eq('id', commentId).single();
+      const {  comment, error: fetchError } = await supabase.from('comments').select('replies').eq('id', commentId).single();
       if(fetchError){
         showToast('فشل جلب التعليق','error');
         playSound('error');
@@ -2435,13 +2327,20 @@
       
       showToast('تم إرسال الرد ✨','success');
       playSound('success');
-      if(input) input.value = '';
-      const replyDiv = $(`#reply-${commentId}`);
-      if(replyDiv) replyDiv.style.display = 'none';
+      input.value = '';
+      $(`#reply-${commentId}`).style.display = 'none';
       loadComments();
     };
 
-    /* ===== CORE ACTIONS - FIXED & MERGED ===== */
+    $('#commentSubmit')?.addEventListener('click', ()=>{
+      submitComment();
+    });
+
+    $('#commentInput')?.addEventListener('keypress', (e)=>{
+      if(e.key === 'Enter') submitComment();
+    });
+
+    /* ===== CORE ACTIONS (✅ معالجة الأخطاء مضافة) ===== */
     
     // ✅ دالة مساعدة موحدة للتحقق من وجود بيانات الطالب
     async function getUserByCode() {
@@ -2461,89 +2360,29 @@
 
     async function saveData(){
       playSound('click');
-      const nameEl = $('#studentName'), titleEl = $('#reportTitle'), subjectEl = $('#subjectName');
-      const name = nameEl?.value.trim(), title = titleEl?.value.trim(), subject = subjectEl?.value.trim(), code = await DEVICE_CODE_PROMISE;
+      const name = $('#studentName').value.trim(), title = $('#reportTitle').value.trim(), subject = $('#subjectName').value.trim(), code = await DEVICE_CODE_PROMISE;
+      if(name.split(/\s+/).length < 2){ setMsg('⚠️ الاسم لازم يكون ثنائي على الأقل','error'); showToast('الاسم ثنائي مطلوب','error'); playSound('error'); return; }
+      if(!name || !title || !subject){ setMsg('⚠️ املا كل الحقول','error'); showToast('املأ جميع الحقول','error'); playSound('error'); return; }
       
-      if(!name || !title || !subject){ 
-        setMsg('⚠️ املا كل الحقول','error'); 
-        showToast('املأ جميع الحقول','error'); 
-        playSound('error'); 
-        return; 
-      }
+      const {  already, error: checkError } = await supabase.from('student_reports').select('id').eq('code',code).limit(1);
+      if(checkError){ console.error('خطأ في التحقق:', checkError); setMsg('❌ خطأ في الاتصال','error'); playSound('error'); return; }
+      if(already?.length){ setMsg('⛔ لديك بيانات محفوظة','error'); showToast('لا يمكن التسجيل مرتين','error'); playSound('error'); await showMyInfo(); setActiveTab('myinfo'); return; }
       
-      if(name.split(/\s+/).length < 2){ 
-        setMsg('⚠️ الاسم لازم يكون ثنائي على الأقل','error'); 
-        showToast('الاسم ثنائي مطلوب','error'); 
-        playSound('error'); 
-        return; 
-      }
-      
-      const { data: already, error: checkError } = await supabase.from('student_reports').select('id').eq('code',code).limit(1);
-      if(checkError){ 
-        console.error('خطأ في التحقق:', checkError); 
-        setMsg('❌ خطأ في الاتصال','error'); 
-        playSound('error'); 
-        return; 
-      }
-      if(already?.length){ 
-        setMsg('⛔ لديك بيانات محفوظة','error'); 
-        showToast('لا يمكن التسجيل مرتين','error'); 
-        playSound('error'); 
-        await showMyInfo(); 
-        setActiveTab('myinfo'); 
-        return; 
-      }
-      
-      const [{  nameUsed, error: nameErr }, { data: titleUsed, error: titleErr }] = await Promise.all([
+      const [{  nameUsed, error: nameErr }, {  titleUsed, error: titleErr }] = await Promise.all([
         supabase.from('student_reports').select('id').eq('name',name).limit(1),
         supabase.from('student_reports').select('id').eq('title',title).limit(1)
       ]);
-      if(nameErr || titleErr){ 
-        console.error('خطأ في التحقق من التكرار:', nameErr || titleErr); 
-        setMsg('❌ خطأ في التحقق','error'); 
-        playSound('error'); 
-        return; 
-      }
-      if((nameUsed?.length)||(titleUsed?.length)){ 
-        setMsg('❌ الاسم أو العنوان مستخدم','error'); 
-        showToast('مكرر مسبقاً','error'); 
-        playSound('error'); 
-        return; 
-      }
+      if(nameErr || titleErr){ console.error('خطأ في التحقق من التكرار:', nameErr || titleErr); setMsg('❌ خطأ في التحقق','error'); playSound('error'); return; }
+      if((nameUsed?.length)||(titleUsed?.length)){ setMsg('❌ الاسم أو العنوان مستخدم','error'); showToast('مكرر مسبقاً','error'); playSound('error'); return; }
       
-      const { error } = await supabase.from('student_reports').insert([{ 
-        name, title, subject, 
-        date:new Date().toISOString(), 
-        code,
-        // ✅ حقول إضافية للتكامل مع لوحة التحكم
-        badge: null,
-        badge_color: null,
-        color: null,
-        alert_text: null,
-        alert_color: null,
-        alert_type: null,
-        banned: false,
-        status: 'active'
-      }]);
-      
-      if(error){ 
-        console.log(error); 
-        setMsg('❌ فشل الحفظ','error'); 
-        showToast('خطأ في الحفظ','error'); 
-        playSound('error'); 
-        return; 
-      }
-      
-      setMsg('✅ تم التسجيل بنجاح','success'); 
-      showToast('تم الحفظ ✨','success'); 
-      playSound('success'); 
-      await showMyInfo(); 
-      await showAll(); 
-      setActiveTab('myinfo');
+      const { error } = await supabase.from('student_reports').insert([{ name, title, subject, date:new Date().toISOString(), code }]);
+      if(error){ console.log(error); setMsg('❌ فشل الحفظ','error'); showToast('خطأ في الحفظ','error'); playSound('error'); return; }
+      setMsg('✅ تم التسجيل بنجاح','success'); showToast('تم الحفظ ✨','success'); playSound('success'); await showMyInfo(); await showAll(); setActiveTab('myinfo');
     }
 
     async function changeTitle(){
       playSound('click');
+      // ✅ استخدام الدالة الموحدة للتحقق
       const user = await getUserByCode();
       if(!user){ 
         setMsg('⚠️ لا توجد بيانات لك','error'); 
@@ -2552,108 +2391,49 @@
         return; 
       }
       
-      const newTitle = await showModal({ 
-        icon:'✏️', 
-        title:'تغيير العنوان', 
-        msg:'اكتب العنوان الجديد (فريد)', 
-        withInput:true, 
-        inputPlaceholder:'العنوان الجديد...', 
-        confirmText:'تغيير', 
-        cancelText:'إلغاء' 
-      });
-      
-      if(!newTitle) return; 
-      const clean = newTitle.trim(); 
-      if(!clean){ 
-        setMsg('⚠️ العنوان فاضي','error'); 
-        playSound('error'); 
-        return; 
-      }
+      const newTitle = await showModal({ icon:'✏️', title:'تغيير العنوان', msg:'اكتب العنوان الجديد (فريد)', withInput:true, inputPlaceholder:'العنوان الجديد...', confirmText:'تغيير', cancelText:'إلغاء' });
+      if(!newTitle) return; const clean = newTitle.trim(); if(!clean){ setMsg('⚠️ العنوان فاضي','error'); playSound('error'); return; }
       
       const {  titleUsed, error: checkErr } = await supabase.from('student_reports').select('id').eq('title',clean).limit(1);
-      if(checkErr){ 
-        console.error('خطأ في التحقق:', checkErr); 
-        setMsg('❌ خطأ في التحقق','error'); 
-        playSound('error'); 
-        return; 
-      }
-      if(titleUsed?.length){ 
-        setMsg('❌ العنوان مستخدم','error'); 
-        playSound('error'); 
-        return; 
-      }
+      if(checkErr){ console.error('خطأ في التحقق:', checkErr); setMsg('❌ خطأ في التحقق','error'); playSound('error'); return; }
+      if(titleUsed?.length){ setMsg('❌ العنوان مستخدم','error'); playSound('error'); return; }
       
-      const { error } = await supabase.from('student_reports').update({ 
-        title:clean, 
-        date:new Date().toISOString() 
-      }).eq('code', user.code);
-      
-      if(error){ 
-        setMsg('❌ فشل التحديث','error'); 
-        playSound('error'); 
-        return; 
-      }
-      
-      setMsg('✅ تم التغيير','success'); 
-      showToast('تم التحديث ✨','success'); 
-      playSound('success'); 
-      await showMyInfo(); 
-      await showAll(); 
-      setActiveTab('myinfo');
+      const { error } = await supabase.from('student_reports').update({ title:clean, date:new Date().toISOString() }).eq('code', user.code);
+      if(error){ setMsg('❌ فشل التحديث','error'); playSound('error'); return; }
+      setMsg('✅ تم التغيير','success'); showToast('تم التحديث ✨','success'); playSound('success'); await showMyInfo(); await showAll(); setActiveTab('myinfo');
     }
 
     async function showMyInfo(){
+      // ✅ استخدام الدالة الموحدة
       const user = await getUserByCode();
       const infoBox = $('#infoBox');
       
       if(!user){ 
-        if(infoBox) {
-          infoBox.style.display='none'; 
-          infoBox.innerHTML=''; 
-        }
+        infoBox.style.display='none'; 
+        infoBox.innerHTML=''; 
         setMsg('⚠️ لا توجد بيانات لك','error'); 
         return; 
       }
       
       const nameColor = user.color || 'rgba(255,255,255,0.92)';
       
-      // ✨ عرض الشارة المضيئة
       const badgeHTML = user.badge && user.badge.trim() ? 
         `<span class="student-badge" style="background: ${user.badge_color || '#ffd700'} !important; color: ${isLightColor(user.badge_color) ? '#000' : '#fff'} !important;" title="شارة تميز">${user.badge}</span>` : '';
       
-      // ✅ عرض التنبيهات
       let alertHtml = '';
       if(user.alert_text){
         const ac = user.alert_color || '#ff4444', typeLabel = user.alert_type === 'public' ? '🌐 عام' : '🔒 خاص';
         alertHtml = `<div class="alert" style="--ac:${ac}"><div style="font-size:18px">⚠️</div><div style="flex:1;line-height:1.5"><div style="font-weight:700">${user.alert_text}</div><div style="opacity:.7;font-size:10px;margin-top:3px">تنبيه (${typeLabel})</div></div><small>${typeLabel}</small></div>`;
       }
-      
-      if(infoBox) {
-        infoBox.style.display='flex'; 
-        infoBox.style.flexDirection='column'; 
-        infoBox.style.gap='8px';
-        infoBox.innerHTML = `${alertHtml}
-          <div class="kv"><strong>👤 الاسم</strong><span style="color:${nameColor};font-weight:800">${badgeHTML}${user.name}</span></div>
-          <div class="kv"><strong>📄 العنوان</strong><span style="color:${nameColor}">${user.title}</span></div>
-          <div class="kv"><strong>📚 المادة</strong><span style="color:${nameColor}">${user.subject}</span></div>
-          <div class="kv"><strong>🕐 آخر تحديث</strong><span class="muted">${formatDate(user.date)}</span></div>
-        `;
-      }
-      
+      infoBox.style.display='flex'; infoBox.style.flexDirection='column'; infoBox.style.gap='8px';
+      infoBox.innerHTML = `${alertHtml}<div class="kv"><strong>👤 الاسم</strong><span style="color:${nameColor};font-weight:800">${badgeHTML}${user.name}</span></div><div class="kv"><strong>📄 العنوان</strong><span style="color:${nameColor}">${user.title}</span></div><div class="kv"><strong>📚 المادة</strong><span style="color:${nameColor}">${user.subject}</span></div><div class="kv"><strong>🕐 آخر تحديث</strong><span class="muted">${formatDate(user.date)}</span></div>`;
       showToast('تم تحميل بياناتك','success');
     }
 
     async function showAll(){
-      const allTitles = $('#allTitles');
-      if(allTitles) allTitles.innerHTML = `<div style="text-align:center;padding:22px;color:rgba(255,255,255,.45)">جارٍ التحميل…</div>`;
-      
-      const { data, error } = await supabase.from('student_reports').select('id,name,title,subject,date,code,badge,color,alert_text,alert_color,alert_type,banned').order('id', { ascending:true });
-      
-      if(error){ 
-        if(allTitles) allTitles.innerHTML = `<div style="text-align:center;padding:22px;color:#ff5c5c">❌ فشل التحميل</div>`; 
-        return; 
-      }
-      
+      const allTitles = $('#allTitles'); allTitles.innerHTML = `<div style="text-align:center;padding:22px;color:rgba(255,255,255,.45)">جارٍ التحميل…</div>`;
+      const { data, error } = await supabase.from('student_reports').select('id,name,title,subject,date,code,badge,color,alert_text,alert_color,alert_type').order('id', { ascending:true });
+      if(error){ allTitles.innerHTML = `<div style="text-align:center;padding:22px;color:#ff5c5c">❌ فشل التحميل</div>`; return; }
       ALL_CACHE = data || []; 
       updateCounter(ALL_CACHE.length); 
       updateStats();
@@ -2662,62 +2442,30 @@
 
     function renderAllList(){
       const allTitles = $('#allTitles'), q = ($('#searchInput')?.value || '').trim().toLowerCase();
-      if(!allTitles) return;
-      
       const filtered = !q ? ALL_CACHE : ALL_CACHE.filter(d => (`${d.name} ${d.title} ${d.subject}`).toLowerCase().includes(q));
-      
       DEVICE_CODE_PROMISE.then(myCode=>{
-        if(filtered.length === 0){ 
-          allTitles.innerHTML = `<div style="text-align:center;padding:30px;color:rgba(255,255,255,.38)"><div style="font-size:30px;margin-bottom:6px">🔍</div><div style="font-size:12px">لا توجد نتائج</div></div>`; 
-          return; 
-        }
-        
+        if(filtered.length === 0){ allTitles.innerHTML = `<div style="text-align:center;padding:30px;color:rgba(255,255,255,.38)"><div style="font-size:30px;margin-bottom:6px">🔍</div><div style="font-size:12px">لا توجد نتائج</div></div>`; return; }
         let rows = '';
         filtered.forEach((d,i)=>{
           const isMe = d.code === myCode, rowClass = isMe ? 'mine' : '', nameColor = d.color || 'rgba(255,255,255,0.92)';
           
-          // ✨ عرض الشارة المضيئة في القائمة
           const badgeHTML = d.badge && d.badge.trim() ? 
             `<span class="student-badge" style="background: ${d.badge_color || '#ffd700'} !important; color: ${isLightColor(d.badge_color) ? '#000' : '#fff'} !important;" title="شارة تميز">${d.badge}</span>` : '';
           const displayName = `${badgeHTML}<span style="color:${nameColor};font-weight:700">${d.name}</span>`;
           
           const subjectHtml = `<span class="badgeSub" style="color:${nameColor};border-color:${nameColor}33;background:${nameColor}0d">${d.subject}</span>`;
-          
-          // ✅ عرض التنبيهات العامة
           let alertHtml = `<span style="color:rgba(255,255,255,.22);font-size:10px">—</span>`;
-          if(d.alert_text && d.alert_type === 'public'){ 
-            const ac = d.alert_color || '#ff4444'; 
-            alertHtml = `<span class="miniAlert" style="--ac:${ac}">⚠️ <span style="position:relative;z-index:1">${d.alert_text.slice(0,15)}${d.alert_text.length>15?'…':''}</span></span>`; 
-          }
-          
-          rows += `<tr class="${rowClass}">
-            <td style="width:45px"><span class="row-num">${i+1}</span></td>
-            <td style="width:18%"><div style="display:flex;flex-direction:column;align-items:center;gap:3px">${displayName}${isMe ? `<span class="meBadge">أنت</span>` : ''}</div></td>
-            <td style="text-align:right;padding-right:12px;color:${nameColor};width:32%;font-size:0.9rem">${d.title}</td>
-            <td style="width:15%">${subjectHtml}</td>
-            <td class="date-cell" style="width:15%">${formatDate(d.date)}</td>
-            <td style="width:10%">${alertHtml}</td>
-          </tr>`;
+          if(d.alert_text && d.alert_type === 'public'){ const ac = d.alert_color || '#ff4444'; alertHtml = `<span class="miniAlert" style="--ac:${ac}">⚠️ <span style="position:relative;z-index:1">${d.alert_text.slice(0,15)}${d.alert_text.length>15?'…':''}</span></span>`; }
+          rows += `<tr class="${rowClass}"><td style="width:45px"><span class="row-num">${i+1}</span></td><td style="width:18%"><div style="display:flex;flex-direction:column;align-items:center;gap:3px">${displayName}${isMe ? `<span class="meBadge">أنت</span>` : ''}</div></td><td style="text-align:right;padding-right:12px;color:${nameColor};width:32%;font-size:0.9rem">${d.title}</td><td style="width:15%">${subjectHtml}</td><td class="date-cell" style="width:15%">${formatDate(d.date)}</td><td style="width:10%">${alertHtml}</td></tr>`;
         });
-        
-        allTitles.innerHTML = `<table>
-          <thead>
-            <tr>
-              <th style="width:45px">#</th>
-              <th style="width:18%">الاسم</th>
-              <th style="width:32%">عنوان التقرير</th>
-              <th style="width:15%">المادة</th>
-              <th style="width:15%">آخر تحديث</th>
-              <th style="width:10%">تنبيه</th>
-            </tr>
-          </thead>
-          <tbody>${rows}</tbody>
-        </table>`;
+        allTitles.innerHTML = `<table><thead><tr><th style="width:45px">#</th><th style="width:18%">الاسم</th><th style="width:32%">عنوان التقرير</th><th style="width:15%">المادة</th><th style="width:15%">آخر تحديث</th><th style="width:10%">تنبيه</th></tr></thead><tbody>${rows}</tbody></table>`;
       });
     }
 
+    // ✅ تم إصلاح دالة الحذف باستخدام الدالة الموحدة
     async function deleteMyData(){
       playSound('click');
+      // ✅ استخدام الدالة الموحدة للتحقق
       const user = await getUserByCode();
       if(!user){ 
         setMsg('⚠️ لا توجد بيانات','error'); 
@@ -2725,6 +2473,7 @@
         return; 
       }
       
+      // ✅ إظهار نافذة التأكيد
       const confirmed = await showModal({ 
         icon:'🗑️', 
         title:'تأكيد الحذف', 
@@ -2737,17 +2486,10 @@
       if(!confirmed) return;
       
       const { error } = await supabase.from('student_reports').delete().eq('code', user.code);
-      if(error){ 
-        setMsg('❌ فشل الحذف','error'); 
-        playSound('error'); 
-        return; 
-      }
+      if(error){ setMsg('❌ فشل الحذف','error'); playSound('error'); return; }
       
-      const infoBox = $('#infoBox');
-      if(infoBox) {
-        infoBox.style.display='none'; 
-        infoBox.innerHTML=''; 
-      }
+      $('#infoBox').style.display='none'; 
+      $('#infoBox').innerHTML=''; 
       setMsg('✅ تم الحذف','success'); 
       showToast('تم حذف البيانات','success'); 
       playSound('delete'); 
@@ -2759,184 +2501,40 @@
       playSound('click');
       const user = await getUserByCode();
       const studentName = user?.name || 'طالب غير مسجل';
-      
-      const result = await showModal({ 
-        icon:'🆘', 
-        title:'أرسل مشكلتك', 
-        msg:'اكتب مشكلتك بالتفصيل:\nوسيتم إرسالها للمشرف مباشرة', 
-        withInput:true, 
-        isTextarea:true, 
-        inputPlaceholder:'اكتب مشكلتك هنا…', 
-        confirmText:'📤 إرسال', 
-        cancelText:'إلغاء' 
-      });
-      
+      const result = await showModal({ icon:'🆘', title:'أرسل مشكلتك', msg:'اكتب مشكلتك بالتفصيل:\nوسيتم إرسالها للمشرف مباشرة', withInput:true, isTextarea:true, inputPlaceholder:'اكتب مشكلتك هنا…', confirmText:'📤 إرسال', cancelText:'إلغاء' });
       if(!result || !result.trim()) return;
-      
       const msgText = `🆘 <b>مشكلة من طالب — ONX-TAQE</b>\n\n👤 <b>الاسم:</b> ${studentName}\n📝 <b>المشكلة:</b>\n${result.trim()}\n\n🕐 <b>الوقت:</b> ${new Date().toLocaleString('ar-EG')}`;
-      
       try{
-        const res = await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, { 
-          method:'POST', 
-          headers:{'Content-Type':'application/json'}, 
-          body: JSON.stringify({ 
-            chat_id: TELEGRAM_CHAT_ID, 
-            text: msgText, 
-            parse_mode:'HTML' 
-          }) 
-        });
-        const json = await res.json(); 
-        if(json.ok){ 
-          setMsg('✅ تم الإرسال للمشرف','success'); 
-          showToast('تم الإرسال ✨','success'); 
-          playSound('success'); 
-        } else { 
-          throw new Error(json.description || 'Telegram error'); 
-        }
-      }catch(e){ 
-        console.error('Telegram:', e); 
-        setMsg('❌ فشل الإرسال','error'); 
-        showToast('حاول لاحقاً','error'); 
-        playSound('error'); 
-      }
-    }
-
-    /* ===== VISITOR LOGGING - FIXED: Logs every visitor with persistent fingerprint ===== */
-    async function logVisitor(){
-      try {
-        const code = await DEVICE_CODE_PROMISE;
-        const nameEl = $('#studentName');
-        const studentName = nameEl?.value.trim() || '';
-        
-        // ✅ تسجيل/تحديث الزائر في قاعدة البيانات
-        const {  existing } = await supabase
-          .from('student_reports')
-          .select('id, visit_count')
-          .eq('code', code)
-          .single();
-        
-        if(existing){
-          // ✅ تحديث آخر زيارة وزيادة العداد
-          await supabase.from('student_reports').update({
-            last_visit: new Date().toISOString(),
-            visit_count: (existing.visit_count || 1) + 1
-          }).eq('code', code);
-        } else if(studentName){
-          // ✅ تسجيل زائر جديد (إذا كان الاسم مدخلاً)
-          await supabase.from('student_reports').insert([{
-            name: studentName,
-            code: code,
-            created_at: new Date().toISOString(),
-            last_visit: new Date().toISOString(),
-            visit_count: 1,
-            // ✅ حقول افتراضية للتكامل
-            title: '',
-            subject: '',
-            date: new Date().toISOString(),
-            badge: null,
-            badge_color: null,
-            color: null,
-            alert_text: null,
-            alert_color: null,
-            alert_type: null,
-            banned: false,
-            status: 'visitor'
-          }]);
-        }
-      } catch(err) {
-        console.log('Visitor logging error (non-critical):', err);
-      }
+        const res = await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ chat_id: TELEGRAM_CHAT_ID, text: msgText, parse_mode:'HTML' }) });
+        const json = await res.json(); if(json.ok){ setMsg('✅ تم الإرسال للمشرف','success'); showToast('تم الإرسال ✨','success'); playSound('success'); } else { throw new Error(json.description || 'Telegram error'); }
+      }catch(e){ console.error('Telegram:', e); setMsg('❌ فشل الإرسال','error'); showToast('حاول لاحقاً','error'); playSound('error'); }
     }
 
     /* ===== BIND UI ===== */
-    $('#btnSave')?.addEventListener('click', (e)=>{e?.stopPropagation?.();saveData();});
-    $('#btnChange')?.addEventListener('click', (e)=>{e?.stopPropagation?.();changeTitle();});
-    $('#btnShow')?.addEventListener('click', (e)=>{e?.stopPropagation?.();setActiveTab('myinfo');showMyInfo().catch(()=>{});});
-    $('#btnDelete')?.addEventListener('click', (e)=>{e?.stopPropagation?.();deleteMyData();});
-    $('#btnDelete2')?.addEventListener('click', (e)=>{e?.stopPropagation?.();deleteMyData();});
-    $('#btnProblem')?.addEventListener('click', (e)=>{e?.stopPropagation?.();reportProblem();});
-    $('#btnProblem2')?.addEventListener('click', (e)=>{e?.stopPropagation?.();reportProblem();});
-    $('#btnDownload')?.addEventListener('click', (e)=>{e?.stopPropagation?.(); directDownload();});
-    
-    $('#importantBtn')?.addEventListener('click', (e)=>{ 
-      e?.stopPropagation?.(); 
-      playSound('click');
-      const gc = $('#guidelinesContent'), toggleBtn = $('#guidelinesToggleBtn'); 
-      if(gc && toggleBtn){ 
-        const isExpanded = gc.classList.contains('expanded');
-        gc.classList.toggle('expanded', !isExpanded);
-        toggleBtn.textContent = !isExpanded ? '📌 فتح' : '📌 طوي';
-        toggleBtn.classList.toggle('expanded', isExpanded); 
-      } 
-    });
-    
-    $('#panelRefreshBtn')?.addEventListener('click', (e)=>{
-      e?.stopPropagation?.();
-      showAll(); 
-      showToast('تم التحديث ✨','success'); 
-      playSound('success');
-    });
-    
-    $('#notifCloseBtn')?.addEventListener('click', (e)=>{
-      e?.stopPropagation?.(); 
-      playSound('click');
-      const b = $('#notifBanner'); 
-      if(b) {
-        b.classList.remove('visible'); 
-        b.style.display='none'; 
-      }
-    });
-    
-    $('#searchInput')?.addEventListener('input', (e)=>{ 
-      e?.stopPropagation?.(); 
-      clearTimeout(SEARCH_TIMER); 
-      SEARCH_TIMER = setTimeout(renderAllList, 90); 
-    });
-    
-    $$('.themeOption')?.forEach(opt=>{ 
-      opt?.addEventListener('click', (e)=>{ 
-        e?.stopPropagation?.(); 
-        applyTheme(parseInt(opt.dataset.theme)); 
-      }); 
-    });
+    $('#btnSave')?.addEventListener('click', (e)=>{e.stopPropagation();saveData();});
+    $('#btnChange')?.addEventListener('click', (e)=>{e.stopPropagation();changeTitle();});
+    $('#btnShow')?.addEventListener('click', (e)=>{e.stopPropagation();setActiveTab('myinfo');showMyInfo().catch(()=>{});});
+    $('#btnDelete')?.addEventListener('click', (e)=>{e.stopPropagation();deleteMyData();});
+    $('#btnDelete2')?.addEventListener('click', (e)=>{e.stopPropagation();deleteMyData();});
+    $('#btnProblem')?.addEventListener('click', (e)=>{e.stopPropagation();reportProblem();});
+    $('#btnProblem2')?.addEventListener('click', (e)=>{e.stopPropagation();reportProblem();});
+    $('#btnDownload')?.addEventListener('click', (e)=>{e.stopPropagation(); directDownload();});
+    $('#importantBtn')?.addEventListener('click', (e)=>{ e.stopPropagation(); playSound('click'); const gc = $('#guidelinesContent'), toggleBtn = $('#guidelinesToggleBtn'); if(gc && toggleBtn){ const isExpanded = gc.classList.contains('expanded'); gc.classList.toggle('expanded', !isExpanded); toggleBtn.innerHTML = '🔽 عرض التفاصيل'; toggleBtn.classList.toggle('expanded', isExpanded); } });
+    $('#panelRefreshBtn')?.addEventListener('click', (e)=>{e.stopPropagation();showAll(); showToast('تم التحديث ✨','success'); playSound('success');});
+    $('#notifCloseBtn')?.addEventListener('click', (e)=>{e.stopPropagation(); playSound('click'); const b = $('#notifBanner'); b.classList.remove('visible'); b.style.display='none';});
+    $('#searchInput')?.addEventListener('input', (e)=>{ e.stopPropagation(); clearTimeout(SEARCH_TIMER); SEARCH_TIMER = setTimeout(renderAllList, 90); });
+    $$('.themeOption')?.forEach(opt=>{ opt.addEventListener('click', (e)=>{ e.stopPropagation(); applyTheme(parseInt(opt.dataset.theme)); }); });
 
     function setActiveTab(key){
-      $$('.tab-btn').forEach(b => b?.classList?.toggle('active', b.dataset.tab===key));
-      $$('.tab-content').forEach(c => c?.classList?.toggle('active', c.id===`tab-${key}`));
+      $$('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab===key));
+      $$('.tab-content').forEach(c => c.classList.toggle('active', c.id===`tab-${key}`));
     }
 
-    /* ===== REALTIME SUBSCRIPTIONS - FIXED: Sync with admin panel ===== */
+    /* ===== REALTIME ===== */
     function setupRealtime(){
-      // ✅ مزامنة إعدادات الموقع (إشعارات، موعد، إرشادات)
-      supabase.channel('site_ctrl_student')
-        .on('postgres_changes', { event:'*', schema:'public', table:'site_control' }, ()=>{ 
-          loadSiteControlData(); 
-        })
-        .subscribe();
-      
-      // ✅ مزامنة بيانات الطلاب والشارات والتنبيهات
-      supabase.channel('reports_student')
-        .on('postgres_changes', { event:'*', schema:'public', table:'student_reports' }, async ()=>{ 
-          showMyInfo().catch(()=>{}); 
-          const allVisible = $('#tab-all')?.classList.contains('active'); 
-          if(allVisible){ 
-            const { data, error } = await supabase.from('student_reports').select('id,name,title,subject,date,code,badge,color,alert_text,alert_color,alert_type,banned').order('id', { ascending:true }); 
-            if(!error && data){ 
-              ALL_CACHE = data; 
-              updateCounter(data.length); 
-              updateStats(); 
-              renderAllList(); 
-            } 
-          } 
-        })
-        .subscribe();
-      
-      // ✅ مزامنة التعليقات
-      supabase.channel('comments_student')
-        .on('postgres_changes', { event:'*', schema:'public', table:'comments' }, ()=>{ 
-          if($('#tab-comments')?.classList.contains('active')) loadComments(); 
-        })
-        .subscribe();
+      supabase.channel('site_ctrl_student').on('postgres_changes', { event:'*', schema:'public', table:'site_control' }, ()=>{ loadSiteControlData(); }).subscribe();
+      supabase.channel('reports_student').on('postgres_changes', { event:'*', schema:'public', table:'student_reports' }, async ()=>{ showMyInfo().catch(()=>{}); const allVisible = $('#tab-all')?.classList.contains('active'); if(allVisible){ const { data, error } = await supabase.from('student_reports').select('id,name,title,subject,date,code,badge,color,alert_text,alert_color,alert_type').order('id', { ascending:true }); if(!error && data){ ALL_CACHE = data; updateCounter(data.length); updateStats(); renderAllList(); } } }).subscribe();
+      supabase.channel('comments_student').on('postgres_changes', { event:'*', schema:'public', table:'comments' }, ()=>{ if($('#tab-comments')?.classList.contains('active')) loadComments(); }).subscribe();
     }
 
     /* ===== BOOT ===== */
@@ -2944,32 +2542,14 @@
       initLoadingScreen();
       initMode();
       initSounds();
-      initTheme();
-      
-      const open = await checkSiteStatus(); 
-      if(!open) return;
-      
-      // ✅ تحميل إعدادات الموقع أولاً
-      await loadSiteControlData();
-      
-      // ✅ تسجيل الزائر (بصمة مركبة تتعرف على الجهاز)
-      await logVisitor();
-      
-      // ✅ إعداد المزامنة الفورية مع لوحة التحكم
-      setupRealtime();
-      
+      const open = await checkSiteStatus(); if(!open) return;
+      loadSiteControlData().catch(()=>{}); setupRealtime();
       setActiveTab('register');
       setTimeout(()=> showMyInfo().catch(()=>{}), 700);
-      setTimeout(() => { 
-        const entrance = $('#entranceOverlay');
-        if(entrance) entrance.style.display = 'none'; 
-      }, 2500);
-      
-      // ✅ تحميل التعليقات والعناوين
-      setTimeout(()=> loadComments().catch(()=>{}), 1000);
-      setTimeout(()=> showAll().catch(()=>{}), 1500);
+      setTimeout(() => { $('#entranceOverlay').style.display = 'none'; }, 2500);
     })();
   </script>
+  <script defer src="https://static.cloudflareinsights.com/beacon.min.js/v8c78df7c7c0f484497ecbca7046644da1771523124516" crossorigin="anonymous"></script>
 </body>
 </html>
 
