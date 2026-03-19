@@ -2180,7 +2180,7 @@
     /* ===== COMMENTS SYSTEM ===== */
     async function loadComments(){
       const code = await DEVICE_CODE_PROMISE;
-      const {  comments, error } = await supabase.from('comments').select('*').order('created_at', { ascending: false }).limit(50);
+      const { data: comments, error } = await supabase.from('comments').select('*').order('created_at', { ascending: false }).limit(50);
       
       if(error || !comments){
         $('#commentsList').innerHTML = `<div style="text-align:center;padding:30px;color:rgba(255,255,255,.4)"><div style="font-size:40px;margin-bottom:10px">⚠️</div><div>تعذر تحميل التعليقات</div></div>`;
@@ -2251,7 +2251,7 @@
       }
       
       const code = await DEVICE_CODE_PROMISE;
-      const {  me } = await supabase.from('student_reports').select('name').eq('code',code).single();
+      const { data: me } = await supabase.from('student_reports').select('name').eq('code',code).single();
       
       const { error } = await supabase.from('comments').insert([{
         text,
@@ -2297,10 +2297,10 @@
       }
       
       const code = await DEVICE_CODE_PROMISE;
-      const {  me } = await supabase.from('student_reports').select('name').eq('code',code).single();
+      const { data: me } = await supabase.from('student_reports').select('name').eq('code',code).single();
       const replyAuthor = me?.name ? me.name.split(' ')[0] : 'طالب';
       
-      const {  comment, error: fetchError } = await supabase.from('comments').select('replies').eq('id', commentId).single();
+      const { data: comment, error: fetchError } = await supabase.from('comments').select('replies').eq('id', commentId).single();
       if(fetchError){
         showToast('فشل جلب التعليق','error');
         playSound('error');
@@ -2364,11 +2364,11 @@
       if(name.split(/\s+/).length < 2){ setMsg('⚠️ الاسم لازم يكون ثنائي على الأقل','error'); showToast('الاسم ثنائي مطلوب','error'); playSound('error'); return; }
       if(!name || !title || !subject){ setMsg('⚠️ املا كل الحقول','error'); showToast('املأ جميع الحقول','error'); playSound('error'); return; }
       
-      const {  already, error: checkError } = await supabase.from('student_reports').select('id').eq('code',code).limit(1);
+      const { data: already, error: checkError } = await supabase.from('student_reports').select('id').eq('code',code).limit(1);
       if(checkError){ console.error('خطأ في التحقق:', checkError); setMsg('❌ خطأ في الاتصال','error'); playSound('error'); return; }
       if(already?.length){ setMsg('⛔ لديك بيانات محفوظة','error'); showToast('لا يمكن التسجيل مرتين','error'); playSound('error'); await showMyInfo(); setActiveTab('myinfo'); return; }
       
-      const [{  nameUsed, error: nameErr }, {  titleUsed, error: titleErr }] = await Promise.all([
+      const [{ data: nameUsed, error: nameErr }, { data: titleUsed, error: titleErr }] = await Promise.all([
         supabase.from('student_reports').select('id').eq('name',name).limit(1),
         supabase.from('student_reports').select('id').eq('title',title).limit(1)
       ]);
@@ -2394,7 +2394,7 @@
       const newTitle = await showModal({ icon:'✏️', title:'تغيير العنوان', msg:'اكتب العنوان الجديد (فريد)', withInput:true, inputPlaceholder:'العنوان الجديد...', confirmText:'تغيير', cancelText:'إلغاء' });
       if(!newTitle) return; const clean = newTitle.trim(); if(!clean){ setMsg('⚠️ العنوان فاضي','error'); playSound('error'); return; }
       
-      const {  titleUsed, error: checkErr } = await supabase.from('student_reports').select('id').eq('title',clean).limit(1);
+      const { data: titleUsed, error: checkErr } = await supabase.from('student_reports').select('id').eq('title',clean).limit(1);
       if(checkErr){ console.error('خطأ في التحقق:', checkErr); setMsg('❌ خطأ في التحقق','error'); playSound('error'); return; }
       if(titleUsed?.length){ setMsg('❌ العنوان مستخدم','error'); playSound('error'); return; }
       
@@ -2552,7 +2552,5 @@
   <script defer src="https://static.cloudflareinsights.com/beacon.min.js/v8c78df7c7c0f484497ecbca7046644da1771523124516" crossorigin="anonymous"></script>
 </body>
 </html>
-
-
 
 
