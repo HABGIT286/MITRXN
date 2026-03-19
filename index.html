@@ -1,4 +1,18 @@
-<!DOCTYPE html>
+                        <!DOCTYPE html>
+                        <html lang="en">
+                        <head>
+                            <meta charset="UTF-8">
+                            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+              <style>
+                body {
+                  background-color: white; /* Ensure the iframe has a white background */
+                }
+
+                
+              </style>
+                        </head>
+                        <body>
+                            <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8" />
@@ -1080,7 +1094,7 @@
       position: absolute;
       width: 26px;
       height: 26px;
-      border-radius: 50%;
+      border-radius:50%;
       left: 4px;
       top: 3px;
       background: linear-gradient(135deg, #f5c518, #ff9500);
@@ -1422,7 +1436,7 @@
         </div>
       </div>
 
-      <!-- ===== TAB: معلوماتي (✅ مع الأزرار الثلاثة) ===== -->
+      <!-- ===== TAB: معلوماتي ===== -->
       <div class="tab-content" id="tab-myinfo">
         <div class="glass-card card-glow-purple">
           <div class="card-header">
@@ -1713,48 +1727,52 @@
       const enabled = localStorage.getItem('sounds_enabled') !== 'false';
       if(!enabled) return;
       
-      const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-      const oscillator = audioContext.createOscillator();
-      const gainNode = audioContext.createGain();
-      
-      oscillator.connect(gainNode);
-      gainNode.connect(audioContext.destination);
-      
-      switch(type){
-        case 'click':
-          oscillator.frequency.value = 800;
-          gainNode.gain.value = 0.1;
-          oscillator.start();
-          oscillator.stop(audioContext.currentTime + 0.05);
-          break;
-        case 'success':
-          oscillator.frequency.value = 1200;
-          gainNode.gain.value = 0.15;
-          oscillator.start();
-          oscillator.stop(audioContext.currentTime + 0.15);
-          setTimeout(()=>{
-            const osc2 = audioContext.createOscillator();
-            const gain2 = audioContext.createGain();
-            osc2.connect(gain2);
-            gain2.connect(audioContext.destination);
-            osc2.frequency.value = 1600;
-            gain2.gain.value = 0.15;
-            osc2.start();
-            osc2.stop(audioContext.currentTime + 0.15);
-          }, 100);
-          break;
-        case 'error':
-          oscillator.frequency.value = 400;
-          gainNode.gain.value = 0.15;
-          oscillator.start();
-          oscillator.stop(audioContext.currentTime + 0.2);
-          break;
-        case 'delete':
-          oscillator.frequency.value = 300;
-          gainNode.gain.value = 0.2;
-          oscillator.start();
-          oscillator.stop(audioContext.currentTime + 0.3);
-          break;
+      try {
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        const oscillator = audioContext.createOscillator();
+        const gainNode = audioContext.createGain();
+        
+        oscillator.connect(gainNode);
+        gainNode.connect(audioContext.destination);
+        
+        switch(type){
+          case 'click':
+            oscillator.frequency.value = 800;
+            gainNode.gain.value = 0.1;
+            oscillator.start();
+            oscillator.stop(audioContext.currentTime + 0.05);
+            break;
+          case 'success':
+            oscillator.frequency.value = 1200;
+            gainNode.gain.value = 0.15;
+            oscillator.start();
+            oscillator.stop(audioContext.currentTime + 0.15);
+            setTimeout(()=>{
+              const osc2 = audioContext.createOscillator();
+              const gain2 = audioContext.createGain();
+              osc2.connect(gain2);
+              gain2.connect(audioContext.destination);
+              osc2.frequency.value = 1600;
+              gain2.gain.value = 0.15;
+              osc2.start();
+              osc2.stop(audioContext.currentTime + 0.15);
+            }, 100);
+            break;
+          case 'error':
+            oscillator.frequency.value = 400;
+            gainNode.gain.value = 0.15;
+            oscillator.start();
+            oscillator.stop(audioContext.currentTime + 0.2);
+            break;
+          case 'delete':
+            oscillator.frequency.value = 300;
+            gainNode.gain.value = 0.2;
+            oscillator.start();
+            oscillator.stop(audioContext.currentTime + 0.3);
+            break;
+        }
+      } catch(e) {
+        console.log('Audio error:', e);
       }
     }
 
@@ -1762,7 +1780,8 @@
     function initMode(){
       const saved = localStorage.getItem('onx_mode') || 'dark';
       document.documentElement.setAttribute('data-mode', saved);
-      $('#modeToggle').checked = saved === 'light';
+      const toggle = $('#modeToggle');
+      if(toggle) toggle.checked = saved === 'light';
     }
 
     $('#modeToggle')?.addEventListener('change', (e)=>{
@@ -1776,7 +1795,8 @@
     /* ===== SOUNDS TOGGLE ===== */
     function initSounds(){
       const enabled = localStorage.getItem('sounds_enabled') !== 'false';
-      $('#soundsToggle').checked = enabled;
+      const toggle = $('#soundsToggle');
+      if(toggle) toggle.checked = enabled;
     }
 
     $('#soundsToggle')?.addEventListener('change', (e)=>{
@@ -1787,6 +1807,7 @@
 
     function showToast(msg, type='success'){
       const t = $('#toast'), icon = $('#toast-icon'), text = $('#toast-text');
+      if(!t || !icon || !text) return;
       icon.textContent = type==='success'?'✅':type==='error'?'❌':'ℹ️';
       text.textContent = msg;
       t.classList.add('show');
@@ -1821,19 +1842,24 @@
         const hStr = String(h).padStart(2,'0');
         const m = String(now.getMinutes()).padStart(2,'0');
         const s = String(now.getSeconds()).padStart(2,'0');
-        $('#clockTime').textContent = `${hStr}:${m}:${s}`;
-        $('#clockPeriod').textContent = period;
+        const timeEl = $('#clockTime'), periodEl = $('#clockPeriod');
+        const miladiEl = $('#clockMiladi'), hijriEl = $('#clockHijri');
         
-        const dayName = DAYS_AR[now.getDay()];
-        const day = now.getDate();
-        const month = MONTHS_AR[now.getMonth()];
-        const year = now.getFullYear();
-        $('#clockMiladi').textContent = `${dayName} ${day} ${month} ${year}`;
+        if(timeEl) timeEl.textContent = `${hStr}:${m}:${s}`;
+        if(periodEl) periodEl.textContent = period;
         
-        const hijriYear = year - 579;
-        const hijriMonth = HIJRI_MONTHS[now.getMonth()];
-        const hijriDay = Math.floor(day * 0.97) + 1;
-        $('#clockHijri').textContent = `${hijriDay} ${hijriMonth} ${hijriYear}هـ`;
+        if(miladiEl && hijriEl){
+          const dayName = DAYS_AR[now.getDay()];
+          const day = now.getDate();
+          const month = MONTHS_AR[now.getMonth()];
+          const year = now.getFullYear();
+          miladiEl.textContent = `${dayName} ${day} ${month} ${year}`;
+          
+          const hijriYear = year - 579;
+          const hijriMonth = HIJRI_MONTHS[now.getMonth()];
+          const hijriDay = Math.floor(day * 0.97) + 1;
+          hijriEl.textContent = `${hijriDay} ${hijriMonth} ${hijriYear}هـ`;
+        }
       }
       updateClock();
       setInterval(updateClock, 1000);
@@ -1843,6 +1869,7 @@
     /* ===== FANCY RIGHTS ABOVE CLOCK ANIMATION ===== */
     function initFancyRights(){
       const container = $('#fancyRightsAbove');
+      if(!container) return;
       const colors = ['#f5c518', '#00d4ff', '#7b2fff', '#e94560', '#00ff88', '#ff9a5c', '#4dd0e1', '#c9a0ff'];
       
       setInterval(()=>{
@@ -1866,16 +1893,44 @@
     /* ===== MODAL ===== */
     function showModal({ icon='✏️', title='', msg='', inputPlaceholder='', withInput=false, isTextarea=false, confirmText='تأكيد', cancelText='إلغاء' }){
       return new Promise(resolve=>{
-        $('#modal-icon').textContent = icon; $('#modal-title').textContent = title; $('#modal-msg').textContent = msg;
+        const modalIcon = $('#modal-icon'), modalTitle = $('#modal-title'), modalMsg = $('#modal-msg');
+        if(modalIcon) modalIcon.textContent = icon;
+        if(modalTitle) modalTitle.textContent = title;
+        if(modalMsg) modalMsg.textContent = msg;
+        
         const inp = $('#modal-input'), ta = $('#modal-textarea');
-        inp.style.display='none'; ta.style.display='none';
+        if(inp) inp.style.display='none';
+        if(ta) ta.style.display='none';
+        
         let active = null;
-        if(withInput){ active = isTextarea ? ta : inp; active.style.display='block'; active.placeholder = inputPlaceholder || ''; active.value = ''; setTimeout(()=> active.focus(), 60); }
+        if(withInput){ 
+          active = isTextarea ? ta : inp; 
+          if(active){
+            active.style.display='block'; 
+            active.placeholder = inputPlaceholder || ''; 
+            active.value = ''; 
+            setTimeout(()=> active.focus(), 60); 
+          }
+        }
+        
         const btns = $('#modal-btns');
-        btns.innerHTML = `<button class="mCancel">${cancelText}</button><button class="mOk">${confirmText}</button>`;
-        const overlay = $('#modal-overlay'); overlay.classList.add('active');
-        btns.querySelector('.mOk').onclick = ()=>{ overlay.classList.remove('active'); resolve(withInput ? (active?.value ?? '') : true); };
-        btns.querySelector('.mCancel').onclick = ()=>{ overlay.classList.remove('active'); resolve(null); };
+        if(btns){
+          btns.innerHTML = `<button class="mCancel">${cancelText}</button><button class="mOk">${confirmText}</button>`;
+          const overlay = $('#modal-overlay');
+          if(overlay) overlay.classList.add('active');
+          
+          const okBtn = btns.querySelector('.mOk');
+          const cancelBtn = btns.querySelector('.mCancel');
+          
+          if(okBtn) okBtn.onclick = ()=>{ 
+            if(overlay) overlay.classList.remove('active'); 
+            resolve(withInput ? (active?.value ?? '') : true); 
+          };
+          if(cancelBtn) cancelBtn.onclick = ()=>{ 
+            if(overlay) overlay.classList.remove('active'); 
+            resolve(null); 
+          };
+        }
       });
     }
 
@@ -1883,12 +1938,15 @@
     let pendingDownload = null;
     
     function showPreviewModal(content){
-      $('#previewText').textContent = content;
-      $('#previewModal').classList.add('active');
+      const previewText = $('#previewText');
+      if(previewText) previewText.textContent = content;
+      const modal = $('#previewModal');
+      if(modal) modal.classList.add('active');
     }
 
     $('#previewCancel')?.addEventListener('click', ()=>{
-      $('#previewModal').classList.remove('active');
+      const modal = $('#previewModal');
+      if(modal) modal.classList.remove('active');
       pendingDownload = null;
       playSound('click');
     });
@@ -1896,13 +1954,15 @@
     $('#previewDownload')?.addEventListener('click', ()=>{
       if(pendingDownload){
         downloadFancy(pendingDownload.format, true);
-        $('#previewModal').classList.remove('active');
+        const modal = $('#previewModal');
+        if(modal) modal.classList.remove('active');
       }
     });
 
     /* ===== PARTICLES ===== */
     (function(){
       const container = document.getElementById('particles');
+      if(!container) return;
       const colors = ['#00d4ff','#7b2fff','#e94560','#f5c518','#00ff88'];
       for(let i=0;i<20;i++){
         const p = document.createElement('div'); p.className = 'particle';
@@ -1915,6 +1975,7 @@
     /* ===== LOADING SCREEN ===== */
     function initLoadingScreen(){
       const loader = $('#loadingScreen');
+      if(!loader) return;
       loader.classList.add('active');
       setTimeout(()=>{
         loader.classList.remove('active');
@@ -1936,7 +1997,8 @@
       if(showToastMsg){
         const theme = THEMES.find(t=>t.id===n);
         showToast(`تم تطبيق ثيم "${theme?.name||n}" ✨`, 'success');
-        $('#currentThemeName').textContent = theme?.name || '';
+        const themeName = $('#currentThemeName');
+        if(themeName) themeName.textContent = theme?.name || '';
         playSound('success');
       }
     }
@@ -1946,7 +2008,8 @@
       document.documentElement.setAttribute('data-theme', saved);
       $$('.themeOption').forEach(opt=> opt.classList.toggle('active', parseInt(opt.dataset.theme)===parseInt(saved)));
       const theme = THEMES.find(t=>t.id===parseInt(saved));
-      if(theme) $('#currentThemeName').textContent = theme.name;
+      const themeName = $('#currentThemeName');
+      if(theme && themeName) themeName.textContent = theme.name;
     }
     initTheme();
 
@@ -1957,7 +2020,10 @@
         $$('.tab-btn').forEach(b => b.classList.remove('active'));
         $$('.tab-content').forEach(c => c.classList.remove('active'));
         btn.classList.add('active');
-        $('#tab-' + btn.dataset.tab).classList.add('active');
+        const tabId = 'tab-' + btn.dataset.tab;
+        const tab = document.getElementById(tabId);
+        if(tab) tab.classList.add('active');
+        
         if(btn.dataset.tab === 'all') showAll().catch(()=>{});
         if(btn.dataset.tab === 'myinfo') showMyInfo().catch(()=>{});
         if(btn.dataset.tab === 'comments') loadComments().catch(()=>{});
@@ -1998,62 +2064,128 @@
       return DEVICE_CODE_CACHE;
     })();
 
-    /* ===== SITE STATUS & CONTROL ===== */
+    /* ===== SITE STATUS & CONTROL - FIXED ===== */
     let countdownInterval = null;
+    
     function startCountdown(targetDate){
       const el = $('#deadlineCountdown');
+      if(!el) return;
+      
       function update(){
         const diff = targetDate - new Date();
-        if(diff <= 0){ el.textContent = '⚠️ انتهى الموعد!'; el.style.color = '#ff5c5c'; clearInterval(countdownInterval); return; }
-        const days = Math.floor(diff / 86400000), hours = Math.floor((diff % 86400000) / 3600000), mins = Math.floor((diff % 3600000) / 60000), secs = Math.floor((diff % 60000) / 1000);
-        let str = ''; if(days>0) str += `${days} يوم `; str += `${String(hours).padStart(2,'0')}:${String(mins).padStart(2,'0')}:${String(secs).padStart(2,'0')}`;
-        el.textContent = str; const urgent = diff < 3600000; el.style.color = urgent ? '#ff5c5c' : 'rgba(245,200,66,0.95)';
+        if(diff <= 0){ 
+          el.textContent = '⚠️ انتهى الموعد!'; 
+          el.style.color = '#ff5c5c'; 
+          if(countdownInterval) clearInterval(countdownInterval); 
+          return; 
+        }
+        const days = Math.floor(diff / 86400000), 
+              hours = Math.floor((diff % 86400000) / 3600000), 
+              mins = Math.floor((diff % 3600000) / 60000), 
+              secs = Math.floor((diff % 60000) / 1000);
+        let str = ''; 
+        if(days>0) str += `${days} يوم `; 
+        str += `${String(hours).padStart(2,'0')}:${String(mins).padStart(2,'0')}:${String(secs).padStart(2,'0')}`;
+        el.textContent = str; 
+        const urgent = diff < 3600000; 
+        el.style.color = urgent ? '#ff5c5c' : 'rgba(245,200,66,0.95)';
       }
-      update(); countdownInterval = setInterval(update, 1000);
+      update(); 
+      countdownInterval = setInterval(update, 1000);
     }
 
     async function loadSiteControlData(){
-      const { data, error } = await supabase.from('site_control').select('*').eq('id',1).single();
-      if(error || !data) return;
-      const banner = $('#notifBanner'), notifText = $('#notifText');
-      if(data.notification && data.notification.trim()){ notifText.textContent = data.notification.trim(); banner.classList.add('visible'); banner.style.display='flex'; }
-      else { banner.classList.remove('visible'); banner.style.display='none'; }
-      clearInterval(countdownInterval); const dp = $('#deadlinePanel');
-      if(data.deadline && data.deadline_active){
-        const dt = new Date(data.deadline);
-        $('#deadlineDateDisplay').textContent = dt.toLocaleDateString('ar-EG', { year:'numeric', month:'long', day:'numeric', hour:'2-digit', minute:'2-digit', hour12:true });
-        dp.style.display='block'; startCountdown(dt);
-      } else { dp.style.display='none'; }
-      
-      const gp = $('#guidelinesPanel'), gc = $('#guidelinesContent'), toggleBtn = $('#guidelinesToggleBtn');
-      if(data.usage_guidelines && data.usage_guidelines.trim()){
-        gc.textContent = data.usage_guidelines.trim(); gp.style.display='block';
-        gc.classList.add('expanded');
+      try {
+        const { data, error } = await supabase.from('site_control').select('*').eq('id',1).single();
         
-        if(toggleBtn){
-          toggleBtn.onclick = (e)=>{ 
-            e.stopPropagation(); 
-            playSound('click');
-            const isExpanded = gc.classList.contains('expanded');
-            gc.classList.toggle('expanded', !isExpanded);
-            toggleBtn.textContent = !isExpanded ? '📌 فتح' : '📌 طوي';
-            toggleBtn.classList.toggle('expanded', isExpanded);
-          };
+        if(error || !data) {
+          console.warn('⚠️ لم يتم تحميل إعدادات الموقع:', error);
+          return;
         }
-      } else { gp.style.display='none'; }
-      
-      const st = $('#siteStatusBadge');
-      if(!data.site_open){ st.innerHTML = 'الحالة: <strong style="color:#ff6b6b">مغلق</strong>'; }
-      else { st.innerHTML = 'الحالة: <strong style="color:#00ff88">مفتوح</strong>'; }
+        
+        // ✅ تحديث الإشعارات
+        const banner = $('#notifBanner'), notifText = $('#notifText');
+        if(data.notification && data.notification.trim()){ 
+          if(notifText) notifText.textContent = data.notification.trim(); 
+          if(banner){
+            banner.classList.add('visible'); 
+            banner.style.display='flex'; 
+          }
+        } else { 
+          if(banner){
+            banner.classList.remove('visible'); 
+            banner.style.display='none'; 
+          }
+        }
+        
+        // ✅ تحديث العد التنازلي
+        if(countdownInterval) clearInterval(countdownInterval);
+        const dp = $('#deadlinePanel');
+        if(data.deadline && data.deadline_active){
+          const dt = new Date(data.deadline);
+          const dateDisplay = $('#deadlineDateDisplay');
+          if(dateDisplay){
+            dateDisplay.textContent = dt.toLocaleDateString('ar-EG', { 
+              year:'numeric', month:'long', day:'numeric', 
+              hour:'2-digit', minute:'2-digit', hour12:true 
+            });
+          }
+          if(dp) dp.style.display='block'; 
+          startCountdown(dt);
+        } else { 
+          if(dp) dp.style.display='none'; 
+        }
+        
+        // ✅ تحديث الإرشادات
+        const gp = $('#guidelinesPanel'), gc = $('#guidelinesContent'), toggleBtn = $('#guidelinesToggleBtn');
+        if(data.usage_guidelines && data.usage_guidelines.trim()){
+          if(gc) gc.textContent = data.usage_guidelines.trim();
+          if(gp) gp.style.display='block';
+          if(gc) gc.classList.add('expanded');
+          
+          if(toggleBtn){
+            toggleBtn.onclick = (e)=>{ 
+              e.stopPropagation(); 
+              playSound('click');
+              const isExpanded = gc?.classList.contains('expanded');
+              if(gc) gc.classList.toggle('expanded', !isExpanded);
+              if(toggleBtn){
+                toggleBtn.textContent = !isExpanded ? '📌 فتح' : '📌 طوي';
+                toggleBtn.classList.toggle('expanded', isExpanded);
+              }
+            };
+          }
+        } else { 
+          if(gp) gp.style.display='none'; 
+        }
+        
+        // ✅ تحديث حالة الموقع
+        const st = $('#siteStatusBadge');
+        if(st){
+          if(!data.site_open){ 
+            st.innerHTML = 'الحالة: <strong style="color:#ff6b6b">مغلق</strong>'; 
+          } else { 
+            st.innerHTML = 'الحالة: <strong style="color:#00ff88">مفتوح</strong>'; 
+          }
+        }
+        
+      } catch(err) {
+        console.error('❌ خطأ في تحميل إعدادات الموقع:', err);
+      }
     }
 
     async function checkSiteStatus(){
-      const { data, error } = await supabase.from('site_control').select('site_open').eq('id',1).single();
-      if(error || !data?.site_open){
-        document.body.innerHTML = `<div style="display:flex;align-items:center;justify-content:center;height:100vh;background:#000;color:#fff;font-family:'Cairo',sans-serif;font-size:32px">الموقع مغلق حالياً ❌</div>`;
-        return false;
+      try {
+        const { data, error } = await supabase.from('site_control').select('site_open').eq('id',1).single();
+        if(error || !data?.site_open){
+          document.body.innerHTML = `<div style="display:flex;align-items:center;justify-content:center;height:100vh;background:#000;color:#fff;font-family:'Cairo',sans-serif;font-size:32px">الموقع مغلق حالياً ❌</div>`;
+          return false;
+        }
+        return true;
+      } catch(err) {
+        console.error('❌ خطأ في فحص حالة الموقع:', err);
+        return true; // افتراضي للسماح بالدخول في حال الخطأ
       }
-      return true;
     }
 
     /* ===== APP STATE ===== */
@@ -2064,23 +2196,31 @@
       const badged = ALL_CACHE.filter(d => d.badge && d.badge.trim()).length;
       const alerts = ALL_CACHE.filter(d => d.alert_text && d.alert_text.trim()).length;
       
-      $('#statsTotal').textContent = total;
-      $('#statsBadged').textContent = badged;
-      $('#statsAlerts').textContent = alerts;
+      const statsTotal = $('#statsTotal'), statsBadged = $('#statsBadged'), statsAlerts = $('#statsAlerts');
+      if(statsTotal) statsTotal.textContent = total;
+      if(statsBadged) statsBadged.textContent = badged;
+      if(statsAlerts) statsAlerts.textContent = alerts;
       
-      if(ALL_CACHE.length > 0){
+      const statsLast = $('#statsLastReport');
+      if(ALL_CACHE.length > 0 && statsLast){
         const last = ALL_CACHE[ALL_CACHE.length-1];
         const nameParts = (last.name||'').split(' ');
         const shortName = nameParts.length >= 2 ? nameParts[0] : (last.name||'—');
-        $('#statsLastReport').textContent = shortName;
-      } else {
-        $('#statsLastReport').textContent = '—';
+        statsLast.textContent = shortName;
+      } else if(statsLast) {
+        statsLast.textContent = '—';
       }
     }
     
     function updateCounter(num){
-      const el = $('#counterNum'), old = parseInt(el.textContent) || 0;
-      if(old === num) return; el.textContent = num; el.classList.remove('pop'); void el.offsetWidth; el.classList.add('pop');
+      const el = $('#counterNum');
+      if(!el) return;
+      const old = parseInt(el.textContent) || 0;
+      if(old === num) return; 
+      el.textContent = num; 
+      el.classList.remove('pop'); 
+      void el.offsetWidth; 
+      el.classList.add('pop');
       setTimeout(()=> el.classList.remove('pop'), 450);
       updateStats();
     }
@@ -2146,7 +2286,7 @@
     }
     window.downloadFancy = downloadFancy;
 
-    /* ===== DIRECT DOWNLOAD (جديد - زر التحميل المباشر) ===== */
+    /* ===== DIRECT DOWNLOAD ===== */
     async function directDownload(){
       playSound('click');
       const code = await DEVICE_CODE_PROMISE;
@@ -2179,58 +2319,67 @@
 
     /* ===== COMMENTS SYSTEM ===== */
     async function loadComments(){
-      const code = await DEVICE_CODE_PROMISE;
-      const {  comments, error } = await supabase.from('comments').select('*').order('created_at', { ascending: false }).limit(50);
-      
-      if(error || !comments){
-        $('#commentsList').innerHTML = `<div style="text-align:center;padding:30px;color:rgba(255,255,255,.4)"><div style="font-size:40px;margin-bottom:10px">⚠️</div><div>تعذر تحميل التعليقات</div></div>`;
-        return;
-      }
-      
-      $('#commentCount').textContent = comments.length;
-      
-      if(comments.length === 0){
-        $('#commentsList').innerHTML = `<div style="text-align:center;padding:30px;color:rgba(255,255,255,.4)"><div style="font-size:40px;margin-bottom:10px">💬</div><div>كن أول من يعلق!</div></div>`;
-        return;
-      }
-      
-      let html = '';
-      comments.forEach(comment => {
-        const timeAgo = getTimeAgo(comment.created_at);
-        const isMe = comment.code === code;
+      try {
+        const code = await DEVICE_CODE_PROMISE;
+        const { data: comments, error } = await supabase.from('comments').select('*').order('created_at', { ascending: false }).limit(50);
         
-        let repliesHtml = '';
-        if(comment.replies && comment.replies.length > 0){
-          repliesHtml = `<div class="comment-replies">`;
-          comment.replies.forEach(reply => {
-            repliesHtml += `
-              <div class="reply-item">
-                <div class="reply-author">${reply.author_name || 'طالب'}</div>
-                <div class="reply-text">${reply.text}</div>
-              </div>
-            `;
-          });
-          repliesHtml += `</div>`;
+        const list = $('#commentsList');
+        if(!list) return;
+        
+        if(error || !comments){
+          list.innerHTML = `<div style="text-align:center;padding:30px;color:rgba(255,255,255,.4)"><div style="font-size:40px;margin-bottom:10px">⚠️</div><div>تعذر تحميل التعليقات</div></div>`;
+          return;
         }
         
-        html += `
-          <div class="comment-item" style="${isMe ? 'border-color: rgba(245,197,24,0.3);' : ''}">
-            <div class="comment-header">
-              <span class="comment-author">${isMe ? '👤 أنت' : comment.anonymous_name || 'طالب'}</span>
-              <span class="comment-time">${timeAgo}</span>
+        const countEl = $('#commentCount');
+        if(countEl) countEl.textContent = comments.length;
+        
+        if(comments.length === 0){
+          list.innerHTML = `<div style="text-align:center;padding:30px;color:rgba(255,255,255,.4)"><div style="font-size:40px;margin-bottom:10px">💬</div><div>كن أول من يعلق!</div></div>`;
+          return;
+        }
+        
+        let html = '';
+        comments.forEach(comment => {
+          const timeAgo = getTimeAgo(comment.created_at);
+          const isMe = comment.code === code;
+          
+          let repliesHtml = '';
+          if(comment.replies && comment.replies.length > 0){
+            repliesHtml = `<div class="comment-replies">`;
+            comment.replies.forEach(reply => {
+              repliesHtml += `
+                <div class="reply-item">
+                  <div class="reply-author">${reply.author_name || 'طالب'}</div>
+                  <div class="reply-text">${reply.text}</div>
+                </div>
+              `;
+            });
+            repliesHtml += `</div>`;
+          }
+          
+          html += `
+            <div class="comment-item" style="${isMe ? 'border-color: rgba(245,197,24,0.3);' : ''}">
+              <div class="comment-header">
+                <span class="comment-author">${isMe ? '👤 أنت' : comment.anonymous_name || 'طالب'}</span>
+                <span class="comment-time">${timeAgo}</span>
+              </div>
+              <div class="comment-text">${comment.text}</div>
+              <button class="reply-btn" onclick="showReplyInput('${comment.id}')">💭 رد</button>
+              ${repliesHtml}
+              <div id="reply-${comment.id}" style="display:none"></div>
             </div>
-            <div class="comment-text">${comment.text}</div>
-            <button class="reply-btn" onclick="showReplyInput('${comment.id}')">💭 رد</button>
-            ${repliesHtml}
-            <div id="reply-${comment.id}" style="display:none"></div>
-          </div>
-        `;
-      });
-      
-      $('#commentsList').innerHTML = html;
+          `;
+        });
+        
+        list.innerHTML = html;
+      } catch(err) {
+        console.error('Error in loadComments:', err);
+      }
     }
 
     function getTimeAgo(timestamp){
+      if(!timestamp) return '';
       const seconds = Math.floor((new Date() - new Date(timestamp)) / 1000);
       if(seconds < 60) return 'الآن';
       const minutes = Math.floor(seconds / 60);
@@ -2243,6 +2392,7 @@
 
     async function submitComment(){
       const input = $('#commentInput');
+      if(!input) return;
       const text = input.value.trim();
       if(!text){
         showToast('اكتب تعليقاً أولاً','error');
@@ -2251,7 +2401,7 @@
       }
       
       const code = await DEVICE_CODE_PROMISE;
-      const {  me } = await supabase.from('student_reports').select('name').eq('code',code).single();
+      const { data: me } = await supabase.from('student_reports').select('name').eq('code',code).single();
       
       const { error } = await supabase.from('comments').insert([{
         text,
@@ -2274,7 +2424,9 @@
     }
 
     window.showReplyInput = function(commentId){
-      const replyDiv = $(`#reply-${commentId}`);
+      const replyDiv = document.getElementById(`reply-${commentId}`);
+      if(!replyDiv) return;
+      
       if(replyDiv.style.display === 'none'){
         replyDiv.style.display = 'block';
         replyDiv.innerHTML = `
@@ -2288,7 +2440,8 @@
     };
 
     window.submitReply = async function(commentId){
-      const input = $(`#replyInput-${commentId}`);
+      const input = document.getElementById(`replyInput-${commentId}`);
+      if(!input) return;
       const text = input.value.trim();
       if(!text){
         showToast('اكتب ردك أولاً','error');
@@ -2297,10 +2450,10 @@
       }
       
       const code = await DEVICE_CODE_PROMISE;
-      const {  me } = await supabase.from('student_reports').select('name').eq('code',code).single();
+      const { data: me } = await supabase.from('student_reports').select('name').eq('code',code).single();
       const replyAuthor = me?.name ? me.name.split(' ')[0] : 'طالب';
       
-      const {  comment, error: fetchError } = await supabase.from('comments').select('replies').eq('id', commentId).single();
+      const { data: comment, error: fetchError } = await supabase.from('comments').select('replies').eq('id', commentId).single();
       if(fetchError){
         showToast('فشل جلب التعليق','error');
         playSound('error');
@@ -2328,7 +2481,8 @@
       showToast('تم إرسال الرد ✨','success');
       playSound('success');
       input.value = '';
-      $(`#reply-${commentId}`).style.display = 'none';
+      const replyDiv = document.getElementById(`reply-${commentId}`);
+      if(replyDiv) replyDiv.style.display = 'none';
       loadComments();
     };
 
@@ -2340,7 +2494,7 @@
       if(e.key === 'Enter') submitComment();
     });
 
-    /* ===== CORE ACTIONS (✅ معالجة الأخطاء مضافة) ===== */
+    /* ===== CORE ACTIONS ===== */
     
     // ✅ دالة مساعدة موحدة للتحقق من وجود بيانات الطالب
     async function getUserByCode() {
@@ -2360,15 +2514,19 @@
 
     async function saveData(){
       playSound('click');
-      const name = $('#studentName').value.trim(), title = $('#reportTitle').value.trim(), subject = $('#subjectName').value.trim(), code = await DEVICE_CODE_PROMISE;
+      const nameInput = $('#studentName'), titleInput = $('#reportTitle'), subjectInput = $('#subjectName');
+      if(!nameInput || !titleInput || !subjectInput) return;
+      
+      const name = nameInput.value.trim(), title = titleInput.value.trim(), subject = subjectInput.value.trim(), code = await DEVICE_CODE_PROMISE;
+      
       if(name.split(/\s+/).length < 2){ setMsg('⚠️ الاسم لازم يكون ثنائي على الأقل','error'); showToast('الاسم ثنائي مطلوب','error'); playSound('error'); return; }
       if(!name || !title || !subject){ setMsg('⚠️ املا كل الحقول','error'); showToast('املأ جميع الحقول','error'); playSound('error'); return; }
       
-      const {  already, error: checkError } = await supabase.from('student_reports').select('id').eq('code',code).limit(1);
+      const { data: already, error: checkError } = await supabase.from('student_reports').select('id').eq('code',code).limit(1);
       if(checkError){ console.error('خطأ في التحقق:', checkError); setMsg('❌ خطأ في الاتصال','error'); playSound('error'); return; }
       if(already?.length){ setMsg('⛔ لديك بيانات محفوظة','error'); showToast('لا يمكن التسجيل مرتين','error'); playSound('error'); await showMyInfo(); setActiveTab('myinfo'); return; }
       
-      const [{  nameUsed, error: nameErr }, {  titleUsed, error: titleErr }] = await Promise.all([
+      const [{ data: nameUsed, error: nameErr }, { data: titleUsed, error: titleErr }] = await Promise.all([
         supabase.from('student_reports').select('id').eq('name',name).limit(1),
         supabase.from('student_reports').select('id').eq('title',title).limit(1)
       ]);
@@ -2382,7 +2540,6 @@
 
     async function changeTitle(){
       playSound('click');
-      // ✅ استخدام الدالة الموحدة للتحقق
       const user = await getUserByCode();
       if(!user){ 
         setMsg('⚠️ لا توجد بيانات لك','error'); 
@@ -2394,7 +2551,7 @@
       const newTitle = await showModal({ icon:'✏️', title:'تغيير العنوان', msg:'اكتب العنوان الجديد (فريد)', withInput:true, inputPlaceholder:'العنوان الجديد...', confirmText:'تغيير', cancelText:'إلغاء' });
       if(!newTitle) return; const clean = newTitle.trim(); if(!clean){ setMsg('⚠️ العنوان فاضي','error'); playSound('error'); return; }
       
-      const {  titleUsed, error: checkErr } = await supabase.from('student_reports').select('id').eq('title',clean).limit(1);
+      const { data: titleUsed, error: checkErr } = await supabase.from('student_reports').select('id').eq('title',clean).limit(1);
       if(checkErr){ console.error('خطأ في التحقق:', checkErr); setMsg('❌ خطأ في التحقق','error'); playSound('error'); return; }
       if(titleUsed?.length){ setMsg('❌ العنوان مستخدم','error'); playSound('error'); return; }
       
@@ -2404,9 +2561,10 @@
     }
 
     async function showMyInfo(){
-      // ✅ استخدام الدالة الموحدة
       const user = await getUserByCode();
       const infoBox = $('#infoBox');
+      
+      if(!infoBox) return;
       
       if(!user){ 
         infoBox.style.display='none'; 
@@ -2431,7 +2589,10 @@
     }
 
     async function showAll(){
-      const allTitles = $('#allTitles'); allTitles.innerHTML = `<div style="text-align:center;padding:22px;color:rgba(255,255,255,.45)">جارٍ التحميل…</div>`;
+      const allTitles = $('#allTitles'); 
+      if(!allTitles) return;
+      allTitles.innerHTML = `<div style="text-align:center;padding:22px;color:rgba(255,255,255,.45)">جارٍ التحميل…</div>`;
+      
       const { data, error } = await supabase.from('student_reports').select('id,name,title,subject,date,code,badge,color,alert_text,alert_color,alert_type').order('id', { ascending:true });
       if(error){ allTitles.innerHTML = `<div style="text-align:center;padding:22px;color:#ff5c5c">❌ فشل التحميل</div>`; return; }
       ALL_CACHE = data || []; 
@@ -2442,6 +2603,8 @@
 
     function renderAllList(){
       const allTitles = $('#allTitles'), q = ($('#searchInput')?.value || '').trim().toLowerCase();
+      if(!allTitles) return;
+      
       const filtered = !q ? ALL_CACHE : ALL_CACHE.filter(d => (`${d.name} ${d.title} ${d.subject}`).toLowerCase().includes(q));
       DEVICE_CODE_PROMISE.then(myCode=>{
         if(filtered.length === 0){ allTitles.innerHTML = `<div style="text-align:center;padding:30px;color:rgba(255,255,255,.38)"><div style="font-size:30px;margin-bottom:6px">🔍</div><div style="font-size:12px">لا توجد نتائج</div></div>`; return; }
@@ -2462,10 +2625,8 @@
       });
     }
 
-    // ✅ تم إصلاح دالة الحذف باستخدام الدالة الموحدة
     async function deleteMyData(){
       playSound('click');
-      // ✅ استخدام الدالة الموحدة للتحقق
       const user = await getUserByCode();
       if(!user){ 
         setMsg('⚠️ لا توجد بيانات','error'); 
@@ -2473,7 +2634,6 @@
         return; 
       }
       
-      // ✅ إظهار نافذة التأكيد
       const confirmed = await showModal({ 
         icon:'🗑️', 
         title:'تأكيد الحذف', 
@@ -2488,8 +2648,11 @@
       const { error } = await supabase.from('student_reports').delete().eq('code', user.code);
       if(error){ setMsg('❌ فشل الحذف','error'); playSound('error'); return; }
       
-      $('#infoBox').style.display='none'; 
-      $('#infoBox').innerHTML=''; 
+      const infoBox = $('#infoBox');
+      if(infoBox){
+        infoBox.style.display='none'; 
+        infoBox.innerHTML=''; 
+      }
       setMsg('✅ تم الحذف','success'); 
       showToast('تم حذف البيانات','success'); 
       playSound('delete'); 
@@ -2511,30 +2674,73 @@
     }
 
     /* ===== BIND UI ===== */
-    $('#btnSave')?.addEventListener('click', (e)=>{e.stopPropagation();saveData();});
-    $('#btnChange')?.addEventListener('click', (e)=>{e.stopPropagation();changeTitle();});
-    $('#btnShow')?.addEventListener('click', (e)=>{e.stopPropagation();setActiveTab('myinfo');showMyInfo().catch(()=>{});});
-    $('#btnDelete')?.addEventListener('click', (e)=>{e.stopPropagation();deleteMyData();});
-    $('#btnDelete2')?.addEventListener('click', (e)=>{e.stopPropagation();deleteMyData();});
-    $('#btnProblem')?.addEventListener('click', (e)=>{e.stopPropagation();reportProblem();});
-    $('#btnProblem2')?.addEventListener('click', (e)=>{e.stopPropagation();reportProblem();});
-    $('#btnDownload')?.addEventListener('click', (e)=>{e.stopPropagation(); directDownload();});
-    $('#importantBtn')?.addEventListener('click', (e)=>{ e.stopPropagation(); playSound('click'); const gc = $('#guidelinesContent'), toggleBtn = $('#guidelinesToggleBtn'); if(gc && toggleBtn){ const isExpanded = gc.classList.contains('expanded'); gc.classList.toggle('expanded', !isExpanded); toggleBtn.innerHTML = '🔽 عرض التفاصيل'; toggleBtn.classList.toggle('expanded', isExpanded); } });
-    $('#panelRefreshBtn')?.addEventListener('click', (e)=>{e.stopPropagation();showAll(); showToast('تم التحديث ✨','success'); playSound('success');});
-    $('#notifCloseBtn')?.addEventListener('click', (e)=>{e.stopPropagation(); playSound('click'); const b = $('#notifBanner'); b.classList.remove('visible'); b.style.display='none';});
-    $('#searchInput')?.addEventListener('input', (e)=>{ e.stopPropagation(); clearTimeout(SEARCH_TIMER); SEARCH_TIMER = setTimeout(renderAllList, 90); });
-    $$('.themeOption')?.forEach(opt=>{ opt.addEventListener('click', (e)=>{ e.stopPropagation(); applyTheme(parseInt(opt.dataset.theme)); }); });
+    $('#btnSave')?.addEventListener('click', (e)=>{e?.stopPropagation?.();saveData();});
+    $('#btnChange')?.addEventListener('click', (e)=>{e?.stopPropagation?.();changeTitle();});
+    $('#btnShow')?.addEventListener('click', (e)=>{e?.stopPropagation?.();setActiveTab('myinfo');showMyInfo().catch(()=>{});});
+    $('#btnDelete')?.addEventListener('click', (e)=>{e?.stopPropagation?.();deleteMyData();});
+    $('#btnDelete2')?.addEventListener('click', (e)=>{e?.stopPropagation?.();deleteMyData();});
+    $('#btnProblem')?.addEventListener('click', (e)=>{e?.stopPropagation?.();reportProblem();});
+    $('#btnProblem2')?.addEventListener('click', (e)=>{e?.stopPropagation?.();reportProblem();});
+    $('#btnDownload')?.addEventListener('click', (e)=>{e?.stopPropagation?.(); directDownload();});
+    $('#importantBtn')?.addEventListener('click', (e)=>{ 
+      e?.stopPropagation?.(); 
+      playSound('click'); 
+      const gc = $('#guidelinesContent'), toggleBtn = $('#guidelinesToggleBtn'); 
+      if(gc && toggleBtn){ 
+        const isExpanded = gc.classList.contains('expanded'); 
+        gc.classList.toggle('expanded', !isExpanded); 
+        toggleBtn.innerHTML = !isExpanded ? '🔽 عرض التفاصيل' : '📌 طوي'; 
+        toggleBtn.classList.toggle('expanded', isExpanded); 
+      } 
+    });
+    $('#panelRefreshBtn')?.addEventListener('click', (e)=>{e?.stopPropagation?.();showAll(); showToast('تم التحديث ✨','success'); playSound('success');});
+    $('#notifCloseBtn')?.addEventListener('click', (e)=>{e?.stopPropagation?.(); playSound('click'); const b = $('#notifBanner'); if(b){ b.classList.remove('visible'); b.style.display='none'; }});
+    $('#searchInput')?.addEventListener('input', (e)=>{ e?.stopPropagation?.(); clearTimeout(SEARCH_TIMER); SEARCH_TIMER = setTimeout(renderAllList, 90); });
+    $$('.themeOption')?.forEach(opt=>{ opt.addEventListener('click', (e)=>{ e?.stopPropagation?.(); applyTheme(parseInt(opt.dataset.theme)); }); });
 
     function setActiveTab(key){
       $$('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab===key));
       $$('.tab-content').forEach(c => c.classList.toggle('active', c.id===`tab-${key}`));
     }
 
-    /* ===== REALTIME ===== */
+    /* ===== REALTIME - FIXED ===== */
     function setupRealtime(){
-      supabase.channel('site_ctrl_student').on('postgres_changes', { event:'*', schema:'public', table:'site_control' }, ()=>{ loadSiteControlData(); }).subscribe();
-      supabase.channel('reports_student').on('postgres_changes', { event:'*', schema:'public', table:'student_reports' }, async ()=>{ showMyInfo().catch(()=>{}); const allVisible = $('#tab-all')?.classList.contains('active'); if(allVisible){ const { data, error } = await supabase.from('student_reports').select('id,name,title,subject,date,code,badge,color,alert_text,alert_color,alert_type').order('id', { ascending:true }); if(!error && data){ ALL_CACHE = data; updateCounter(data.length); updateStats(); renderAllList(); } } }).subscribe();
-      supabase.channel('comments_student').on('postgres_changes', { event:'*', schema:'public', table:'comments' }, ()=>{ if($('#tab-comments')?.classList.contains('active')) loadComments(); }).subscribe();
+      // ✅ استخدام نفس اسم القناة مثل لوحة التحكم
+      supabase.channel('site_control_sync')
+        .on('postgres_changes', 
+          { event: '*', schema: 'public', table: 'site_control' }, 
+          async (payload) => {
+            console.log('🔄 استلام تحديث من لوحة التحكم:', payload.eventType);
+            // ✅ إعادة تحميل جميع إعدادات الموقع فوراً
+            await loadSiteControlData();
+            showToast('📢 تم تحديث إعدادات الموقع', 'info');
+          }
+        )
+        .subscribe();
+        
+      supabase.channel('reports_student')
+        .on('postgres_changes', 
+          { event: '*', schema: 'public', table: 'student_reports' }, 
+          async () => { 
+            await showMyInfo(); 
+            const allTab = document.getElementById('tab-all');
+            const allVisible = allTab?.classList.contains('active'); 
+            if(allVisible){ 
+              await showAll(); 
+            } 
+          }
+        )
+        .subscribe();
+        
+      supabase.channel('comments_student')
+        .on('postgres_changes', 
+          { event: '*', schema: 'public', table: 'comments' }, 
+          () => { 
+            const commentsTab = document.getElementById('tab-comments');
+            if(commentsTab?.classList.contains('active')) loadComments(); 
+          }
+        )
+        .subscribe();
     }
 
     /* ===== BOOT ===== */
@@ -2542,11 +2748,26 @@
       initLoadingScreen();
       initMode();
       initSounds();
-      const open = await checkSiteStatus(); if(!open) return;
-      loadSiteControlData().catch(()=>{}); setupRealtime();
+      initTheme();
+      
+      const open = await checkSiteStatus(); 
+      if(!open) return;
+      
+      // ✅ تحميل إعدادات الموقع أولاً قبل أي شيء
+      await loadSiteControlData();
+      
+      // ✅ تفعيل الـ Realtime
+      setupRealtime();
+      
+      // ✅ تحميل بيانات المستخدم
       setActiveTab('register');
       setTimeout(()=> showMyInfo().catch(()=>{}), 700);
-      setTimeout(() => { $('#entranceOverlay').style.display = 'none'; }, 2500);
+      
+      // ✅ إخفاء شاشة الدخول
+      setTimeout(() => { 
+        const overlay = $('#entranceOverlay');
+        if(overlay) overlay.style.display = 'none'; 
+      }, 2500);
     })();
   </script>
   <script defer src="https://static.cloudflareinsights.com/beacon.min.js/v8c78df7c7c0f484497ecbca7046644da1771523124516" crossorigin="anonymous"></script>
@@ -2555,3 +2776,28 @@
 
 
 
+              <script>
+                              // ✅ قناة Realtime موحدة مع لوحة التحكم
+supabase.channel('site_control_sync')
+  .on('postgres_changes', 
+    { event: '*', schema: 'public', table: 'site_control' }, 
+    async (payload) => {
+      console.log('🔄 استلام تحديث من لوحة التحكم:', payload.eventType);
+      await loadSiteControlData(); // إعادة تحميل فوري
+      showToast('📢 تم تحديث إعدادات الموقع', 'info');
+    }
+  )
+  .subscribe();
+
+(async function boot(){
+  // ...
+  await loadSiteControlData(); // تحميل الإعدادات أولاً
+  setupRealtime(); // ثم تفعيل التزامن
+  // ...
+})();
+
+
+              </script>
+                        </body>
+                        </html>
+                    
