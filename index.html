@@ -625,19 +625,17 @@
         const { data, error } = await supabase.from('site_control').select('*').eq('id', 1).single();
         if (error || !data) return;
         
-        // Check site status
         if (!data.site_open) {
           document.body.innerHTML = `<div style="display:flex;align-items:center;justify-content:center;height:100vh;background:#000;color:#fff;font-family:'Cairo',sans-serif;font-size:24px;text-align:center;padding:20px">الموقع مغلق حالياً ❌<br><br>يرجى المحاولة لاحقاً</div>`;
           return;
         }
         
-        // Show notification if exists
         if (data.notification?.trim()) {
           const banner = document.createElement('div');
           banner.innerHTML = `<span>📢</span> ${data.notification} <button style="margin-right:auto;background:none;border:none;color:inherit;cursor:pointer;font-size:18px">✕</button>`;
-          banner.style.cssText = 'display:flex;align-items:center;gap:10px;padding:12px 20px;background:rgba(245,197,24,0.15);border-bottom:1px solid rgba(245,197,24,0.3);color:#f5c518;font-size:0.9rem';          banner.querySelector('button').onclick = () => banner.remove();
-          document.body.insertBefore(banner, document.body.firstChild);
-        }
+          banner.style.cssText = 'display:flex;align-items:center;gap:10px;padding:12px 20px;background:rgba(245,197,24,0.15);border-bottom:1px solid rgba(245,197,24,0.3);color:#f5c518;font-size:0.9rem';
+          banner.querySelector('button').onclick = () => banner.remove();
+          document.body.insertBefore(banner, document.body.firstChild);        }
       } catch (e) {
         console.error('Error loading site settings:', e);
       }
@@ -650,7 +648,8 @@
       const subject = $('#subjectName').value.trim();
       const title = $('#reportTitle').value.trim();
       
-      // Validation
+      console.log('📝 البيانات المدخلة:', { name, subject, title });
+      
       if (name.split(/\s+/).filter(w => w).length < 2) {
         setMsg('⚠️ الاسم يجب أن يكون ثنائياً على الأقل', 'error');
         showToast('الاسم غير صحيح', 'error');
@@ -665,8 +664,8 @@
       }
       
       const code = await DEVICE_CODE_PROMISE;
+      console.log('🔑 كود الجهاز:', code);
       
-      // Check if already registered
       const { data: existing, error: checkError } = await supabase
         .from('student_reports')
         .select('id')
@@ -674,55 +673,67 @@
         .limit(1);
       
       if (checkError) {
-        setMsg('❌ خطأ في الاتصال', 'error');
+        console.error('❌ خطأ في التحقق:', checkError);
+        setMsg('❌ خطأ في الاتصال: ' + checkError.message, 'error');
         playSound('error');
         return;
       }
+      
       if (existing?.length > 0) {
+        console.log('⛔ الطالب مسجل مسبقاً');
         setMsg('⛔ لديك بيانات محفوظة مسبقاً', 'error');
         showToast('لا يمكن التسجيل مرتين', 'error');
         playSound('error');
-        setActiveTab('myinfo');
-        loadMyInfo();
-        return;      }
+        setActiveTab('myinfo');        loadMyInfo();
+        return;
+      }
       
-      // Check for duplicate name or title
       const [{ data: nameExists }, { data: titleExists }] = await Promise.all([
         supabase.from('student_reports').select('id').eq('name', name).limit(1),
         supabase.from('student_reports').select('id').eq('title', title).limit(1)
       ]);
       
       if (nameExists?.length > 0 || titleExists?.length > 0) {
+        console.log('❌ الاسم أو العنوان مكرر');
         setMsg('❌ الاسم أو العنوان مستخدم مسبقاً', 'error');
         showToast('مكرر - اختر اسماً/عنواناً آخر', 'error');
         playSound('error');
         return;
       }
       
-      // Insert new record with auto ID, code, and date
-      const { error } = await supabase.from('student_reports').insert([{
+      console.log('💾 جارٍ الحفظ في قاعدة البيانات...');
+      const insertData = {
         name, subject, title,
-        code, // ✅ كود الطالب التلقائي
-        date: new Date().toISOString(), // ✅ تاريخ التسجيل التلقائي
+        code,
+        date: new Date().toISOString(),
         badge: null, badge_color: null,
         color: null,
         alert_text: null, alert_color: null, alert_type: null,
         banned: false, banned_at: null, ban_reason: null
-      }]);
+      };
+      
+      console.log('📦 البيانات المرسلة:', insertData);
+      
+      const { data: insertedData, error } = await supabase
+        .from('student_reports')
+        .insert([insertData])
+        .select();
       
       if (error) {
-        console.error('Insert error:', error);
+        console.error('❌ فشل الحفظ:', error);
+        console.error('تفاصيل الخطأ:', error.details);
+        console.error('رسالة الخطأ:', error.message);
         setMsg('❌ فشل الحفظ: ' + error.message, 'error');
+        showToast('خطأ في الحفظ', 'error');
         playSound('error');
         return;
       }
       
+      console.log('✅ تم الحفظ بنجاح!', insertedData);
       setMsg('✅ تم الحفظ بنجاح!', 'success');
       showToast('تم حفظ بياناتك ✨', 'success');
       playSound('success');
-      
-      // Clear inputs and show my info
-      $('#studentName').value = '';
+            $('#studentName').value = '';
       $('#subjectName').value = '';
       $('#reportTitle').value = '';
       
@@ -733,10 +744,10 @@
     }
 
     /* ===== Change Title - زر التعديل ===== */
-    async function changeTitle() {      playSound('click');
+    async function changeTitle() {
+      playSound('click');
       const code = await DEVICE_CODE_PROMISE;
       
-      // Get user data
       const { data: user, error } = await supabase
         .from('student_reports')
         .select('*')
@@ -750,7 +761,6 @@
         return;
       }
       
-      // Show modal for new title
       const newTitle = prompt('أدخل العنوان الجديد:', user.title);
       if (!newTitle || !newTitle.trim()) {
         showToast('العنوان مطلوب', 'error');
@@ -758,7 +768,6 @@
         return;
       }
       
-      // Check for duplicate
       const { data: exists } = await supabase
         .from('student_reports')
         .select('id')
@@ -772,17 +781,16 @@
         return;
       }
       
-      // Update with new date
       const { error: updateError } = await supabase
-        .from('student_reports')
-        .update({ 
+        .from('student_reports')        .update({ 
           title: newTitle.trim(),
-          date: new Date().toISOString() // ✅ تحديث التاريخ
+          date: new Date().toISOString()
         })
         .eq('code', code);
       
       if (updateError) {
-        setMsg('❌ فشل التعديل', 'error');        playSound('error');
+        setMsg('❌ فشل التعديل', 'error');
+        playSound('error');
         return;
       }
       
@@ -795,6 +803,8 @@
     /* ===== Load My Info - زر معلوماتي ===== */
     async function loadMyInfo() {
       const code = await DEVICE_CODE_PROMISE;
+      console.log('🔍 جارٍ تحميل المعلومات للكود:', code);
+      
       const infoBox = $('#infoBox');
       const noDataMsg = $('#noDataMsg');
       
@@ -804,17 +814,24 @@
         .eq('code', code)
         .single();
       
-      if (error || !user) {
-        infoBox.style.display = 'none';
-        noDataMsg.style.display = 'block';
+      if (error) {
+        console.error('❌ خطأ في تحميل البيانات:', error);
+        if (error.code === 'PGRST116') {
+          console.log('⚠️ لا توجد بيانات مسجلة لهذا الطالب');
+          infoBox.style.display = 'none';
+          noDataMsg.style.display = 'block';
+        } else {
+          console.error('خطأ آخر:', error.message);
+          showToast('خطأ في تحميل البيانات', 'error');
+        }
         return;
       }
       
-      // Show data in info box
-      $('#infoName').textContent = user.name;
-      $('#infoSubject').textContent = user.subject;
-      $('#infoTitle').textContent = user.title;
-      $('#infoDate').textContent = formatDate(user.date);
+      console.log('✅ تم تحميل البيانات:', user);
+      
+      $('#infoName').textContent = user.name || '—';
+      $('#infoSubject').textContent = user.subject || '—';
+      $('#infoTitle').textContent = user.title || '—';      $('#infoDate').textContent = formatDate(user.date);
       
       infoBox.style.display = 'flex';
       noDataMsg.style.display = 'none';
@@ -831,7 +848,9 @@
         .from('student_reports')
         .select('id, name, title, subject, date, code')
         .order('date', { ascending: false });
-            if (error) {
+      
+      if (error) {
+        console.error('❌ فشل تحميل العناوين:', error);
         table.innerHTML = `<tr><td colspan="5" style="color:#ff6b6b;text-align:center;padding:20px">❌ فشل التحميل</td></tr>`;
         return;
       }
@@ -847,7 +866,7 @@
       data.forEach((item, i) => {
         const isMe = item.code === myCode;
         rows += `<tr class="${isMe ? 'mine' : ''}">
-          <td>${item.id}</td> <!-- ✅ رقم تسلسلي من قاعدة البيانات -->
+          <td>${item.id}</td>
           <td style="font-weight:700;color:${isMe ? 'var(--gold)' : 'inherit'}">${item.name}${isMe ? ' <span style="font-size:0.7rem;background:rgba(245,197,24,0.2);padding:2px 8px;border-radius:10px;margin-right:5px">أنت</span>' : ''}</td>
           <td style="text-align:right;padding-right:10px">${item.title}</td>
           <td><span style="background:rgba(0,212,255,0.15);padding:4px 10px;border-radius:15px;font-size:0.8rem;color:#00d4ff">${item.subject}</span></td>
@@ -861,8 +880,7 @@
     /* ===== Send Problem via Telegram ===== */
     async function sendProblem() {
       const text = $('#problemText').value.trim();
-      if (!text) {
-        showToast('اكتب مشكلتك أولاً', 'error');
+      if (!text) {        showToast('اكتب مشكلتك أولاً', 'error');
         playSound('error');
         return;
       }
@@ -880,7 +898,8 @@
       try {
         const res = await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },          body: JSON.stringify({
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
             chat_id: TELEGRAM_CHAT_ID,
             text: message,
             parse_mode: 'HTML'
@@ -910,8 +929,7 @@
     });
     
     $('#modalCancel')?.addEventListener('click', () => {
-      playSound('click');
-      $('#problemModal').classList.remove('active');
+      playSound('click');      $('#problemModal').classList.remove('active');
       $('#problemText').value = '';
     });
     
@@ -929,7 +947,8 @@
     $('#searchInput')?.addEventListener('input', (e) => {
       clearTimeout(searchTimer);
       searchTimer = setTimeout(() => {
-        const q = e.target.value.toLowerCase().trim();        const rows = $$('#titlesTable tr');
+        const q = e.target.value.toLowerCase().trim();
+        const rows = $$('#titlesTable tr');
         rows.forEach(row => {
           const text = row.textContent.toLowerCase();
           row.style.display = text.includes(q) ? '' : 'none';
@@ -959,8 +978,7 @@
           () => {
             if ($('#tab-titles').classList.contains('active')) loadAllTitles();
             if ($('#tab-myinfo').classList.contains('active')) loadMyInfo();
-          }
-        )
+          }        )
         .subscribe();
       
       supabase.channel('site_updates')
@@ -973,16 +991,35 @@
 
     /* ===== Init ===== */
     async function init() {
+      console.log('🚀 بدء تشغيل التطبيق...');
+      console.log('📡 Supabase URL:', SUPABASE_URL);
+      console.log('🔑 Supabase Key:', SUPABASE_KEY ? 'موجود ✅' : 'غير موجود ❌');
+      
+      // اختبار الاتصال
+      try {
+        console.log('🧪 اختبار الاتصال بـ Supabase...');
+        const { data, error } = await supabase.from('student_reports').select('count').limit(1);
+        if (error) {
+          console.error('❌ فشل الاتصال:', error);
+          alert('❌ خطأ في الاتصال بقاعدة البيانات!\n\n' + error.message);
+        } else {
+          console.log('✅ الاتصال ناجح!');
+        }
+      } catch (e) {
+        console.error('❌ خطأ غير متوقع:', e);
+      }
+      
       initMode();
       initSounds();
       await DEVICE_CODE_PROMISE;
       await loadSiteSettings();
       setupRealtime();
-      loadMyInfo();      loadAllTitles();
+      loadMyInfo();
+      loadAllTitles();
     }
 
     // Start app
     init();
   </script>
 </body>
-</html>چ
+</html>
