@@ -638,22 +638,12 @@
           banner.style.cssText = 'display:flex;align-items:center;gap:10px;padding:12px 20px;background:rgba(245,197,24,0.15);border-bottom:1px solid rgba(245,197,24,0.3);color:#f5c518;font-size:0.9rem';          banner.querySelector('button').onclick = () => banner.remove();
           document.body.insertBefore(banner, document.body.firstChild);
         }
-        
-        // Show deadline if active
-        if (data.deadline && data.deadline_active) {
-          // Could add countdown display here
-        }
-        
-        // Show guidelines if exists
-        if (data.usage_guidelines?.trim()) {
-          // Could add guidelines display here
-        }
       } catch (e) {
         console.error('Error loading site settings:', e);
       }
     }
 
-    /* ===== Save Data ===== */
+    /* ===== Save Data - زر الحفظ ===== */
     async function saveData() {
       playSound('click');
       const name = $('#studentName').value.trim();
@@ -684,7 +674,8 @@
         .limit(1);
       
       if (checkError) {
-        setMsg('❌ خطأ في الاتصال', 'error');        playSound('error');
+        setMsg('❌ خطأ في الاتصال', 'error');
+        playSound('error');
         return;
       }
       if (existing?.length > 0) {
@@ -693,8 +684,7 @@
         playSound('error');
         setActiveTab('myinfo');
         loadMyInfo();
-        return;
-      }
+        return;      }
       
       // Check for duplicate name or title
       const [{ data: nameExists }, { data: titleExists }] = await Promise.all([
@@ -709,11 +699,11 @@
         return;
       }
       
-      // Insert new record
+      // Insert new record with auto ID, code, and date
       const { error } = await supabase.from('student_reports').insert([{
         name, subject, title,
-        code,
-        date: new Date().toISOString(),
+        code, // ✅ كود الطالب التلقائي
+        date: new Date().toISOString(), // ✅ تاريخ التسجيل التلقائي
         badge: null, badge_color: null,
         color: null,
         alert_text: null, alert_color: null, alert_type: null,
@@ -733,7 +723,8 @@
       
       // Clear inputs and show my info
       $('#studentName').value = '';
-      $('#subjectName').value = '';      $('#reportTitle').value = '';
+      $('#subjectName').value = '';
+      $('#reportTitle').value = '';
       
       setTimeout(() => {
         setActiveTab('myinfo');
@@ -741,9 +732,8 @@
       }, 1500);
     }
 
-    /* ===== Change Title ===== */
-    async function changeTitle() {
-      playSound('click');
+    /* ===== Change Title - زر التعديل ===== */
+    async function changeTitle() {      playSound('click');
       const code = await DEVICE_CODE_PROMISE;
       
       // Get user data
@@ -782,17 +772,17 @@
         return;
       }
       
-      // Update      const { error: updateError } = await supabase
+      // Update with new date
+      const { error: updateError } = await supabase
         .from('student_reports')
         .update({ 
           title: newTitle.trim(),
-          date: new Date().toISOString()
+          date: new Date().toISOString() // ✅ تحديث التاريخ
         })
         .eq('code', code);
       
       if (updateError) {
-        setMsg('❌ فشل التعديل', 'error');
-        playSound('error');
+        setMsg('❌ فشل التعديل', 'error');        playSound('error');
         return;
       }
       
@@ -802,7 +792,7 @@
       loadMyInfo();
     }
 
-    /* ===== Load My Info ===== */
+    /* ===== Load My Info - زر معلوماتي ===== */
     async function loadMyInfo() {
       const code = await DEVICE_CODE_PROMISE;
       const infoBox = $('#infoBox');
@@ -820,7 +810,7 @@
         return;
       }
       
-      // Show data
+      // Show data in info box
       $('#infoName').textContent = user.name;
       $('#infoSubject').textContent = user.subject;
       $('#infoTitle').textContent = user.title;
@@ -831,7 +821,8 @@
       
       showToast('تم تحميل بياناتك', 'success');
     }
-    /* ===== Load All Titles ===== */
+
+    /* ===== Load All Titles - عرض جميع العناوين ===== */
     async function loadAllTitles() {
       const table = $('#titlesTable');
       table.innerHTML = `<tr><td colspan="5"><div class="loading"><div class="loader"></div>جارٍ التحميل...</div></td></tr>`;
@@ -840,8 +831,7 @@
         .from('student_reports')
         .select('id, name, title, subject, date, code')
         .order('date', { ascending: false });
-      
-      if (error) {
+            if (error) {
         table.innerHTML = `<tr><td colspan="5" style="color:#ff6b6b;text-align:center;padding:20px">❌ فشل التحميل</td></tr>`;
         return;
       }
@@ -857,7 +847,7 @@
       data.forEach((item, i) => {
         const isMe = item.code === myCode;
         rows += `<tr class="${isMe ? 'mine' : ''}">
-          <td>${i + 1}</td>
+          <td>${item.id}</td> <!-- ✅ رقم تسلسلي من قاعدة البيانات -->
           <td style="font-weight:700;color:${isMe ? 'var(--gold)' : 'inherit'}">${item.name}${isMe ? ' <span style="font-size:0.7rem;background:rgba(245,197,24,0.2);padding:2px 8px;border-radius:10px;margin-right:5px">أنت</span>' : ''}</td>
           <td style="text-align:right;padding-right:10px">${item.title}</td>
           <td><span style="background:rgba(0,212,255,0.15);padding:4px 10px;border-radius:15px;font-size:0.8rem;color:#00d4ff">${item.subject}</span></td>
@@ -880,7 +870,8 @@
       const code = await DEVICE_CODE_PROMISE;
       const { data: user } = await supabase
         .from('student_reports')
-        .select('name')        .eq('code', code)
+        .select('name')
+        .eq('code', code)
         .single();
       
       const studentName = user?.name || 'طالب غير مسجل';
@@ -889,8 +880,7 @@
       try {
         const res = await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
+          headers: { 'Content-Type': 'application/json' },          body: JSON.stringify({
             chat_id: TELEGRAM_CHAT_ID,
             text: message,
             parse_mode: 'HTML'
@@ -927,9 +917,9 @@
     
     $('#modalSend')?.addEventListener('click', sendProblem);
     
-    // Close modal on outside click
     $('#problemModal')?.addEventListener('click', (e) => {
-      if (e.target === $('#problemModal')) {        $('#problemModal').classList.remove('active');
+      if (e.target === $('#problemModal')) {
+        $('#problemModal').classList.remove('active');
         $('#problemText').value = '';
       }
     });
@@ -939,9 +929,7 @@
     $('#searchInput')?.addEventListener('input', (e) => {
       clearTimeout(searchTimer);
       searchTimer = setTimeout(() => {
-        const q = e.target.value.toLowerCase().trim();
-        const rows = $$('#titlesTable tr');
-        
+        const q = e.target.value.toLowerCase().trim();        const rows = $$('#titlesTable tr');
         rows.forEach(row => {
           const text = row.textContent.toLowerCase();
           row.style.display = text.includes(q) ? '' : 'none';
@@ -965,7 +953,6 @@
 
     /* ===== Realtime Updates ===== */
     function setupRealtime() {
-      // Listen for student_reports changes
       supabase.channel('student_updates')
         .on('postgres_changes', 
           { event: '*', schema: 'public', table: 'student_reports' },
@@ -976,9 +963,9 @@
         )
         .subscribe();
       
-      // Listen for site_control changes
       supabase.channel('site_updates')
-        .on('postgres_changes',          { event: '*', schema: 'public', table: 'site_control' },
+        .on('postgres_changes',
+          { event: '*', schema: 'public', table: 'site_control' },
           () => loadSiteSettings()
         )
         .subscribe();
@@ -988,20 +975,14 @@
     async function init() {
       initMode();
       initSounds();
-      
-      // Wait for device code then load data
       await DEVICE_CODE_PROMISE;
-      
       await loadSiteSettings();
       setupRealtime();
-      
-      // Load initial data
-      loadMyInfo();
-      loadAllTitles();
+      loadMyInfo();      loadAllTitles();
     }
 
     // Start app
     init();
   </script>
 </body>
-</html>
+</html>چ
