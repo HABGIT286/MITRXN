@@ -3,1952 +3,578 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>تقارير الطلبة — تصميم احترافي | ONX-TAQE PRO</title>
+  <title>🎓 تقارير الطلبة | ONX-TAQE</title>
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
-
   <style>
-    /* ===== CSS Variables ===== */
     :root {
       --primary: #0f1e3d; --secondary: #1a2a4a; --accent: #e94560;
       --gold: #f5c518; --neon-blue: #00d4ff; --neon-purple: #7b2fff;
-      --neon-green: #00ff88; --glass: rgba(255,255,255,0.07);
-      --glass-border: rgba(255,255,255,0.15); --text-light: #e0e0f0;
-      --card-shadow: 0 20px 60px rgba(0,0,0,0.5);
-      --transition: all 0.3s cubic-bezier(0.23,1,0.32,1);
-      --card-gradient-start: rgba(255,255,255,.065);
-      --card-gradient-end: rgba(255,255,255,.035);
-      --card-border: rgba(255,255,255,.12);
-      --card-glow: rgba(125,211,252,.15);
-      --card-radial-1: rgba(125,211,252,.12);
-      --card-radial-2: rgba(245,200,66,.10);
-      --bg-color: #050b1a;
-      --bg-gradient: radial-gradient(ellipse at 20% 50%, rgba(0,212,255,0.10) 0%, transparent 60%),
-                     radial-gradient(ellipse at 80% 20%, rgba(123,47,255,0.10) 0%, transparent 60%),
-                     radial-gradient(ellipse at 50% 80%, rgba(233,69,96,0.07) 0%, transparent 60%),
-                     linear-gradient(180deg, rgba(5,11,26,0.4) 0%, rgba(5,11,26,0.7) 100%);
+      --glass: rgba(255,255,255,0.07); --glass-border: rgba(255,255,255,0.15);
+      --text-light: #e0e0f0; --card-shadow: 0 20px 60px rgba(0,0,0,0.5);
+      --transition: all 0.3s ease; --bg-color: #050b1a;
     }
-
-    /* ===== LIGHT MODE ===== */
-    html[data-mode="light"]{
-      --bg-color: #f0f2f5;
-      --text-light: #1a1a2e;
-      --glass: rgba(0,0,0,0.05);
-      --glass-border: rgba(0,0,0,0.1);
-      --card-shadow: 0 20px 60px rgba(0,0,0,0.15);
-      --card-gradient-start: rgba(0,0,0,.03);
-      --card-gradient-end: rgba(0,0,0,.01);
-      --card-border: rgba(0,0,0,.08);
-      --bg-gradient: radial-gradient(ellipse at 20% 50%, rgba(0,212,255,0.08) 0%, transparent 60%),
-                     radial-gradient(ellipse at 80% 20%, rgba(123,47,255,0.08) 0%, transparent 60%),
-                     linear-gradient(180deg, rgba(240,242,245,0.8) 0%, rgba(240,242,245,0.95) 100%);
+    html[data-mode="light"] {
+      --bg-color: #f0f2f5; --text-light: #1a1a2e;
+      --glass: rgba(0,0,0,0.05); --glass-border: rgba(0,0,0,0.1);
     }
-
-    /* ===== Reset & Base ===== */
-    *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-    html,body{height:100%;overscroll-behavior:none}
-    body{
-      font-family:'Cairo',system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
-      overflow-x:hidden; -webkit-user-select:none; -moz-user-select:none;
-      -ms-user-select:none; user-select:none; background:var(--bg-color);
-      color:var(--text-light); transition: background 0.4s ease;
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Cairo', sans-serif; background: var(--bg-color);
+      color: var(--text-light); min-height: 100vh; overflow-x: hidden;
+      transition: background 0.4s ease;
     }
-    button,input,textarea,select{
-      font-family:inherit; -webkit-user-select:text; -moz-user-select:text;
-      -ms-user-select:text; user-select:text;
-    }
-    :focus{outline:none!important;box-shadow:none!important}
-    ::selection{background:rgba(0,212,255,0.3)}
-
-    /* ===== Background Effects ===== */
+    button, input, textarea { font-family: inherit; }
+    
+    /* ===== Background ===== */
     .bg-image {
-      position:fixed; inset:0; z-index:-2;
-      background: url('M.jpg') center center / cover no-repeat;
-      filter:brightness(0.25) saturate(1.5);
+      position: fixed; inset: 0; z-index: -2;
+      background: url('https://images.unsplash.com/photo-1513258496099-48168024aec0?w=1920&q=80') center/cover no-repeat;
+      filter: brightness(0.25) saturate(1.5);
     }
-    html[data-mode="light"] .bg-image{
-      filter:brightness(0.85) saturate(1.2);
-    }
+    html[data-mode="light"] .bg-image { filter: brightness(0.85) saturate(1.2); }
     .bg-overlay {
-      position:fixed; inset:0; z-index:-1;
-      background: var(--bg-gradient);
+      position: fixed; inset: 0; z-index: -1;
+      background: radial-gradient(ellipse at 20% 50%, rgba(0,212,255,0.10) 0%, transparent 60%),
+                  radial-gradient(ellipse at 80% 20%, rgba(123,47,255,0.10) 0%, transparent 60%),
+                  linear-gradient(180deg, rgba(5,11,26,0.4) 0%, rgba(5,11,26,0.7) 100%);
     }
-    #particles { position:fixed; inset:0; z-index:-1; pointer-events:none; }
-    .particle {
-      position:absolute; border-radius:50%;
-      animation: floatUp linear infinite; opacity:0;
-    }
-    @keyframes floatUp {
-      0%   { transform:translateY(100vh) scale(0); opacity:0; }
-      10%  { opacity:0.6; } 90%  { opacity:0.3; }
-      100% { transform:translateY(-10vh) scale(1); opacity:0; }
-    }
-
-    /* ===== Loading Screen ===== */
-    #loadingScreen{
-      position:fixed; inset:0; z-index:99999;
-      background:linear-gradient(135deg, #050b1a 0%, #0f1e3d 50%, #1a2a4a 100%);
-      display:flex; flex-direction:column; align-items:center; justify-content:center; gap:24px;
-      animation: fadeOutLoader 0.6s ease forwards; animation-delay: 2.2s; pointer-events: none;
-    }
-    #loadingScreen.active{ pointer-events: all; animation: none; display:flex; }
-    @keyframes fadeOutLoader{ to{ opacity:0; transform:scale(1.02); visibility:hidden; } }
     
-    .loaderTitle{
-      font-size:28px; color:transparent;
-      background:linear-gradient(90deg, var(--gold), var(--neon-blue), var(--neon-purple), var(--gold));
-      background-size:300% 100%; -webkit-background-clip:text; background-clip:text;
-      animation: gradientMove 2.5s ease infinite, titlePop 0.6s ease;
-      letter-spacing:2px; text-shadow:0 0 30px rgba(245,200,66,.3); white-space:nowrap;
+    /* ===== Header ===== */
+    .header {
+      text-align: center; padding: 30px 20px 20px;
+      animation: slideDown 0.6s ease;
     }
-    @keyframes gradientMove{ 0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%} }
-    @keyframes titlePop{ 0%{transform:scale(0.8);opacity:0} 60%{transform:scale(1.05)} 100%{transform:scale(1);opacity:1} }
+    @keyframes slideDown { from { transform: translateY(-30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+    .header-icon {
+      width: 70px; height: 70px; margin: 0 auto 15px;
+      background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));      border-radius: 20px; display: flex; align-items: center; justify-content: center;
+      font-size: 32px; box-shadow: 0 0 40px rgba(0,212,255,0.4);
+    }
+    .header-title {
+      font-size: 1.8rem; font-weight: 900;
+      background: linear-gradient(135deg, #fff, var(--neon-blue));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .header-subtitle { color: rgba(255,255,255,0.5); font-size: 0.9rem; margin-top: 5px; }
+    html[data-mode="light"] .header-subtitle { color: rgba(0,0,0,0.5); }
     
-    .loaderBar{
-      width:280px; max-width:80vw; height:6px; border-radius:99px;
-      background:rgba(255,255,255,.08); overflow:hidden; position:relative;
-      border:1px solid rgba(255,255,255,.12);
-    }
-    .loaderBar::after{
-      content:''; position:absolute; inset:0;
-      background:linear-gradient(90deg, transparent, var(--neon-blue), var(--gold), transparent);
-      background-size:200% 100%; animation: barLoad 1.8s ease-in-out infinite; border-radius:99px;
-    }
-    @keyframes barLoad{ 0%{background-position:-200% 0} 50%{background-position:100% 0} 100%{background-position:200% 0} }
-    
-    .loaderDots{ display:flex; gap:8px; margin-top:8px; }
-    .loaderDots span{
-      width:10px; height:10px; border-radius:50%; background:var(--gold);
-      animation: dotBounce 1.4s ease-in-out infinite both;
-    }
-    .loaderDots span:nth-child(2){animation-delay:0.2s;background:var(--neon-blue)}
-    .loaderDots span:nth-child(3){animation-delay:0.4s;background:var(--neon-purple)}
-    @keyframes dotBounce{ 0%,80%,100%{transform:scale(0.6);opacity:0.5} 40%{transform:scale(1.2);opacity:1} }
-
-    /* ===== Entrance Animation ===== */
-    .entrance-overlay { 
-      position:fixed; inset:0; z-index:1000; 
-      background:linear-gradient(135deg,#050b1a,#0f1a2e); 
-      display:flex; flex-direction:column; align-items:center; justify-content:center; 
-      animation:overlayFade 0.8s 1.8s forwards; 
-    }
-    @keyframes overlayFade { to{opacity:0;pointer-events:none;visibility:hidden} }
-    .entrance-logo { 
-      width:100px; height:100px; 
-      background:linear-gradient(135deg,var(--neon-blue),var(--neon-purple)); 
-      border-radius:28px; display:flex; align-items:center; justify-content:center; 
-      font-size:44px; 
-      box-shadow:0 0 60px rgba(0,212,255,0.6),0 0 120px rgba(123,47,255,0.4); 
-      animation:logoAnim 1.5s cubic-bezier(0.23,1,0.32,1) both; margin-bottom:24px; 
-    }
-    @keyframes logoAnim { 0%{transform:scale(0) rotateY(180deg);opacity:0} 60%{transform:scale(1.1) rotateY(-10deg)} 100%{transform:scale(1) rotateY(0deg);opacity:1} }
-    .entrance-title { 
-      font-size:2rem; font-weight:900; 
-      background:linear-gradient(135deg,#fff,var(--neon-blue)); 
-      -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; 
-      animation:fadeInUp 0.8s 0.5s both; 
-    }
-    .entrance-sub { 
-      color:rgba(255,255,255,0.4); font-size:0.9rem; margin-top:8px; letter-spacing:3px; text-transform:uppercase; 
-      animation:fadeInUp 0.8s 0.7s both; 
-    }
-    @keyframes fadeInUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
-    .entrance-progress { 
-      width:200px; height:3px; background:rgba(255,255,255,0.1); border-radius:3px; margin-top:32px; overflow:hidden; 
-      animation:fadeInUp 0.8s 0.9s both; 
-    }
-    .entrance-bar { 
-      height:100%; border-radius:3px; 
-      background:linear-gradient(90deg,var(--neon-blue),var(--neon-purple)); 
-      animation:progressFill 1.5s 0.3s cubic-bezier(0.23,1,0.32,1) both; 
-      box-shadow:0 0 10px rgba(0,212,255,0.8); 
-    }
-    @keyframes progressFill { from{width:0} to{width:100%} }
-
-    /* ===== DASHBOARD ===== */
-    .dashboard-header { 
-      text-align:center; padding:25px 20px 10px; position:relative; 
-      animation:slideDown 0.8s cubic-bezier(0.23,1,0.32,1) both; 
-    }
-    @keyframes slideDown { from{transform:translateY(-60px);opacity:0} to{transform:translateY(0);opacity:1} }
-    .header-icon { 
-      width:70px; height:70px; 
-      background:linear-gradient(135deg,var(--neon-blue),var(--neon-purple)); 
-      border-radius:22px; display:inline-flex; align-items:center; justify-content:center; 
-      font-size:32px; margin-bottom:12px; 
-      box-shadow:0 0 40px rgba(0,212,255,0.5),0 0 80px rgba(123,47,255,0.3); 
-      animation:pulse-glow 3s ease-in-out infinite; 
-    }
-    @keyframes pulse-glow { 0%,100%{box-shadow:0 0 40px rgba(0,212,255,0.5),0 0 80px rgba(123,47,255,0.3);} 50%{box-shadow:0 0 60px rgba(0,212,255,0.9),0 0 120px rgba(123,47,255,0.6);} }
-    .header-title { 
-      font-size:2rem; font-weight:900; 
-      background:linear-gradient(135deg,#fff 0%,var(--neon-blue) 50%,var(--neon-purple) 100%); 
-      -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; letter-spacing:1px; 
-    }
-    .header-subtitle { color:rgba(255,255,255,0.5); font-size:0.9rem; margin-top:4px; letter-spacing:2px; text-transform:uppercase; }
-    html[data-mode="light"] .header-subtitle{ color:rgba(0,0,0,0.5); }
-    .header-line { width:180px; height:2px; margin:12px auto 0; background:linear-gradient(90deg,transparent,var(--neon-blue),var(--neon-purple),transparent); }
-
-    /* ===== FANCY RIGHTS ABOVE CLOCK ===== */
-    .fancy-rights-above {
-      text-align:center; margin:8px auto 12px; position:relative;
-      min-height:32px; display:flex; align-items:center; justify-content:center;
-    }
-    .fancy-rights-text {
-      font-family:'Cairo',sans-serif; font-weight:900; font-size:0.95rem;
-      letter-spacing:3px; cursor:default; position:relative;
-      background:linear-gradient(135deg, var(--gold), var(--neon-blue), var(--neon-purple), var(--gold));
-      background-size:400% 100%; -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
-      animation: rightsBlink 2.8s ease-in-out infinite, rightsColorShift 4s linear infinite;
-      text-shadow:0 0 15px rgba(245,200,66,0.4);
-      display:inline-flex; align-items:center; gap:6px;
-    }
-    @keyframes rightsBlink {
-      0%, 48%, 52%, 100% { opacity:1; transform:scale(1); }
-      50% { opacity:0; transform:scale(0.95); }
-    }
-    @keyframes rightsColorShift {
-      0% { filter:hue-rotate(0deg) brightness(1); }
-      25% { filter:hue-rotate(90deg) brightness(1.2); }
-      50% { filter:hue-rotate(180deg) brightness(1); }
-      75% { filter:hue-rotate(270deg) brightness(1.2); }
-      100% { filter:hue-rotate(360deg) brightness(1); }
-    }
-    .rights-sparkle {
-      position:absolute; width:4px; height:4px; border-radius:50%;
-      background:var(--gold); animation: sparkleFly 1.8s ease-out forwards;
-      box-shadow:0 0 8px var(--gold), 0 0 16px var(--neon-blue);
-      pointer-events:none; opacity:0;
-    }
-    @keyframes sparkleFly {
-      0% { transform:translate(0,0) scale(0); opacity:1; }
-      50% { opacity:1; }
-      100% { transform:translate(var(--tx,0), var(--ty,-30px)) scale(1); opacity:0; }
-    }
-    .rights-icon {
-      font-size:1rem; animation: iconPulse 2s ease-in-out infinite;
-    }
-    @keyframes iconPulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.3) rotate(15deg)} }
-
-    /* ===== FANCY CLOCK ===== */
-    .fancy-clock {
-      display:flex; align-items:center; justify-content:center; gap:12px;
-      padding:10px 18px; border-radius:16px;
-      background:linear-gradient(135deg, rgba(0,212,255,0.08), rgba(123,47,255,0.08));
-      border:1px solid rgba(0,212,255,0.2);
-      margin:15px auto 20px; max-width:420px;
-      box-shadow:0 8px 32px rgba(0,212,255,0.15), inset 0 1px 0 rgba(255,255,255,0.1);
-      animation: clockGlow 3s ease-in-out infinite;
-    }
-    @keyframes clockGlow {
-      0%,100% { box-shadow:0 8px 32px rgba(0,212,255,0.15), inset 0 1px 0 rgba(255,255,255,0.1); }
-      50% { box-shadow:0 12px 48px rgba(0,212,255,0.35), inset 0 1px 0 rgba(255,255,255,0.2); }
-    }
-    .clock-time {
-      font-family:'Cairo',monospace; font-size:1.6rem; font-weight:900;
-      color:var(--neon-blue); letter-spacing:2px; direction:ltr;
-      text-shadow:0 0 20px rgba(0,212,255,0.5);
-    }
-    .clock-period {
-      font-size:0.7rem; color:rgba(255,255,255,0.6); margin-right:4px;
-      background:rgba(0,212,255,0.15); padding:2px 6px; border-radius:6px;
-    }
-    html[data-mode="light"] .clock-period{ color:rgba(0,0,0,0.6); }
-    .clock-date {
-      display:flex; flex-direction:column; align-items:flex-start; gap:2px;
-      padding-right:12px; border-right:1px solid rgba(255,255,255,0.2);
-    }
-    .clock-date .miladi {
-      font-size:0.75rem; color:rgba(255,255,255,0.7);
-    }
-    html[data-mode="light"] .clock-date .miladi{ color:rgba(0,0,0,0.7); }
-    .clock-date .hijri {
-      font-size:0.7rem; color:var(--gold); font-weight:600;
-    }
-    .clock-icon {
-      font-size:1.4rem; animation: tick 1s steps(1) infinite;
-    }
-    @keyframes tick { 50% { transform:scale(1.1); } }
-
-    /* ===== STATS BAR ===== */
-    .stats-bar { display:flex; justify-content:center; gap:15px; padding:8px 20px 15px; animation:fadeIn 1s 0.3s both; flex-wrap:wrap; }
-    @keyframes fadeIn { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
-    .stat-badge { 
-      background:var(--glass); 
-      border:1px solid var(--glass-border); 
-      backdrop-filter:blur(10px); 
-      padding:8px 16px; 
-      border-radius:50px; 
-      display:flex; 
-      align-items:center; 
-      gap:6px; 
-      font-size:0.85rem; 
-      font-weight:600; 
-      transition:var(--transition);
-      box-sizing: border-box;
-      white-space: nowrap;
-      justify-content: flex-start;
-      min-width: fit-content;
-      position: relative;
-      line-height: 1.2;
-    }
-    .stat-badge:hover { 
-      transform:translateY(-2px); 
-      border-color:var(--neon-blue);
-      box-shadow: 0 0 0 2px rgba(0,212,255,0.15);
-    }
-    .stat-dot { 
-      width:7px; 
-      height:7px; 
-      border-radius:50%; 
-      flex-shrink: 0;
-      box-shadow:0 0 8px currentColor;
-    }
-    .stat-badge strong,
-    .stat-badge span:not(.stat-dot) {
-      line-height: 1;
-      display: inline-flex;
-      align-items: center;
-    }
-    .stat-badge:active {
-      animation: badgePulse 0.3s ease;
-      border-color: var(--gold);
-      box-shadow: 0 0 0 3px rgba(245,197,24,0.3);
-    }
-    @keyframes badgePulse {
-      0% { transform: scale(1); }
-      50% { transform: scale(1.05); }
-      100% { transform: scale(1); }
-    }
-
-    /* ===== TABS SYSTEM ===== */
-    .tabs-container { max-width:1200px; margin:0 auto; padding:0 20px 30px; }
-    .tabs-nav { 
-      display:flex; gap:6px; padding:8px; 
-      background:var(--glass); border:1px solid var(--glass-border); 
-      border-radius:14px; backdrop-filter:blur(20px); margin-bottom:20px; 
-      overflow-x:auto; flex-wrap:wrap; 
+    /* ===== Tabs ===== */
+    .tabs {
+      display: flex; gap: 8px; padding: 10px; margin: 15px 20px;
+      background: var(--glass); border: 1px solid var(--glass-border);
+      border-radius: 14px; backdrop-filter: blur(10px);
+      overflow-x: auto; flex-wrap: wrap;
     }
     .tab-btn {
-      padding:10px 16px; border:none; border-radius:10px; cursor:pointer;
-      font-family:'Cairo',sans-serif; font-size:0.85rem; font-weight:600;
-      background:transparent; color:rgba(255,255,255,0.6);
-      transition:var(--transition); display:flex; align-items:center; gap:6px;
-      white-space:nowrap;
+      padding: 10px 16px; border: none; border-radius: 10px;
+      background: transparent; color: rgba(255,255,255,0.6);
+      font-family: 'Cairo', sans-serif; font-size: 0.9rem; font-weight: 600;
+      cursor: pointer; transition: var(--transition); white-space: nowrap;
     }
-    html[data-mode="light"] .tab-btn{ color:rgba(0,0,0,0.6); }
-    .tab-btn:hover { background:rgba(255,255,255,0.08); color:#fff; }
-    html[data-mode="light"] .tab-btn:hover{ background:rgba(0,0,0,0.08); color:#000; }
+    html[data-mode="light"] .tab-btn { color: rgba(0,0,0,0.6); }
+    .tab-btn:hover { background: rgba(255,255,255,0.08); color: #fff; }
+    html[data-mode="light"] .tab-btn:hover { background: rgba(0,0,0,0.08); color: #000; }
     .tab-btn.active {
-      background:linear-gradient(135deg,var(--neon-blue),var(--neon-purple));
-      color:#fff; box-shadow:0 4px 20px rgba(0,212,255,0.3);
-    }
-    .tab-btn .badge {
-      background:var(--accent); color:#fff; padding:2px 7px;
-      border-radius:20px; font-size:0.65rem; margin-right:3px;
-    }
-    .tab-content { display:none; animation:tabFadeIn 0.4s ease; }
-    .tab-content.active { display:block; }
-    @keyframes tabFadeIn { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
-
-    /* ===== GLASS CARD ===== */
-    .glass-card { 
-      background:linear-gradient(135deg,var(--card-gradient-start),var(--card-gradient-end)); 
-      border:1px solid var(--card-border); backdrop-filter:blur(20px); 
-      border-radius:22px; padding:24px; box-shadow:var(--card-shadow); 
-      position:relative; overflow:hidden; transform-style:preserve-3d; 
-      transition:var(--transition); animation:cardEntrance 0.8s cubic-bezier(0.23,1,0.32,1) both; 
-    }
-    .glass-card:nth-child(1){animation-delay:0.1s} .glass-card:nth-child(2){animation-delay:0.2s}
-    .glass-card:nth-child(3){animation-delay:0.3s} .glass-card:nth-child(4){animation-delay:0.4s}
-    .glass-card:nth-child(5){animation-delay:0.5s} .glass-card:nth-child(6){animation-delay:0.6s}
-    @keyframes cardEntrance { from{transform:translateY(40px) rotateX(10deg);opacity:0} to{transform:translateY(0) rotateX(0deg);opacity:1} }
-    .glass-card:hover { transform:translateY(-5px) rotateX(2deg); box-shadow:0 30px 80px rgba(0,0,0,0.6),0 0 40px rgba(0,212,255,0.1); }
-    .glass-card::before { content:''; position:absolute; inset:0; border-radius:22px; background:linear-gradient(135deg,rgba(255,255,255,0.1) 0%,transparent 50%); pointer-events:none; }
-    
-    .card-glow-red::after   { content:''; position:absolute; top:-50%; right:-30%; width:200px; height:200px; border-radius:50%; background:radial-gradient(circle,rgba(233,69,96,0.15),transparent 70%); pointer-events:none; }
-    .card-glow-blue::after  { content:''; position:absolute; top:-50%; right:-30%; width:200px; height:200px; border-radius:50%; background:radial-gradient(circle,rgba(0,212,255,0.12),transparent 70%); pointer-events:none; }
-    .card-glow-purple::after{ content:''; position:absolute; top:-50%; right:-30%; width:200px; height:200px; border-radius:50%; background:radial-gradient(circle,rgba(123,47,255,0.15),transparent 70%); pointer-events:none; }
-    .card-glow-gold::after  { content:''; position:absolute; top:-50%; right:-30%; width:200px; height:200px; border-radius:50%; background:radial-gradient(circle,rgba(245,197,24,0.12),transparent 70%); pointer-events:none; }
-    .card-glow-green::after { content:''; position:absolute; top:-50%; right:-30%; width:200px; height:200px; border-radius:50%; background:radial-gradient(circle,rgba(0,200,81,0.12),transparent 70%); pointer-events:none; }
-    .card-glow-orange::after{ content:''; position:absolute; top:-50%; right:-30%; width:200px; height:200px; border-radius:50%; background:radial-gradient(circle,rgba(255,140,0,0.12),transparent 70%); pointer-events:none; }
-    .card-glow-teal::after  { content:''; position:absolute; top:-50%; right:-30%; width:200px; height:200px; border-radius:50%; background:radial-gradient(circle,rgba(20,184,166,0.15),transparent 70%); pointer-events:none; }
-
-    /* ===== CARD HEADER ===== */
-    .card-header { display:flex; align-items:center; gap:12px; margin-bottom:20px; }
-    .card-icon { width:44px; height:44px; border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:20px; flex-shrink:0; }
-    .icon-blue   { background:linear-gradient(135deg,#00d4ff22,#00d4ff44); border:1px solid #00d4ff44; }
-    .icon-red    { background:linear-gradient(135deg,#e9456022,#e9456044); border:1px solid #e9456044; }
-    .icon-purple { background:linear-gradient(135deg,#7b2fff22,#7b2fff44); border:1px solid #7b2fff44; }
-    .icon-gold   { background:linear-gradient(135deg,#f5c51822,#f5c51844); border:1px solid #f5c51844; }
-    .icon-green  { background:linear-gradient(135deg,#00ff8822,#00ff8844); border:1px solid #00ff8844; }
-    .icon-orange { background:linear-gradient(135deg,#ff8c0022,#ff8c0044); border:1px solid #ff8c0044; }
-    .icon-teal   { background:linear-gradient(135deg,#14b8a622,#14b8a644); border:1px solid #14b8a644; }
-    .card-title { font-size:1.1rem; font-weight:700; color:#fff; }
-    html[data-mode="light"] .card-title{ color:#1a1a2e; }
-    .card-desc  { font-size:0.75rem; color:rgba(255,255,255,0.4); margin-top:2px; }
-    html[data-mode="light"] .card-desc{ color:rgba(0,0,0,0.4); }
-
-    /* ===== INPUTS ===== */
-    .input-group { position:relative; margin-bottom:12px; }
-    .input-label { font-size:0.7rem; font-weight:600; color:rgba(255,255,255,0.5); text-transform:uppercase; letter-spacing:1px; margin-bottom:5px; display:block; }
-    html[data-mode="light"] .input-label{ color:rgba(0,0,0,0.5); }
-    .styled-input { 
-      width:100%; padding:12px 14px 12px 42px; background:rgba(255,255,255,0.06); 
-      border:1px solid rgba(255,255,255,0.12); border-radius:10px; color:#fff; 
-      font-family:'Cairo',sans-serif; font-size:0.9rem; transition:var(--transition); outline:none; direction:rtl; 
-    }
-    html[data-mode="light"] .styled-input{ background:rgba(0,0,0,0.05); border-color:rgba(0,0,0,0.12); color:#1a1a2e; }
-    .styled-input::placeholder { color:rgba(255,255,255,0.3); }
-    html[data-mode="light"] .styled-input::placeholder{ color:rgba(0,0,0,0.3); }
-    .styled-input:focus { border-color:var(--neon-blue); background:rgba(0,212,255,0.06); box-shadow:0 0 0 3px rgba(0,212,255,0.1),0 4px 20px rgba(0,212,255,0.1); }
-    .input-icon { position:absolute; left:12px; top:50%; transform:translateY(-50%); font-size:16px; pointer-events:none; }
-    .styled-input[type="datetime-local"] { color-scheme: dark; padding-left: 12px; }
-    
-    .styled-textarea {
-      width:100%; padding:12px 14px; background:rgba(255,255,255,0.06);
-      border:1px solid rgba(255,255,255,0.12); border-radius:10px;
-      color:#fff; font-family:'Cairo',sans-serif; font-size:0.9rem;
-      transition:var(--transition); outline:none; direction:rtl;
-      resize:vertical; min-height:100px; line-height:1.7;
-    }
-    html[data-mode="light"] .styled-textarea{ background:rgba(0,0,0,0.05); border-color:rgba(0,0,0,0.12); color:#1a1a2e; }
-    .styled-textarea::placeholder { color:rgba(255,255,255,0.3); }
-    html[data-mode="light"] .styled-textarea::placeholder{ color:rgba(0,0,0,0.3); }
-    .styled-textarea:focus { border-color:var(--neon-blue); background:rgba(0,212,255,0.06); box-shadow:0 0 0 3px rgba(0,212,255,0.1); }
-
-    /* ===== BUTTONS ===== */
-    .btn-row { display:flex; gap:10px; margin-top:6px; flex-wrap:wrap; }
-    .btn { 
-      flex:1; min-width:100px; padding:11px 16px; border:none; border-radius:10px; cursor:pointer; 
-      font-family:'Cairo',sans-serif; font-size:0.9rem; font-weight:700; position:relative; overflow:hidden; 
-      transition:var(--transition); display:flex; align-items:center; justify-content:center; gap:6px; letter-spacing:0.3px; 
-    }
-    .btn::before { content:''; position:absolute; inset:0; background:linear-gradient(135deg,rgba(255,255,255,0.15),transparent); opacity:0; transition:opacity 0.3s; }
-    .btn:hover::before { opacity:1; }
-    .btn-primary  { background:linear-gradient(135deg,#00d4ff,#0077ff); color:#fff; box-shadow:0 6px 25px rgba(0,212,255,0.35); }
-    .btn-secondary{ background:linear-gradient(135deg,#7b2fff,#c044ff); color:#fff; box-shadow:0 6px 25px rgba(123,47,255,0.35); }
-    .btn-danger   { background:linear-gradient(135deg,#e94560,#ff6b6b); color:#fff; box-shadow:0 6px 25px rgba(233,69,96,0.35); }
-    .btn-success  { background:linear-gradient(135deg,#00c851,#00ff88); color:#fff; box-shadow:0 6px 25px rgba(0,200,81,0.35); }
-    .btn-gold     { background:linear-gradient(135deg,#f5c518,#ff9500); color:#000; box-shadow:0 6px 25px rgba(245,197,24,0.35); }
-    .btn-outline  { background:transparent; border:1px solid rgba(255,255,255,0.2); color:rgba(255,255,255,0.8); }
-    html[data-mode="light"] .btn-outline{ border-color:rgba(0,0,0,0.2); color:rgba(0,0,0,0.8); }
-    .btn-telegram { background:linear-gradient(135deg,#0088cc,#00aff0); color:#fff; box-shadow:0 6px 25px rgba(0,136,204,0.35); }
-    .btn-primary:hover  { transform:translateY(-2px) scale(1.02); box-shadow:0 12px 35px rgba(0,212,255,0.5); }
-    .btn-secondary:hover{ transform:translateY(-2px) scale(1.02); box-shadow:0 12px 35px rgba(123,47,255,0.5); }
-    .btn-danger:hover   { transform:translateY(-2px) scale(1.02); box-shadow:0 12px 35px rgba(233,69,96,0.5); }
-    .btn-success:hover  { transform:translateY(-2px) scale(1.02); box-shadow:0 12px 35px rgba(0,200,81,0.5); }
-    .btn-gold:hover     { transform:translateY(-2px) scale(1.02); box-shadow:0 12px 35px rgba(245,197,24,0.5); }
-    .btn-telegram:hover { transform:translateY(-2px) scale(1.02); box-shadow:0 12px 35px rgba(0,136,204,0.5); }
-    .btn:active { transform:translateY(1px) scale(0.98); }
-    .btn:disabled { opacity:0.5; cursor:not-allowed; transform:none !important; }
-
-    /* ===== DEV BUTTON ===== */
-    .dev-btn {
-      position:fixed; bottom:20px; right:20px; z-index:100;
-      padding:12px 20px; border-radius:999px;
-      background:linear-gradient(135deg, #0088cc, #00aff0);
-      border:2px solid rgba(255,255,255,0.3);
-      color:#fff; font-family:'Cairo',sans-serif; font-weight:800; font-size:0.95rem;
-      display:flex; align-items:center; gap:8px; cursor:pointer;
-      box-shadow:0 8px 32px rgba(0,136,204,0.4), 0 0 0 4px rgba(0,136,204,0.1);
-      transition:var(--transition); text-decoration:none;
-      animation: devPulse 2.5s ease-in-out infinite;
-    }
-    @keyframes devPulse {
-      0%,100% { box-shadow:0 8px 32px rgba(0,136,204,0.4), 0 0 0 4px rgba(0,136,204,0.1); }
-      50% { box-shadow:0 12px 48px rgba(0,136,204,0.7), 0 0 0 6px rgba(0,136,204,0.25); }
-    }
-    .dev-btn:hover { transform:translateY(-3px) scale(1.05); }
-    .dev-btn:active { transform:translateY(1px) scale(0.98); }
-    .dev-btn .dev-icon { font-size:1.2rem; animation: devIconFloat 2s ease-in-out infinite; }
-    @keyframes devIconFloat { 0%,100% { transform:translateY(0); } 50% { transform:translateY(-3px); } }
-
-    /* ===== ONX-TAQE RIGHTS ===== */
-    .onx-rights {
-      position:fixed; bottom:20px; left:20px; z-index:100;
-      padding:10px 16px; border-radius:14px;
-      background:linear-gradient(135deg, rgba(245,197,24,0.12), rgba(123,47,255,0.12));
-      border:1px solid rgba(245,197,24,0.3);
-      display:flex; align-items:center; gap:8px;
-      font-family:'Cairo',sans-serif; font-weight:700; font-size:0.85rem;
-      color:var(--gold); cursor:default;
-      box-shadow:0 6px 24px rgba(245,197,24,0.2);
-      animation: rightsGlow 3s ease-in-out infinite;
-    }
-    @keyframes rightsGlow {
-      0%,100% { box-shadow:0 6px 24px rgba(245,197,24,0.2); }
-      50% { box-shadow:0 10px 40px rgba(245,197,24,0.45), 0 0 20px rgba(245,197,24,0.2); }
-    }
-    .onx-rights .onx-icon {
-      font-size:1.1rem; animation: onxSpin 4s linear infinite;
-    }
-    @keyframes onxSpin { 0% { transform:rotate(0deg); } 100% { transform:rotate(360deg); } }
-    .onx-rights .onx-text {
-      background:linear-gradient(135deg, var(--gold), var(--neon-blue), var(--neon-purple));
-      -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
-      animation: textShimmer 2.5s ease-in-out infinite;
-    }
-    @keyframes textShimmer {
-      0% { filter:brightness(1); } 50% { filter:brightness(1.3); } 100% { filter:brightness(1); }
-    }
-
-    /* ===== MSG BOX ===== */
-    .msg-box { padding:10px 16px; border-radius:10px; font-weight:600; text-align:center; font-size:0.85rem; transition:var(--transition); opacity:0; transform:translateY(-8px); margin-top:12px; border:1px solid rgba(255,255,255,0.1); }
-    .msg-box.show { opacity:1; transform:translateY(0); }
-    .msg-box.success { background:rgba(0,200,81,0.15); border-color:#00c851; color:#00ff88; }
-    .msg-box.error   { background:rgba(233,69,96,0.15); border-color:#e94560; color:#ff6b6b; }
-    .msg-box.info    { background:rgba(0,212,255,0.15); border-color:#00d4ff; color:#00d4ff; }
-
-    /* ===== TABLE ===== */
-    .table-card { grid-column:1 / -1; }
-    .table-wrapper { overflow-x:auto; border-radius:14px; overflow:hidden; box-shadow:0 10px 40px rgba(0,0,0,0.4); }
-    table { width:100%; border-collapse:collapse; min-width:700px; }
-    thead tr { background:linear-gradient(135deg,rgba(0,212,255,0.15),rgba(123,47,255,0.15)); border-bottom:1px solid rgba(255,255,255,0.1); }
-    thead th { padding:14px 12px; text-align:center; font-size:0.75rem; font-weight:700; color:rgba(255,255,255,0.7); text-transform:uppercase; letter-spacing:1px; white-space:nowrap; }
-    html[data-mode="light"] thead th{ color:rgba(0,0,0,0.7); }
-    tbody tr { border-bottom:1px solid rgba(255,255,255,0.05); transition:var(--transition); animation:rowSlide 0.5s ease both; }
-    @keyframes rowSlide { from{opacity:0;transform:translateX(20px)} to{opacity:1;transform:translateX(0)} }
-    tbody tr:hover { background:rgba(255,255,255,0.05); transform:scale(1.003); }
-    tbody tr.mine { background:linear-gradient(135deg, rgba(245,200,66,.06), rgba(245,200,66,.02)); border-right:2px solid rgba(245,200,66,.45); }
-    td { padding:12px; text-align:center; font-size:0.85rem; color:var(--text-light); }
-    .student-name-cell { font-weight:700; font-size:0.95rem; }
-    .subject-badge { background:rgba(0,212,255,0.15); border:1px solid rgba(0,212,255,0.3); padding:3px 10px; border-radius:18px; font-size:0.75rem; display:inline-block; color:#00d4ff; }
-    .date-cell { color:rgba(255,255,255,0.4); font-size:0.75rem; }
-    html[data-mode="light"] .date-cell{ color:rgba(0,0,0,0.4); }
-    .row-num { width:28px; height:28px; border-radius:8px; background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.12); display:inline-flex; align-items:center; justify-content:center; font-weight:700; font-size:0.8rem; }
-    .meBadge{font-size:8px;padding:2px 7px;border-radius:999px;border:1px solid rgba(245,200,66,.45);
-      background:rgba(245,200,66,.18);color:rgba(245,200,66,.92);font-weight:700;letter-spacing:1px}
-
-    /* ✨ BADGE STYLES - SHINY EFFECT */
-    .student-badge {
-      display:inline-flex !important;
-      align-items:center !important;
-      justify-content:center !important;
-      width:26px !important;
-      height:26px !important;
-      border-radius:50% !important;
-      font-size:15px !important;
-      font-weight:900 !important;
-      position:relative !important;
-      overflow:hidden !important;
-      animation: badgeShine 2.5s ease-in-out infinite !important;
-      box-shadow: 0 0 12px currentColor, 0 0 24px currentColor !important;
-      text-shadow: 0 1px 2px rgba(0,0,0,0.4) !important;
-      flex-shrink: 0 !important;
-      margin-left: 6px !important;
-      vertical-align: middle !important;
-    }
-    @keyframes badgeShine {
-      0%, 100% { filter: brightness(1); transform: scale(1); }
-      50% { filter: brightness(1.4); transform: scale(1.08); }
-    }
-    .student-badge::before {
-      content:''; position:absolute; inset:0;
-      background: linear-gradient(135deg, 
-        rgba(255,255,255,0) 0%, 
-        rgba(255,255,255,0.5) 45%, 
-        rgba(255,255,255,0) 55%, 
-        rgba(255,255,255,0) 100%);
-      transform: translateX(-100%);
-      animation: badgeShimmer 2s ease-in-out infinite;
-    }
-    @keyframes badgeShimmer {
-      0% { transform: translateX(-100%); }
-      50%, 100% { transform: translateX(100%); }
-    }
-
-    /* ===== TABLE TOOLS ===== */
-    .tableTools{
-      display:flex; gap:8px; align-items:center; flex-wrap:wrap;
-      padding:10px; border-bottom:1px solid rgba(255,255,255,0.08); flex-shrink:0;
-    }
-    .search{flex:1;min-width:180px}
-    .counter{
-      display:flex;align-items:center;gap:8px;
-      padding:6px 10px;border-radius:12px;
-      background:rgba(125,211,252,.08);
-      border:1px solid rgba(125,211,252,.18);
-      color:rgba(125,211,252,.92);
-    }
-    .counter b{font-weight:900;font-size:18px;letter-spacing:1px}
-    @keyframes pop{0%{transform:scale(1)}40%{transform:scale(1.18)}100%{transform:scale(1)}}
-    .pop{animation:pop .35s cubic-bezier(.22,1,.36,1)}
-
-    .tableContainer{
-      overflow:auto; flex:1; min-height:0;
-      max-height:calc(48px * 7 + 2px);
-      scrollbar-width:thin; scrollbar-color: rgba(255,255,255,.18) transparent;
-    }
-    .tableContainer::-webkit-scrollbar{width:5px;height:5px}
-    .tableContainer::-webkit-scrollbar-thumb{background:rgba(255,255,255,.18);border-radius:8px}
-
-    /* ===== ALERT BADGE ===== */
-    @keyframes glow{
-      0%,100%{box-shadow:0 0 10px var(--ac, rgba(255,80,80,.45)), 0 0 18px rgba(0,0,0,.0)}
-      50%{box-shadow:0 0 18px var(--ac, rgba(255,80,80,.8)), 0 0 42px rgba(0,0,0,.0)}
-    }
-    .alert{
-      border-radius:16px; padding:10px 12px;
-      border:1.5px solid var(--ac, #ff4444);
-      color:var(--ac, #ff4444);
-      background:rgba(0,0,0,.18);
-      display:flex;align-items:flex-start;gap:8px;
-      animation:glow 2.5s ease-in-out infinite;
-    }
-    .alert small{opacity:.75;border:1px solid currentColor;padding:2px 7px;border-radius:999px;font-size:9px;white-space:nowrap}
-
-    .miniAlert{
-      display:inline-flex;align-items:center;gap:4px;
-      padding:2px 8px;border-radius:999px;
-      border:1px solid var(--ac,#ff4444);
-      color:var(--ac,#ff4444);
-      background:rgba(255,255,255,.03);
-      position:relative;overflow:hidden;
-      white-space:nowrap; max-width:100%; text-overflow:ellipsis;
-      animation:glow 2.5s ease-in-out infinite; font-size:0.7rem;
-    }
-    @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
-    .miniAlert::before{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.22),transparent);
-      background-size:200% 100%;animation:shimmer 2.2s linear infinite;opacity:.75}
-
-    /* ===== DEADLINE & GUIDELINES ===== */
-    .deadline{
-      display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap;
-      padding:10px 12px;border-radius:16px;
-      background:rgba(125,211,252,.07);
-      border:1px solid rgba(125,211,252,.18);
-    }
-    .deadline .left{display:flex;align-items:center;gap:8px}
-    .deadline .ico{width:36px;height:36px;border-radius:14px;display:flex;align-items:center;justify-content:center;
-      background:rgba(125,211,252,.10);border:1px solid rgba(125,211,252,.18);font-size:16px}
-    .deadline .meta{display:flex;flex-direction:column;gap:2px}
-    .deadline .meta small{color:rgba(125,211,252,.65);letter-spacing:1px;font-size:9px}
-    .deadline .meta b{color:rgba(125,211,252,.95);font-size:12px}
-    .deadline .count{
-      font-weight:900; color:rgba(245,200,66,.95); direction:ltr;
-      letter-spacing:1px; font-size:14px; text-shadow:0 0 20px rgba(245,200,66,.20);
-    }
-
-    .bigNote{
-      line-height:1.85; color:rgba(255,255,255,.86);
-      white-space:pre-wrap; max-height:90px; overflow:hidden;
-      transition:max-height .4s ease; position:relative; font-size:0.9rem;
-    }
-    html[data-mode="light"] .bigNote{ color:rgba(0,0,0,.86); }
-    .bigNote.expanded{ max-height:2000px; }
-    .bigNote::after{
-      content:''; position:absolute; bottom:0; left:0; right:0; height:35px;
-      background:linear-gradient(to top, rgba(0,0,0,.02), transparent);
-      pointer-events:none; opacity:0; transition:opacity .3s ease;
-    }
-    .bigNote:not(.expanded)::after{ opacity:1; }
-    
-    /* ✅ زر طوي/فتح - صغير وفي الأسفل */
-    .bigNote-toggle{
-      display:inline-flex; align-items:center; gap:4px;
-      margin-top:8px; padding:4px 10px; border-radius:8px;
-      background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.10);
-      color:rgba(255,255,255,.60); font-size:9px; cursor:pointer; transition:.2s;
-      font-weight:600; letter-spacing:0.5px;
-    }
-    html[data-mode="light"] .bigNote-toggle{ background:rgba(0,0,0,.04); border-color:rgba(0,0,0,.10); color:rgba(0,0,0,.60); }
-    .bigNote-toggle:hover{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.18);color:rgba(255,255,255,.85)}
-    html[data-mode="light"] .bigNote-toggle:hover{background:rgba(0,0,0,.08);border-color:rgba(0,0,0,.18);color:rgba(0,0,0,.85)}
-    .bigNote-toggle.expanded{ background:rgba(245,200,66,.08); border-color:rgba(245,200,66,.25); color:var(--gold); }
-
-    /* ===== INFO BOX ===== */
-    .infoRow{display:flex;flex-direction:column;gap:8px}
-    .kv{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;
-      padding:10px 12px;border-radius:14px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.10)}
-    html[data-mode="light"] .kv{ background:rgba(0,0,0,.04); border-color:rgba(0,0,0,.10); }
-    .kv strong{font-size:10px;color:rgba(255,255,255,.50);min-width:70px}
-    html[data-mode="light"] .kv strong{ color:rgba(0,0,0,.50); }
-    .kv span{font-size:12px;color:rgba(255,255,255,.88)}
-    html[data-mode="light"] .kv span{ color:rgba(0,0,0,.88); }
-
-    /* ===== THEME PICKER ===== */
-    .themePicker{ display:grid; grid-template-columns:repeat(2,1fr); gap:6px; margin-top:6px; }
-    .themeOption{
-      display:flex; align-items:center; gap:8px;
-      padding:8px 10px; border-radius:12px;
-      background:rgba(255,255,255,.04);
-      border:1px solid rgba(255,255,255,.10);
-      cursor:pointer; transition:.2s; user-select:none;
-    }
-    html[data-mode="light"] .themeOption{ background:rgba(0,0,0,.04); border-color:rgba(0,0,0,.10); }
-    .themeOption:hover{ transform:translateY(-2px); background:rgba(255,255,255,.07); border-color:rgba(255,255,255,.18); }
-    html[data-mode="light"] .themeOption:hover{ background:rgba(0,0,0,.07); border-color:rgba(0,0,0,.18); }
-    .themeOption.active{ border-color:var(--gold); background:rgba(245,200,66,.08); box-shadow:0 0 0 2px rgba(245,200,66,.2); }
-    .themeSwatch{ width:20px; height:20px; border-radius:6px; border:1px solid rgba(255,255,255,.2); flex-shrink:0; }
-    .themeName{ font-size:11px; color:rgba(255,255,255,.85); font-weight:600; }
-    html[data-mode="light"] .themeName{ color:rgba(0,0,0,.85); }
-    .themePreview{ display:flex; gap:3px; margin-top:3px; }
-    .themePreview span{ width:10px; height:10px; border-radius:3px; border:1px solid rgba(255,255,255,.15); }
-
-    /* ===== MODAL & TOAST ===== */
-    #modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.62);z-index:10000;display:none;align-items:center;justify-content:center;backdrop-filter: blur(10px)}
-    #modal-overlay.active{display:flex}
-    .modal{
-      width:400px;max-width:92%; border-radius:20px;
-      background:linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.06));
-      border:1px solid rgba(255,255,255,.16); box-shadow:0 25px 65px rgba(0,0,0,.75);
-      padding:22px; text-align:center; backdrop-filter: blur(18px);
-      animation: mi .26s cubic-bezier(.22,1,.36,1);
-    }
-    .mIco{font-size:38px;margin-bottom:8px;display:block}
-    .mT{font-weight:900;color:rgba(245,200,66,.95);font-size:16px;margin-bottom:6px}
-    .mM{color:rgba(255,255,255,.68);font-size:12px;line-height:1.6;margin-bottom:12px;white-space:pre-line}
-    html[data-mode="light"] .mM{ color:rgba(0,0,0,.68); }
-    .mInp{width:100%;padding:10px 12px;border-radius:14px;border:1px solid rgba(255,255,255,.14);
-      background:rgba(0,0,0,.18);color:#fff;margin-bottom:12px;font-size:0.9rem}
-    html[data-mode="light"] .mInp{ background:rgba(255,255,255,.18); color:#1a1a2e; border-color:rgba(0,0,0,.14); }
-    .mInp:focus{border-color:rgba(125,211,252,.30);box-shadow:0 0 0 3px rgba(125,211,252,.10)}
-    .mBtns{display:flex;gap:8px}
-    .mBtns button{flex:1;padding:10px 12px;border-radius:14px;border:none;cursor:pointer;font-weight:900;font-size:0.9rem}
-    .mCancel{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);color:rgba(255,255,255,.80)}
-    html[data-mode="light"] .mCancel{ background:rgba(0,0,0,.06); border-color:rgba(0,0,0,.12); color:rgba(0,0,0,.80); }
-    .mOk{background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.18);color:#fff}
-
-    #toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(100px);
-      background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);
-      padding:10px 16px;border-radius:999px;display:flex;gap:8px;align-items:center;
-      box-shadow:0 18px 40px rgba(0,0,0,.45);z-index:9000;
-      transition: transform .38s cubic-bezier(.22,1,.36,1);
-      backdrop-filter: blur(18px);
-    }
-    #toast.show{transform:translateX(-50%) translateY(0)}
-    #toast span{color:#fff;font-size:12px}
-    html[data-mode="light"] #toast span{ color:#1a1a2e; }
-
-    /* ===== NOTIFICATION BANNER ===== */
-    #notifBanner{
-      display:none; padding:10px 12px;
-      border-bottom:1px solid rgba(245,200,66,.25);
-      background:linear-gradient(135deg, rgba(245,200,66,.18), rgba(255,255,255,.03));
-      color:rgba(255,255,255,.92); gap:8px; align-items:center;
-      user-select:none; font-size:0.9rem;
-    }
-    html[data-mode="light"] #notifBanner{ color:rgba(0,0,0,.92); }
-    #notifBanner.visible{display:flex}
-    .notifClose{margin-right:auto;cursor:pointer;border-radius:10px;padding:4px 8px;
-      background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);color:rgba(255,255,255,.70);font-size:14px}
-    html[data-mode="light"] .notifClose{ background:rgba(0,0,0,.06); border-color:rgba(0,0,0,.12); color:rgba(0,0,0,.70); }
-    .notifClose:hover{background:rgba(255,255,255,.10);color:#fff}
-    html[data-mode="light"] .notifClose:hover{background:rgba(0,0,0,.10);color:#000}
-
-    /* ===== EXPORT BUTTONS ===== */
-    .export-buttons {
-      display:flex; gap:12px; justify-content:center; margin-top:16px; flex-wrap:wrap;
-    }
-    .export-btn {
-      display:flex; flex-direction:column; align-items:center; gap:8px;
-      padding:16px 24px; border-radius:16px; min-width:140px;
-      background:linear-gradient(135deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
-      border:1px solid rgba(255,255,255,0.15); cursor:pointer;
-      transition:var(--transition); text-decoration:none; color:inherit;
-    }
-    html[data-mode="light"] .export-btn{ background:linear-gradient(135deg, rgba(0,0,0,0.06), rgba(0,0,0,0.03)); border-color:rgba(0,0,0,0.15); }
-    .export-btn:hover {
-      transform:translateY(-4px); border-color:var(--neon-blue);
-      box-shadow:0 12px 40px rgba(0,212,255,0.25);
-    }
-    .export-btn.txt { border-color:rgba(125,211,252,0.3); }
-    .export-btn.txt:hover { border-color:#7dd3fc; box-shadow:0 12px 40px rgba(125,211,252,0.3); }
-    
-    .export-icon { font-size:2rem; }
-    .export-label { font-weight:700; font-size:0.95rem; }
-    .export-desc { font-size:0.75rem; color:rgba(255,255,255,0.5); }
-    html[data-mode="light"] .export-desc{ color:rgba(0,0,0,0.5); }
-
-    /* ===== COMMENTS SECTION ===== */
-    .comments-section {
-      margin-top: 16px;
-      border-top: 1px solid var(--glass-border);
-      padding-top: 16px;
-    }
-    .comments-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 12px;
-    }
-    .comments-title {
-      font-size: 1rem;
-      font-weight: 700;
-      color: var(--neon-blue);
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-    .comment-count {
-      background: rgba(0, 212, 255, 0.15);
-      padding: 2px 8px;
-      border-radius: 12px;
-      font-size: 0.75rem;
-      color: var(--neon-blue);
-    }
-    .comment-input-area {
-      display: flex;
-      gap: 8px;
-      margin-bottom: 16px;
-    }
-    .comment-input {
-      flex: 1;
-      padding: 10px 14px;
-      background: rgba(255, 255, 255, 0.06);
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      border-radius: 10px;
-      color: #fff;
-      font-family: 'Cairo', sans-serif;
-      font-size: 0.85rem;
-      transition: var(--transition);
-      outline: none;
-    }
-    html[data-mode="light"] .comment-input {
-      background: rgba(0, 0, 0, 0.05);
-      border-color: rgba(0, 0, 0, 0.12);
-      color: #1a1a2e;
-    }
-    .comment-input:focus {
-      border-color: var(--neon-blue);
-      background: rgba(0, 212, 255, 0.06);
-      box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.1);
-    }
-    .comment-submit {
-      padding: 10px 16px;
       background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
-      border: none;
-      border-radius: 10px;
-      color: #fff;
-      font-weight: 700;
-      cursor: pointer;
-      transition: var(--transition);
+      color: #fff; box-shadow: 0 4px 20px rgba(0,212,255,0.3);
     }
-    .comment-submit:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(0, 212, 255, 0.3);
+    .tab-content { display: none; padding: 0 20px 30px; animation: fadeIn 0.4s ease; }
+    .tab-content.active { display: block; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    
+    /* ===== Cards ===== */
+    .card {
+      background: linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.03));
+      border: 1px solid var(--glass-border); border-radius: 20px;
+      padding: 24px; margin-bottom: 20px; box-shadow: var(--card-shadow);
+      backdrop-filter: blur(20px); transition: var(--transition);
+    }
+    .card:hover { transform: translateY(-3px); box-shadow: 0 30px 80px rgba(0,0,0,0.6); }
+    .card-header {
+      display: flex; align-items: center; gap: 12px; margin-bottom: 20px;
+    }
+    .card-icon {
+      width: 44px; height: 44px; border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px; flex-shrink: 0;      background: linear-gradient(135deg, rgba(0,212,255,0.2), rgba(0,212,255,0.1));
+      border: 1px solid rgba(0,212,255,0.3);
+    }
+    .card-title { font-size: 1.2rem; font-weight: 700; color: #fff; }
+    html[data-mode="light"] .card-title { color: #1a1a2e; }
+    .card-desc { font-size: 0.8rem; color: rgba(255,255,255,0.4); }
+    html[data-mode="light"] .card-desc { color: rgba(0,0,0,0.4); }
+    
+    /* ===== Inputs ===== */
+    .input-group { position: relative; margin-bottom: 14px; }
+    .input-label {
+      font-size: 0.75rem; font-weight: 600; color: rgba(255,255,255,0.5);
+      text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; display: block;
+    }
+    html[data-mode="light"] .input-label { color: rgba(0,0,0,0.5); }
+    .styled-input {
+      width: 100%; padding: 13px 16px 13px 42px;
+      background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 12px; color: #fff; font-family: 'Cairo', sans-serif;
+      font-size: 0.95rem; transition: var(--transition); outline: none; direction: rtl;
+    }
+    html[data-mode="light"] .styled-input {
+      background: rgba(0,0,0,0.05); border-color: rgba(0,0,0,0.12); color: #1a1a2e;
+    }
+    .styled-input::placeholder { color: rgba(255,255,255,0.3); }
+    html[data-mode="light"] .styled-input::placeholder { color: rgba(0,0,0,0.3); }
+    .styled-input:focus {
+      border-color: var(--neon-blue); background: rgba(0,212,255,0.06);
+      box-shadow: 0 0 0 3px rgba(0,212,255,0.1);
+    }
+    .input-icon {
+      position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
+      font-size: 18px; pointer-events: none;
     }
     
-    /* ✅ تمرير عمودي للتعليقات */
-    .comments-list {
-      max-height: 350px;
-      overflow-y: auto;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      padding: 8px;
-      scrollbar-width: thin;
-      scrollbar-color: rgba(0, 212, 255, 0.3) transparent;
+    /* ===== Buttons ===== */
+    .btn-row { display: flex; gap: 10px; margin-top: 10px; flex-wrap: wrap; }
+    .btn {
+      flex: 1; min-width: 100px; padding: 12px 16px; border: none;
+      border-radius: 12px; cursor: pointer; font-family: 'Cairo', sans-serif;
+      font-size: 0.95rem; font-weight: 700; transition: var(--transition);
+      display: flex; align-items: center; justify-content: center; gap: 6px;
     }
-    .comments-list::-webkit-scrollbar {
-      width: 6px;
+    .btn-primary {
+      background: linear-gradient(135deg, #00d4ff, #0077ff); color: #fff;
+      box-shadow: 0 6px 25px rgba(0,212,255,0.35);
     }
-    .comments-list::-webkit-scrollbar-thumb {
-      background: rgba(0, 212, 255, 0.3);
-      border-radius: 3px;
+    .btn-secondary {
+      background: linear-gradient(135deg, #7b2fff, #c044ff); color: #fff;
+      box-shadow: 0 6px 25px rgba(123,47,255,0.35);    }
+    .btn-danger {
+      background: linear-gradient(135deg, #e94560, #ff6b6b); color: #fff;
+      box-shadow: 0 6px 25px rgba(233,69,96,0.35);
     }
-    .comments-list::-webkit-scrollbar-thumb:hover {
-      background: rgba(0, 212, 255, 0.6);
+    .btn-gold {
+      background: linear-gradient(135deg, #f5c518, #ff9500); color: #000;
+      box-shadow: 0 6px 25px rgba(245,197,24,0.35);
+    }
+    .btn-outline {
+      background: transparent; border: 1px solid rgba(255,255,255,0.2);
+      color: rgba(255,255,255,0.8);
+    }
+    html[data-mode="light"] .btn-outline {
+      border-color: rgba(0,0,0,0.2); color: rgba(0,0,0,0.8);
+    }
+    .btn:hover { transform: translateY(-2px); filter: brightness(1.1); }
+    .btn:active { transform: translateY(1px); }
+    
+    /* ===== Messages ===== */
+    .msg-box {
+      padding: 10px 16px; border-radius: 10px; font-weight: 600;
+      text-align: center; font-size: 0.85rem; margin-top: 12px;
+      opacity: 0; transform: translateY(-8px); transition: var(--transition);
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+    .msg-box.show { opacity: 1; transform: translateY(0); }
+    .msg-box.success {
+      background: rgba(0,200,81,0.15); border-color: #00c851; color: #00ff88;
+    }
+    .msg-box.error {
+      background: rgba(233,69,96,0.15); border-color: #e94560; color: #ff6b6b;
+    }
+    .msg-box.info {
+      background: rgba(0,212,255,0.15); border-color: #00d4ff; color: #00d4ff;
     }
     
-    .comment-item {
-      background: rgba(255, 255, 255, 0.04);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 12px;
-      padding: 12px;
-      transition: var(--transition);
+    /* ===== Table ===== */
+    .table-wrapper {
+      overflow-x: auto; border-radius: 14px; overflow: hidden;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.4); margin-top: 15px;
     }
-    html[data-mode="light"] .comment-item {
-      background: rgba(0, 0, 0, 0.04);
-      border-color: rgba(0, 0, 0, 0.08);
+    table { width: 100%; border-collapse: collapse; min-width: 600px; }
+    thead {
+      background: linear-gradient(135deg, rgba(0,212,255,0.15), rgba(123,47,255,0.15));
+      border-bottom: 1px solid rgba(255,255,255,0.1);
     }
-    .comment-item:hover {
-      border-color: rgba(0, 212, 255, 0.2);
+    th {
+      padding: 14px 12px; text-align: center; font-size: 0.75rem;
+      font-weight: 700; color: rgba(255,255,255,0.7); text-transform: uppercase;      letter-spacing: 1px; white-space: nowrap;
     }
-    .comment-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 8px;
+    html[data-mode="light"] th { color: rgba(0,0,0,0.7); }
+    tbody tr {
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      transition: var(--transition); animation: rowSlide 0.4s ease both;
     }
-    .comment-author {
-      font-size: 0.85rem;
-      font-weight: 700;
-      color: var(--neon-blue);
-      display: flex;
-      align-items: center;
-      gap: 6px;
+    @keyframes rowSlide { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
+    tbody tr:hover { background: rgba(255,255,255,0.05); }
+    tbody tr.mine {
+      background: linear-gradient(135deg, rgba(245,200,66,0.08), rgba(245,200,66,0.03));
+      border-right: 3px solid var(--gold);
     }
-    .comment-time {
-      font-size: 0.7rem;
-      color: rgba(255, 255, 255, 0.4);
-    }
-    html[data-mode="light"] .comment-time {
-      color: rgba(0, 0, 0, 0.4);
-    }
-    .comment-text {
-      font-size: 0.85rem;
-      color: rgba(255, 255, 255, 0.85);
-      line-height: 1.6;
-      white-space: pre-wrap;
-    }
-    html[data-mode="light"] .comment-text {
-      color: rgba(0, 0, 0, 0.85);
-    }
+    td { padding: 12px; text-align: center; font-size: 0.9rem; }
+    .date-cell { color: rgba(255,255,255,0.4); font-size: 0.8rem; }
+    html[data-mode="light"] .date-cell { color: rgba(0,0,0,0.4); }
     
-    /* ✅ الردود على التعليقات */
-    .comment-replies {
-      margin-top: 12px;
-      padding-right: 16px;
-      border-right: 2px solid rgba(0, 212, 255, 0.3);
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
+    /* ===== Info Box ===== */
+    .info-box { display: flex; flex-direction: column; gap: 12px; }
+    .info-item {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 12px 16px; background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.1); border-radius: 12px;
     }
-    .reply-item {
-      background: rgba(0, 212, 255, 0.06);
-      border-radius: 10px;
-      padding: 10px 12px;
-      font-size: 0.8rem;
+    html[data-mode="light"] .info-item {
+      background: rgba(0,0,0,0.04); border-color: rgba(0,0,0,0.1);
     }
-    .reply-item .reply-author {
-      font-weight: 700;
-      color: var(--neon-blue);
-      font-size: 0.8rem;
-      margin-bottom: 4px;
-    }
-    .reply-item .reply-text {
-      color: rgba(255, 255, 255, 0.8);
-      line-height: 1.5;
-    }
-    html[data-mode="light"] .reply-item .reply-text {
-      color: rgba(0, 0, 0, 0.8);
-    }
+    .info-label { font-size: 0.85rem; color: rgba(255,255,255,0.5); }
+    html[data-mode="light"] .info-label { color: rgba(0,0,0,0.5); }
+    .info-value { font-weight: 700; font-size: 1rem; }
     
-    .reply-btn {
-      font-size: 0.75rem;
-      color: rgba(0, 212, 255, 0.7);
-      background: none;
-      border: none;
-      cursor: pointer;
-      padding: 4px 8px;
-      border-radius: 6px;
-      transition: var(--transition);
-      margin-top: 8px;
+    /* ===== Toggles ===== */
+    .toggle-row {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.05);
     }
-    .reply-btn:hover {
-      background: rgba(0, 212, 255, 0.1);
-      color: var(--neon-blue);
-    }
-    .reply-input {
-      width: 100%;
-      padding: 8px 10px;
-      background: rgba(255, 255, 255, 0.04);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 8px;
-      color: #fff;
-      font-family: 'Cairo', sans-serif;
-      font-size: 0.8rem;
-      margin-top: 8px;
-      outline: none;
-    }
-    html[data-mode="light"] .reply-input {
-      background: rgba(0, 0, 0, 0.04);
-      border-color: rgba(0, 0, 0, 0.1);
-      color: #1a1a2e;
-    }
-    .reply-input:focus {
-      border-color: var(--neon-blue);
-    }
-
-    /* ===== SOUND TOGGLE ===== */
-    .sound-toggle-container {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 12px;
-      margin-top: 12px;
-    }
-    .toggle-info {
-      flex: 1;
-    }
-    .toggle-title {
-      font-size: 0.95rem;
-      font-weight: 700;
-      color: #fff;
-    }
-    html[data-mode="light"] .toggle-title {
-      color: #1a1a2e;
-    }
-    .toggle-desc {
-      font-size: 0.75rem;
-      color: rgba(255, 255, 255, 0.4);
-      margin-top: 2px;
-    }
-    html[data-mode="light"] .toggle-desc {
-      color: rgba(0, 0, 0, 0.4);
-    }
+    .toggle-info { flex: 1; }
+    .toggle-title { font-size: 0.95rem; font-weight: 700; }
+    .toggle-desc { font-size: 0.75rem; color: rgba(255,255,255,0.4); margin-top: 2px; }
+    html[data-mode="light"] .toggle-desc { color: rgba(0,0,0,0.4); }
+    
     .switch {
-      position: relative;
-      display: inline-block;
-      width: 60px;
-      height: 32px;
+      position: relative; display: inline-block; width: 56px; height: 30px;
       flex-shrink: 0;
     }
-    .switch input {
-      opacity: 0;
-      width: 0;
-      height: 0;
-    }
+    .switch input { opacity: 0; width: 0; height: 0; }
     .slider {
-      position: absolute;
-      cursor: pointer;
-      inset: 0;
-      background: rgba(255, 255, 255, 0.1);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      border-radius: 32px;
-      transition: var(--transition);
-    }
+      position: absolute; cursor: pointer; inset: 0;
+      background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 30px; transition: var(--transition);    }
     html[data-mode="light"] .slider {
-      background: rgba(0, 0, 0, 0.1);
-      border-color: rgba(0, 0, 0, 0.2);
+      background: rgba(0,0,0,0.1); border-color: rgba(0,0,0,0.2);
     }
     .slider:before {
-      content: '';
-      position: absolute;
-      width: 22px;
-      height: 22px;
-      border-radius: 50%;
-      left: 4px;
-      top: 4px;
+      content: ''; position: absolute; width: 22px; height: 22px;
+      border-radius: 50%; left: 3px; top: 3px;
       background: linear-gradient(135deg, #fff, #ccc);
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
       transition: var(--transition);
     }
     input:checked + .slider {
       background: linear-gradient(135deg, #00c851, #00ff88);
       border-color: #00ff88;
-      box-shadow: 0 0 20px rgba(0, 200, 81, 0.4);
     }
-    input:checked + .slider:before {
-      transform: translateX(28px);
-      background: linear-gradient(135deg, #fff, #e0ffe0);
-    }
-    input:not(:checked) + .slider {
-      background: linear-gradient(135deg, #e94560, #ff4040);
-      border-color: #e94560;
-      box-shadow: 0 0 20px rgba(233, 69, 96, 0.3);
-    }
-
-    /* ===== DARK/LIGHT MODE TOGGLE ===== */
-    .mode-toggle-container {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 12px;
-      margin-top: 12px;
-    }
-    .mode-switch {
-      position: relative;
-      display: inline-block;
-      width: 70px;
-      height: 34px;
-      flex-shrink: 0;
-    }
-    .mode-switch input {
-      opacity: 0;
-      width: 0;
-      height: 0;
-    }
-    .mode-slider {
-      position: absolute;
-      cursor: pointer;
-      inset: 0;
-      background: rgba(255, 255, 255, 0.1);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      border-radius: 34px;
-      transition: var(--transition);
-    }
-    html[data-mode="light"] .mode-slider {
-      background: rgba(0, 0, 0, 0.1);
-      border-color: rgba(0, 0, 0, 0.2);
-    }
-    .mode-slider:before {
-      content: '';
-      position: absolute;
-      width: 26px;
-      height: 26px;
-      border-radius: 50%;
-      left: 4px;
-      top: 3px;
-      background: linear-gradient(135deg, #f5c518, #ff9500);
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
-      transition: var(--transition);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 14px;
-    }
-    input:checked + .mode-slider {
-      background: linear-gradient(135deg, #0f1e3d, #1a2a4a);
-      border-color: #00d4ff;
-      box-shadow: 0 0 20px rgba(0, 212, 255, 0.4);
-    }
-    input:checked + .mode-slider:before {
-      transform: translateX(36px);
-      background: linear-gradient(135deg, #00d4ff, #0077ff);
-    }
-
-    /* ===== PREVIEW MODAL ===== */
-    #previewModal {
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.75);
-      z-index: 10001;
-      display: none;
-      align-items: center;
-      justify-content: center;
+    input:checked + .slider:before { transform: translateX(26px); }
+    
+    /* ===== Modal ===== */
+    .modal-overlay {
+      position: fixed; inset: 0; z-index: 1000;
+      background: rgba(0,0,0,0.7); display: none;
+      align-items: center; justify-content: center;
       backdrop-filter: blur(10px);
     }
-    #previewModal.active {
-      display: flex;
+    .modal-overlay.active { display: flex; }
+    .modal {
+      width: 90%; max-width: 400px; border-radius: 20px;
+      background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
+      border: 1px solid rgba(255,255,255,0.15); padding: 24px;
+      text-align: center; backdrop-filter: blur(20px);
+      animation: modalIn 0.3s ease;
     }
-    .preview-content {
-      width: 500px;
-      max-width: 92%;
-      border-radius: 20px;
-      background: linear-gradient(180deg, rgba(255, 255, 255, 0.10), rgba(255, 255, 255, 0.06));
-      border: 1px solid rgba(255, 255, 255, 0.16);
-      box-shadow: 0 25px 65px rgba(0, 0, 0, 0.75);
-      padding: 24px;
-      backdrop-filter: blur(18px);
-      animation: mi 0.26s cubic-bezier(0.22, 1, 0.36, 1);
+    @keyframes modalIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+    .modal-title { font-size: 1.2rem; font-weight: 800; margin-bottom: 12px; }
+    .modal-textarea {
+      width: 100%; min-height: 100px; padding: 12px;
+      background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 10px; color: #fff; font-family: 'Cairo', sans-serif;
+      font-size: 0.9rem; resize: vertical; margin: 12px 0;
     }
-    .preview-text {
-      background: rgba(0, 0, 0, 0.3);
-      border-radius: 12px;
-      padding: 16px;
-      font-family: 'Courier New', monospace;
-      font-size: 0.85rem;
-      color: rgba(255, 255, 255, 0.9);
-      white-space: pre-wrap;
-      max-height: 300px;
-      overflow-y: auto;
-      margin: 16px 0;
-      text-align: left;
-      direction: ltr;
+    html[data-mode="light"] .modal-textarea {
+      background: rgba(0,0,0,0.05); border-color: rgba(0,0,0,0.12); color: #1a1a2e;
     }
-    html[data-mode="light"] .preview-text {
-      background: rgba(255, 255, 255, 0.3);
-      color: rgba(0, 0, 0, 0.9);
+    .modal-btns { display: flex; gap: 10px; margin-top: 16px; }
+    .modal-btn { flex: 1; padding: 10px; border: none; border-radius: 10px; cursor: pointer; font-weight: 700; }
+    
+    /* ===== Loading ===== */
+    .loading {
+      text-align: center; padding: 30px; color: rgba(255,255,255,0.4);
     }
-    .preview-actions {
-      display: flex;
-      gap: 8px;
+    .loader {      display: inline-block; width: 24px; height: 24px;
+      border: 3px solid rgba(255,255,255,0.2);
+      border-top-color: var(--neon-blue); border-radius: 50%;
+      animation: spin 0.8s linear infinite; margin-bottom: 10px;
     }
-    .preview-actions button {
-      flex: 1;
-      padding: 12px 16px;
-      border-radius: 14px;
-      border: none;
-      cursor: pointer;
-      font-weight: 900;
-      font-size: 0.9rem;
-      transition: var(--transition);
-    }
-    .preview-cancel {
-      background: rgba(255, 255, 255, 0.06);
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      color: rgba(255, 255, 255, 0.80);
-    }
-    html[data-mode="light"] .preview-cancel {
-      background: rgba(0, 0, 0, 0.06);
-      border-color: rgba(0, 0, 0, 0.12);
-      color: rgba(0, 0, 0, 0.80);
-    }
-    .preview-download {
-      background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
-      color: #fff;
-    }
-    .preview-download:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(0, 212, 255, 0.4);
-    }
-
-    /* ===== THEME SYSTEM (10 THEMES) ===== */
-    html[data-theme="0"]{ --gold:#f5c842;--neon-blue:#7dd3fc;--neon-purple:#b28dff; --card-gradient-start: rgba(255,255,255,.065); --card-gradient-end: rgba(255,255,255,.035); --card-border: rgba(255,255,255,.12); --card-glow: rgba(245,200,66,.15); --card-radial-1: rgba(125,211,252,.12); --card-radial-2: rgba(245,200,66,.10); }
-    html[data-theme="1"]{ --gold:#a8c0ff;--neon-blue:#6fa8ff;--neon-purple:#3f6fff; --card-gradient-start: rgba(18,25,45,.75); --card-gradient-end: rgba(12,18,35,.55); --card-border: rgba(111,168,255,.28); --card-glow: rgba(63,111,255,.25); --card-radial-1: rgba(111,168,255,.18); --card-radial-2: rgba(168,192,255,.12); }
-    html[data-theme="2"]{ --gold:#d8ff44;--neon-blue:#bff7ff;--neon-purple:#7dfc8e; --card-gradient-start: rgba(20,40,30,.70); --card-gradient-end: rgba(12,28,20,.50); --card-border: rgba(125,252,142,.25); --card-glow: rgba(216,255,68,.20); --card-radial-1: rgba(191,247,255,.15); --card-radial-2: rgba(216,255,68,.12); }
-    html[data-theme="3"]{ --gold:#ff9ec9;--neon-blue:#ffb3d9;--neon-purple:#ff79c6; --card-gradient-start: rgba(45,20,35,.72); --card-gradient-end: rgba(30,12,25,.52); --card-border: rgba(255,121,198,.30); --card-glow: rgba(255,158,201,.22); --card-radial-1: rgba(255,179,217,.16); --card-radial-2: rgba(255,121,198,.14); }
-    html[data-theme="4"]{ --gold:#ff6b6b;--neon-blue:#00d4ff;--neon-purple:#ffe66d; --card-gradient-start: rgba(35,15,40,.78); --card-gradient-end: rgba(22,8,28,.58); --card-border: rgba(0,212,255,.35); --card-glow: rgba(255,107,107,.30); --card-radial-1: rgba(0,212,255,.20); --card-radial-2: rgba(255,230,109,.16); }
-    html[data-theme="5"]{ --gold:#ff9ad9;--neon-blue:#7dd3fc;--neon-purple:#6a5cff; --card-gradient-start: rgba(30,20,45,.74); --card-gradient-end: rgba(18,12,32,.54); --card-border: rgba(106,92,255,.28); --card-glow: rgba(255,154,217,.24); --card-radial-1: rgba(125,211,252,.14); --card-radial-2: rgba(106,92,255,.16); }
-    html[data-theme="6"]{ --gold:#ff9a5c;--neon-blue:#ffcc80;--neon-purple:#ff7043; --card-gradient-start: rgba(45,25,20,.76); --card-gradient-end: rgba(32,16,12,.56); --card-border: rgba(255,154,92,.32); --card-glow: rgba(255,112,67,.28); --card-radial-1: rgba(255,204,128,.18); --card-radial-2: rgba(255,154,92,.14); }
-    html[data-theme="7"]{ --gold:#4dd0e1;--neon-blue:#80deea;--neon-purple:#26c6da; --card-gradient-start: rgba(15,40,45,.75); --card-gradient-end: rgba(10,28,32,.55); --card-border: rgba(77,208,225,.30); --card-glow: rgba(38,198,218,.26); --card-radial-1: rgba(128,222,234,.16); --card-radial-2: rgba(77,208,225,.14); }
-    html[data-theme="8"]{ --gold:#e0e0e0;--neon-blue:#c0c0c0;--neon-purple:#a0a0a0; --card-gradient-start: rgba(35,35,40,.72); --card-gradient-end: rgba(22,22,28,.52); --card-border: rgba(224,224,224,.25); --card-glow: rgba(192,192,192,.20); --card-radial-1: rgba(224,224,224,.12); --card-radial-2: rgba(160,160,160,.10); }
-    html[data-theme="9"]{ --gold:#c9a0ff;--neon-blue:#7eb3ff;--neon-purple:#e08dff; --card-gradient-start: rgba(20,15,35,.80); --card-gradient-end: rgba(12,8,24,.60); --card-border: rgba(201,160,255,.30); --card-glow: rgba(126,179,255,.28); --card-radial-1: rgba(224,141,255,.20); --card-radial-2: rgba(201,160,255,.16); }
-
-    /* ===== SCROLLBAR ===== */
-    ::-webkit-scrollbar { width:5px; height:5px; }
-    ::-webkit-scrollbar-track { background:rgba(255,255,255,0.03); }
-    ::-webkit-scrollbar-thumb { background:rgba(0,212,255,0.3); border-radius:3px; }
-    ::-webkit-scrollbar-thumb:hover { background:rgba(0,212,255,0.6); }
-
-    /* ===== RESPONSIVE ===== */
-    @media(max-width:768px){
-      .tabs-nav { flex-wrap:wrap; }
-      .tab-btn { padding:8px 12px; font-size:0.8rem; }
-      .header-title { font-size:1.5rem; }
-      .glass-card { padding:20px; }
-      .btn-row { flex-direction:column; }
-      .btn { width:100%; }
-      .grid{grid-template-columns:1fr !important}
-      table{min-width:600px}
-      .fancy-clock { flex-direction:column; gap:8px; padding:12px 16px; }
-      .clock-date { padding-right:0; border-right:none; border-top:1px solid rgba(255,255,255,0.2); padding-top:8px; align-items:center; }
-      .onx-rights, .dev-btn { position:static; margin:10px auto; width:fit-content; }
-    }
-    @media(max-width:480px){
-      .stats-bar { gap:10px; }
-      .stat-badge { padding:6px 12px; font-size:0.8rem; }
-      .tabs-nav { padding:6px; }
-      .tab-btn { padding:7px 10px; font-size:0.75rem; }
-      .themePicker{grid-template-columns:1fr}
-      .export-buttons { flex-direction:column; align-items:center; }
-      .export-btn { width:100%; max-width:200px; }
-    }
-    @media (prefers-reduced-motion: reduce){
-      .btn,.tab-btn,.color-box,.themeOption,.glass-card{transition:none}
-      .miniAlert,.alert,.onx-rights,.dev-btn,.fancy-clock{animation:none}
-      .loaderTitle,.loaderBar::after,.loaderDots span{animation:none}
+    @keyframes spin { to { transform: rotate(360deg); } }
+    
+    /* ===== Responsive ===== */
+    @media (max-width: 600px) {
+      .header-title { font-size: 1.4rem; }
+      .btn-row { flex-direction: column; }
+      .btn { width: 100%; }
+      .tabs { padding: 8px; }
+      .tab-btn { padding: 8px 12px; font-size: 0.85rem; }
     }
   </style>
 </head>
-
 <body>
-  <!-- Entrance Animation -->
-  <div class="entrance-overlay" id="entranceOverlay">
-    <div class="entrance-logo">🎓</div>
-    <div class="entrance-title">تقارير الطلبة</div>
-    <div class="entrance-sub">ONX-TAQE • Student Portal</div>
-    <div class="entrance-progress"><div class="entrance-bar"></div></div>
-  </div>
+  <div class="bg-image"></div>
+  <div class="bg-overlay"></div>
 
-  <!-- Loading Screen -->
-  <div id="loadingScreen" class="active">
-    <div class="loaderTitle">عناوين تقارير الطلبة</div>
-    <div class="loaderBar"></div>
-    <div class="loaderDots"><span></span><span></span><span></span></div>
-  </div>
+  <!-- Header -->
+  <header class="header">
+    <div class="header-icon">🎓</div>
+    <h1 class="header-title">لوحة تقارير الطلبة</h1>
+    <p class="header-subtitle">ONX-TAQE • Student Portal</p>
+  </header>
 
-  <!-- Background -->
-  <div class="bg-image" aria-hidden="true"></div>
-  <div class="bg-overlay" aria-hidden="true"></div>
-  <div id="particles"></div>
+  <!-- Tabs Navigation -->
+  <nav class="tabs">
+    <button class="tab-btn active" data-tab="register">📝 تسجيل</button>
+    <button class="tab-btn" data-tab="myinfo">👁️ معلوماتي</button>
+    <button class="tab-btn" data-tab="titles">📋 العناوين</button>
+  </nav>
 
-  <!-- MODAL -->
-  <div id="modal-overlay" aria-hidden="true">
-    <div class="modal" role="dialog" aria-modal="true">
-      <span class="mIco" id="modal-icon">✏️</span>
-      <div class="mT" id="modal-title"></div>
-      <div class="mM" id="modal-msg"></div>
-      <input id="modal-input" class="mInp" style="display:none" />
-      <textarea id="modal-textarea" class="mInp" style="display:none;height:100px;resize:none"></textarea>
-      <div class="mBtns" id="modal-btns"></div>
+  <!-- Tab: تسجيل -->
+  <section class="tab-content active" id="tab-register">
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon">✏️</div>
+        <div>
+          <div class="card-title">تسجيل تقرير جديد</div>
+          <div class="card-desc">أدخل بياناتك لحفظ التقرير</div>
+        </div>
+      </div>
+      
+      <div class="input-group">
+        <label class="input-label">الاسم الكامل</label>
+        <span class="input-icon">👤</span>
+        <input class="styled-input" id="studentName" placeholder="مثال: أحمد محمد علي" autocomplete="name" />      </div>
+      
+      <div class="input-group">
+        <label class="input-label">المادة الدراسية</label>
+        <span class="input-icon">📚</span>
+        <input class="styled-input" id="subjectName" placeholder="مثال: قواعد بيانات" />
+      </div>
+      
+      <div class="input-group">
+        <label class="input-label">عنوان التقرير</label>
+        <span class="input-icon">📋</span>
+        <input class="styled-input" id="reportTitle" placeholder="اكتب عنوان تقريرك هنا" />
+      </div>
+      
+      <div class="btn-row">
+        <button class="btn btn-primary" id="btnSave">💾 حفظ</button>
+        <button class="btn btn-secondary" id="btnChange">✏️ تعديل</button>
+        <button class="btn btn-outline" id="btnGoInfo">👁️ معلوماتي</button>
+      </div>
+      
+      <div class="msg-box" id="msg"></div>
+    </div>
+  </section>
+
+  <!-- Tab: معلوماتي -->
+  <section class="tab-content" id="tab-myinfo">
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon">👁️</div>
+        <div>
+          <div class="card-title">معلوماتي الشخصية</div>
+          <div class="card-desc">بياناتك المسجلة في النظام</div>
+        </div>
+      </div>
+      
+      <div id="infoBox" class="info-box" style="display: none;">
+        <div class="info-item">
+          <span class="info-label">👤 الاسم</span>
+          <span class="info-value" id="infoName">—</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">📚 المادة</span>
+          <span class="info-value" id="infoSubject">—</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">📋 عنوان التقرير</span>
+          <span class="info-value" id="infoTitle">—</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">🕐 آخر تحديث</span>          <span class="info-value" id="infoDate">—</span>
+        </div>
+      </div>
+      
+      <div id="noDataMsg" class="loading" style="display: block;">
+        <div class="loader"></div>
+        <div>لا توجد بيانات مسجلة لك بعد</div>
+        <button class="btn btn-primary" style="margin-top: 15px;" onclick="setActiveTab('register')">📝 سجّل بياناتك الآن</button>
+      </div>
+      
+      <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1);">
+        <button class="btn btn-gold" id="btnProblem" style="width: 100%; margin-bottom: 15px;">
+          🆘 أرسل مشكلتك
+        </button>
+        
+        <div class="toggle-row">
+          <div class="toggle-info">
+            <div class="toggle-title">🌙 الوضع الليلي</div>
+            <div class="toggle-desc">تبديل بين الوضع الداكن والفاتح</div>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="modeToggle">
+            <span class="slider"></span>
+          </label>
+        </div>
+        
+        <div class="toggle-row">
+          <div class="toggle-info">
+            <div class="toggle-title">🔊 أصوات الإشعارات</div>
+            <div class="toggle-desc">تشغيل/كتم الأصوات</div>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="soundsToggle" checked>
+            <span class="slider"></span>
+          </label>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Tab: العناوين -->
+  <section class="tab-content" id="tab-titles">
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon">📋</div>
+        <div>
+          <div class="card-title">عناوين الطلبة</div>
+          <div class="card-desc">جميع التقارير المسجلة • بدون تكرار</div>
+        </div>
+        <button class="btn btn-primary" id="btnRefresh" style="margin-right: auto; padding: 8px 16px; font-size: 0.85rem;">          🔄 تحديث
+        </button>
+      </div>
+      
+      <div class="input-group">
+        <label class="input-label">🔍 بحث</label>
+        <span class="input-icon">🔍</span>
+        <input class="styled-input" id="searchInput" placeholder="ابحث بالاسم أو العنوان أو المادة..." />
+      </div>
+      
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>الاسم</th>
+              <th>عنوان التقرير</th>
+              <th>المادة</th>
+              <th>التاريخ</th>
+            </tr>
+          </thead>
+          <tbody id="titlesTable">
+            <tr><td colspan="5"><div class="loading"><div class="loader"></div>جارٍ التحميل...</div></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- Modal: إرسال مشكلة -->
+  <div class="modal-overlay" id="problemModal">
+    <div class="modal">
+      <div style="font-size: 40px; margin-bottom: 10px;">🆘</div>
+      <div class="modal-title">أرسل مشكلتك</div>
+      <p style="color: rgba(255,255,255,0.6); font-size: 0.9rem; margin-bottom: 15px;">
+        اكتب مشكلتك وسيتم إرسالها للمشرف مباشرة عبر تيليجرام
+      </p>
+      <textarea class="modal-textarea" id="problemText" placeholder="اكتب مشكلتك هنا..."></textarea>
+      <div class="modal-btns">
+        <button class="modal-btn btn-outline" id="modalCancel">❌ إلغاء</button>
+        <button class="modal-btn btn-gold" id="modalSend">📤 إرسال</button>
+      </div>
     </div>
   </div>
 
-  <!-- PREVIEW MODAL -->
-  <div id="previewModal" aria-hidden="true">
-    <div class="preview-content">
-      <span class="mIco">👁️</span>
-      <div class="mT">معاينة التقرير</div>
-      <div class="mM">راجع المحتوى قبل التحميل</div>
-      <div class="preview-text" id="previewText"></div>
-      <div class="preview-actions">
-        <button class="preview-cancel" id="previewCancel">❌ إلغاء</button>
-        <button class="preview-download" id="previewDownload">⬇️ تحميل</button>
-      </div>
-    </div>
+  <!-- Toast Notification -->
+  <div id="toast" style="position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(100px); background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); padding: 12px 20px; border-radius: 50px; display: flex; align-items: center; gap: 10px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); transition: transform 0.3s ease; z-index: 9999; backdrop-filter: blur(10px);">
+    <span id="toastIcon">✅</span>
+    <span id="toastText" style="color: #fff; font-size: 0.9rem; font-weight: 600;"></span>
   </div>
-
-  <!-- TOAST -->
-  <div id="toast" aria-live="polite">
-    <span id="toast-icon">✅</span>
-    <span id="toast-text"></span>
-  </div>
-
-  <!-- ===== DEV BUTTON ===== -->
-  <a href="https://t.me/ONX44" target="_blank" rel="noopener" class="dev-btn" title="تواصل مع المطور">
-    <span class="dev-icon">🧑‍💻</span>
-    <span>DEV</span>
-  </a>
-
-  <!-- ===== ONX-TAQE RIGHTS ===== -->
-  <div class="onx-rights" title="© جميع الحقوق محفوظة">
-    <span class="onx-icon">✦</span>
-    <span class="onx-text">© ONX-TAQE</span>
-  </div>
-
-  <!-- ===== DASHBOARD ===== -->
-  <div id="dashboardScreen">
-
-    <div class="dashboard-header">
-      <div class="header-icon">📚</div>
-      <h1 class="header-title">لوحة تقارير الطلبة</h1>
-      <p class="header-subtitle">Student Reports • ONX-TAQE PRO</p>
-      <div class="header-line"></div>
-    </div>
-
-    <!-- ✅ FANCY RIGHTS ABOVE CLOCK -->
-    <div class="fancy-rights-above" id="fancyRightsAbove">
-      <span class="fancy-rights-text">
-        <span class="rights-icon">✦</span>
-        © ONX-TAQE
-        <span class="rights-icon">✦</span>
-      </span>
-    </div>
-
-    <!-- ✅ FANCY CLOCK -->
-    <div class="fancy-clock">
-      <span class="clock-icon">🕐</span>
-      <div style="display:flex;align-items:center;gap:4px">
-        <span class="clock-time" id="clockTime">00:00:00</span>
-        <span class="clock-period" id="clockPeriod">AM</span>
-      </div>
-      <div class="clock-date">
-        <span class="miladi" id="clockMiladi">—</span>
-        <span class="hijri" id="clockHijri">—</span>
-      </div>
-    </div>
-
-    <!-- Stats Bar -->
-    <div class="stats-bar">
-      <div class="stat-badge">
-        <div class="stat-dot" style="background:#00d4ff;box-shadow:0 0 8px #00d4ff"></div>
-        <span>إجمالي: <strong id="statsTotal">0</strong></span>
-      </div>
-      <div class="stat-badge">
-        <div class="stat-dot" style="background:#f5c518;box-shadow:0 0 8px #f5c518"></div>
-        <span>متميزون: <strong id="statsBadged">0</strong></span>
-      </div>
-      <div class="stat-badge">
-        <div class="stat-dot" style="background:#e94560;box-shadow:0 0 8px #e94560"></div>
-        <span>آخر: <strong id="statsLastReport">—</strong></span>
-      </div>
-      <div class="stat-badge">
-        <div class="stat-dot" style="background:#00c851;box-shadow:0 0 8px #00c851"></div>
-        <span id="siteStatusBadge">الحالة: <strong>...</strong></span>
-      </div>
-      <div class="stat-badge">
-        <div class="stat-dot" style="background:#ff8c00;box-shadow:0 0 8px #ff8c00"></div>
-        <span>تنبيهات: <strong id="statsAlerts">0</strong></span>
-      </div>
-    </div>
-
-    <!-- TABS NAVIGATION -->
-    <div class="tabs-container">
-      <div class="tabs-nav">
-        <button class="tab-btn active" data-tab="register">📝 تسجيل</button>
-        <button class="tab-btn" data-tab="myinfo">👁️ معلوماتي</button>
-        <button class="tab-btn" data-tab="all">📋 العناوين</button>
-        <button class="tab-btn" data-tab="export">⬇️ تصدير</button>
-        <button class="tab-btn" data-tab="comments">💬 تعليقات</button>
-        <button class="tab-btn" data-tab="help">🆘 مساعدة</button>
-        <button class="tab-btn" data-tab="delete">🗑️ حذف</button>
-        <button class="tab-btn" data-tab="themes">🎨 ثيمات</button>
-      </div>
-
-      <!-- ===== TAB: تسجيل ===== -->
-      <div class="tab-content active" id="tab-register">
-        <div class="glass-card card-glow-blue">
-          <div class="card-header">
-            <div class="card-icon icon-blue">✏️</div>
-            <div>
-              <div class="card-title">تسجيل البيانات</div>
-              <div class="card-desc">أدخل معلومات تقريرك</div>
-            </div>
-          </div>
-
-          <!-- DEADLINE -->
-          <div id="deadlinePanel" style="display:none;margin-bottom:12px">
-            <div class="deadline">
-              <div class="left">
-                <div class="ico">⏰</div>
-                <div class="meta">
-                  <small>موعد التسليم</small>
-                  <b id="deadlineDateDisplay">—</b>
-                </div>
-              </div>
-              <div class="count" id="deadlineCountdown">جارٍ التحميل…</div>
-            </div>
-          </div>
-
-          <!-- GUIDELINES -->
-          <div id="guidelinesPanel" style="display:none;margin-bottom:12px">
-            <div class="glass-card" style="border-radius:16px;padding:16px">
-              <div style="margin-bottom:10px">
-                <strong style="color:rgba(20,184,166,.95);font-size:12px">📋 متطلبات الاستخدام</strong>
-              </div>
-              <div id="guidelinesContent" class="bigNote expanded">جارٍ التحميل…</div>
-              <button class="bigNote-toggle" id="guidelinesToggleBtn">📌 طوي</button>
-            </div>
-          </div>
-
-          <!-- Form -->
-          <div class="input-group">
-            <label class="input-label">الاسم الثنائي <span style="color:var(--neon-blue);font-size:10px">(اسمين على الأقل)</span></label>
-            <span class="input-icon">👤</span>
-            <input class="styled-input" id="studentName" placeholder="مثال: أحمد محمد" autocomplete="name" />
-          </div>
-          <div class="input-group">
-            <label class="input-label">المادة الدراسية</label>
-            <span class="input-icon">📚</span>
-            <input class="styled-input" id="subjectName" placeholder="مثال: قواعد بيانات" />
-          </div>
-          <div class="input-group">
-            <label class="input-label">عنوان التقرير <span style="color:var(--neon-blue);font-size:10px">(لازم يكون فريد)</span></label>
-            <span class="input-icon">📋</span>
-            <input class="styled-input" id="reportTitle" placeholder="اكتب عنوان تقريرك هنا" />
-          </div>
-
-          <div class="btn-row">
-            <button class="btn btn-primary" id="btnSave"><span>💾</span> حفظ البيانات</button>
-            <button class="btn btn-secondary" id="btnChange"><span>✏️</span> تغيير العنوان</button>
-            <button class="btn btn-outline" id="btnShow"><span>👁️</span> معلوماتي</button>
-          </div>
-          <div class="msg-box" id="msg"></div>
-        </div>
-      </div>
-
-      <!-- ===== TAB: معلوماتي (✅ مع الأزرار الثلاثة) ===== -->
-      <div class="tab-content" id="tab-myinfo">
-        <div class="glass-card card-glow-purple">
-          <div class="card-header">
-            <div class="card-icon icon-purple">👁️</div>
-            <div>
-              <div class="card-title">معلوماتي</div>
-              <div class="card-desc">بياناتك المسجلة والتنبيهات</div>
-            </div>
-          </div>
-
-          <div class="infoRow" id="infoBox" style="display:none"></div>
-
-          <!-- ✅ وضع ليلي/نهاري -->
-          <div class="mode-toggle-container">
-            <div class="toggle-info">
-              <div class="toggle-title">🌙 الوضع الليلي / النهاري</div>
-              <div class="toggle-desc">تبديل بين الوضع الداكن والفاتح</div>
-            </div>
-            <label class="mode-switch">
-              <input type="checkbox" id="modeToggle">
-              <span class="mode-slider"></span>
-            </label>
-          </div>
-
-          <!-- ✅ أصوات التأثيرات -->
-          <div class="sound-toggle-container">
-            <div class="toggle-info">
-              <div class="toggle-title">🔊 أصوات التأثيرات</div>
-              <div class="toggle-desc">تشغيل أصوات عند النقر والتحميل</div>
-            </div>
-            <label class="switch">
-              <input type="checkbox" id="soundsToggle" checked>
-              <span class="slider"></span>
-            </label>
-          </div>
-
-          <!-- ✅ الأزرار الثلاثة -->
-          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px">
-            <button class="btn btn-outline" id="btnDownload"><span>⬇️</span> تحميل بياناتي</button>
-            <button class="btn btn-danger" id="btnDelete"><span>🗑️</span> حذف معلوماتي</button>
-            <button class="btn btn-gold" id="btnProblem"><span>🆘</span> أرسل مشكلتك</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- ===== TAB: العناوين ===== -->
-      <div class="tab-content" id="tab-all">
-        <div class="glass-card table-card">
-          <div class="card-header">
-            <div class="card-icon icon-blue">📋</div>
-            <div>
-              <div class="card-title">عناوين الطلبة</div>
-              <div class="card-desc">قائمة جميع التقارير • بحث + تحديث</div>
-            </div>
-            <button class="btn btn-primary" id="panelRefreshBtn" style="margin-right:auto;padding:6px 12px;font-size:0.8rem">
-              <span class="spin">🔄</span> تحديث
-            </button>
-          </div>
-
-          <div class="tableTools">
-            <input class="styled-input search" id="searchInput" placeholder="🔍 ابحث بالاسم أو العنوان أو المادة..." />
-            <div class="counter" title="عدد الطلبة المسجلين">
-              <span>👥</span>
-              <div style="display:flex;flex-direction:column;line-height:1.1">
-                <b id="counterNum">0</b>
-                <small style="color:rgba(255,255,255,.45);font-size:9px">طالب</small>
-              </div>
-            </div>
-          </div>
-
-          <div class="tableContainer" id="allTitles">
-            <div style="text-align:center;padding:22px;color:rgba(255,255,255,.45)">افتح القائمة لعرض البيانات…</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- ===== TAB: تصدير ===== -->
-      <div class="tab-content" id="tab-export">
-        <div class="glass-card card-glow-gold">
-          <div class="card-header">
-            <div class="card-icon icon-gold">⬇️</div>
-            <div>
-              <div class="card-title">تصدير بياناتي</div>
-              <div class="card-desc">حمّل بياناتك بتصميم فاخر مع حقوقك</div>
-            </div>
-          </div>
-
-          <div style="color:rgba(255,255,255,.7);line-height:1.8;font-size:0.9rem;text-align:center">
-            <p>✨ اختر صيغة التحميل:</p>
-            <p style="color:rgba(255,255,255,.4);font-size:0.85rem;margin-bottom:16px">
-              جميع الملفات تحتوي على حقوق © ONX-TAQE بتصميم مزخرف فاخر
-            </p>
-          </div>
-
-          <div class="export-buttons">
-            <button class="export-btn txt" id="exportTXT" onclick="previewBeforeDownload('txt')">
-              <span class="export-icon">📝</span>
-              <span class="export-label">TXT فاخر</span>
-              <span class="export-desc">معاينة + تحميل</span>
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <!-- ===== TAB: تعليقات ===== -->
-      <div class="tab-content" id="tab-comments">
-        <div class="glass-card card-glow-teal">
-          <div class="card-header">
-            <div class="card-icon icon-teal">💬</div>
-            <div>
-              <div class="card-title">نقاشات الطلبة</div>
-              <div class="card-desc">تواصل مع زملائك واطرح أسئلتك</div>
-            </div>
-          </div>
-
-          <div class="comments-section">
-            <div class="comments-header">
-              <div class="comments-title">
-                <span>💭</span> التعليقات
-                <span class="comment-count" id="commentCount">0</span>
-              </div>
-            </div>
-
-            <div class="comment-input-area">
-              <input class="comment-input" id="commentInput" placeholder="اكتب تعليقك أو سؤالك هنا…" />
-              <button class="comment-submit" id="commentSubmit">إرسال</button>
-            </div>
-
-            <div class="comments-list" id="commentsList">
-              <div style="text-align:center;padding:30px;color:rgba(255,255,255,.4)">
-                <div style="font-size:40px;margin-bottom:10px">💬</div>
-                <div>كن أول من يعلق!</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- ===== TAB: مساعدة ===== -->
-      <div class="tab-content" id="tab-help">
-        <div class="glass-card card-glow-orange">
-          <div class="card-header">
-            <div class="card-icon icon-orange">🆘</div>
-            <div>
-              <div class="card-title">أرسل مشكلتك</div>
-              <div class="card-desc">استفسارك يصل للمشرف مباشرة عبر تيليجرام</div>
-            </div>
-          </div>
-
-          <div style="color:rgba(255,255,255,.7);line-height:1.8;font-size:0.9rem;margin-bottom:16px">
-            <p>✍️ اكتب مشكلتك أو استفسارك بالتفصيل:</p>
-            <ul style="margin:8px 0 8px 20px;font-size:0.85rem;color:rgba(255,255,255,.5)">
-              <li>• سيتم إرسال رسالتك للمشرف فوراً</li>
-              <li>• ستصلك الإجابة عبر نفس القناة</li>
-              <li>• يمكنك متابعة الحالة في "معلوماتي"</li>
-            </ul>
-          </div>
-
-          <button class="btn btn-gold" id="btnProblem2" style="width:100%">
-            <span>📤</span> افتح نافذة إرسال المشكلة
-          </button>
-        </div>
-      </div>
-
-      <!-- ===== TAB: حذف ===== -->
-      <div class="tab-content" id="tab-delete">
-        <div class="glass-card card-glow-red">
-          <div class="card-header">
-            <div class="card-icon icon-red">🗑️</div>
-            <div>
-              <div class="card-title">حذف معلوماتي</div>
-              <div class="card-desc">إجراء نهائي وغير قابل للتراجع</div>
-            </div>
-          </div>
-
-          <div style="color:rgba(255,255,255,.7);line-height:1.8;font-size:0.9rem;margin-bottom:16px">
-            <p style="color:var(--danger);font-weight:700">⚠️ تحذير مهم:</p>
-            <ul style="margin:8px 0 8px 20px;font-size:0.85rem;color:rgba(255,255,255,.5)">
-              <li>• سيتم حذف جميع بياناتك نهائياً</li>
-              <li>• لا يمكن استعادة البيانات بعد الحذف</li>
-              <li>• سيُحذف عنوانك من قائمة الطلبة</li>
-            </ul>
-            <p style="margin-top:12px;font-size:0.85rem;color:rgba(255,255,255,.4)">هل أنت متأكد تماماً من رغبتك في الحذف؟</p>
-          </div>
-
-          <button class="btn btn-danger" id="btnDelete2" style="width:100%">
-            <span>🗑️</span> حذف معلوماتي الآن (نهائي)
-          </button>
-        </div>
-      </div>
-
-      <!-- ===== TAB: ثيمات ===== -->
-      <div class="tab-content" id="tab-themes">
-        <div class="glass-card card-glow-teal">
-          <div class="card-header">
-            <div class="card-icon icon-teal">🎨</div>
-            <div>
-              <div class="card-title">اختر ثيمك المفضل</div>
-              <div class="card-desc">10 ثيمات فاخرة • تُطبّق فوراً على الواجهة</div>
-            </div>
-          </div>
-
-          <div class="kv">
-            <strong>الثيم الحالي</strong>
-            <span class="muted" id="currentThemeName">كلاسيكي ذهبي</span>
-          </div>
-
-          <div class="themePicker" id="themePicker">
-            <div class="themeOption" data-theme="0">
-              <div class="themeSwatch" style="background:linear-gradient(135deg,#f5c842,#7dd3fc)"></div>
-              <div><div class="themeName">كلاسيكي ذهبي</div><div class="themePreview"><span style="background:#f5c842"></span><span style="background:#7dd3fc"></span><span style="background:#b28dff"></span></div></div>
-            </div>
-            <div class="themeOption" data-theme="1">
-              <div class="themeSwatch" style="background:linear-gradient(135deg,#1e2a4a,#3f6fff)"></div>
-              <div><div class="themeName">ليلي أزرق</div><div class="themePreview"><span style="background:#a8c0ff"></span><span style="background:#6fa8ff"></span><span style="background:#3f6fff"></span></div></div>
-            </div>
-            <div class="themeOption" data-theme="2">
-              <div class="themeSwatch" style="background:linear-gradient(135deg,#14281e,#7dfc8e)"></div>
-              <div><div class="themeName">ربيعي أخضر</div><div class="themePreview"><span style="background:#d8ff44"></span><span style="background:#bff7ff"></span><span style="background:#7dfc8e"></span></div></div>
-            </div>
-            <div class="themeOption" data-theme="3">
-              <div class="themeSwatch" style="background:linear-gradient(135deg,#2d1423,#ff79c6)"></div>
-              <div><div class="themeName">وردي ناعم</div><div class="themePreview"><span style="background:#ff9ec9"></span><span style="background:#ffb3d9"></span><span style="background:#ff79c6"></span></div></div>
-            </div>
-            <div class="themeOption" data-theme="4">
-              <div class="themeSwatch" style="background:linear-gradient(135deg,#230f28,#ff6b6b)"></div>
-              <div><div class="themeName">نيون ساطع</div><div class="themePreview"><span style="background:#ff6b6b"></span><span style="background:#00d4ff"></span><span style="background:#ffe66d"></span></div></div>
-            </div>
-            <div class="themeOption" data-theme="5">
-              <div class="themeSwatch" style="background:linear-gradient(135deg,#1e142d,#6a5cff)"></div>
-              <div><div class="themeName">حلمي بنفسجي</div><div class="themePreview"><span style="background:#ff9ad9"></span><span style="background:#7dd3fc"></span><span style="background:#6a5cff"></span></div></div>
-            </div>
-            <div class="themeOption" data-theme="6">
-              <div class="themeSwatch" style="background:linear-gradient(135deg,#2d1914,#ff7043)"></div>
-              <div><div class="themeName">غروب برتقالي 🔥</div><div class="themePreview"><span style="background:#ff9a5c"></span><span style="background:#ffcc80"></span><span style="background:#ff7043"></span></div></div>
-            </div>
-            <div class="themeOption" data-theme="7">
-              <div class="themeSwatch" style="background:linear-gradient(135deg,#0f282d,#26c6da)"></div>
-              <div><div class="themeName">محيط أزرق 🌊</div><div class="themePreview"><span style="background:#4dd0e1"></span><span style="background:#80deea"></span><span style="background:#26c6da"></span></div></div>
-            </div>
-            <div class="themeOption" data-theme="8">
-              <div class="themeSwatch" style="background:linear-gradient(135deg,#232328,#e0e0e0)"></div>
-              <div><div class="themeName">فضي كلاسيك ⚪</div><div class="themePreview"><span style="background:#e0e0e0"></span><span style="background:#c0c0c0"></span><span style="background:#a0a0a0"></span></div></div>
-            </div>
-            <div class="themeOption" data-theme="9">
-              <div class="themeSwatch" style="background:linear-gradient(135deg,#140f23,#e08dff)"></div>
-              <div><div class="themeName">كوني مظلم 🌌</div><div class="themePreview"><span style="background:#c9a0ff"></span><span style="background:#7eb3ff"></span><span style="background:#e08dff"></span></div></div>
-            </div>
-          </div>
-
-          <div style="margin-top:12px;color:rgba(255,255,255,.4);font-size:0.8rem;line-height:1.6">
-            ✨ يتم حفظ اختيارك تلقائياً • يظهر الثيم على جميع الكروت الزجاجية
-          </div>
-        </div>
-      </div>
-
-    </div><!-- end tabs-container -->
-  </div><!-- end dashboardScreen -->
-
-  <!-- Notification Banner -->
-  <div id="notifBanner" role="status" aria-live="polite">
-    <span>📢</span>
-    <span id="notifText" style="font-weight:700">إشعار من الإدارة</span>
-    <button class="notifClose" id="notifCloseBtn" type="button">✕</button>
-  </div>
-
   <script type="module">
     import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
 
     /* ===== SUPABASE CONFIG ===== */
-const SUPABASE_URL = "https://nbaedfesrclwvywsiphy.supabase.co";
-const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5iYWVkZmVzcmNsd3Z5d3NpcWhyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI0ODc4ODcsImV4cCI6MjA4ODA2Mzg4N30.XSgIUBQHK0xtC6xeN194_563_SmfJnKLq5V4SKidVow";
+    const SUPABASE_URL = "https://nbaedfesrclwvywsiphy.supabase.co";
+    const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5iYWVkZmVzcmNsd3Z5d3NpcWhyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI0ODc4ODcsImV4cCI6MjA4ODA2Mzg4N30.XSgIUBQHK0xtC6xeN194_563_SmfJnKLq5V4SKidVow";
+    const TELEGRAM_BOT_TOKEN = "7769329974:AAHEwfIzPDZ1-KCSAKsxepmNtC35lYXvlMs";
+    const TELEGRAM_CHAT_ID = "910624538";
+    const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
-
-    /* ===== UI HELPERS ===== */
+    /* ===== UI Helpers ===== */
     const $ = (s) => document.querySelector(s);
     const $$ = (s) => Array.from(document.querySelectorAll(s));
 
-    // ✨ دالة لتحديد لون نص الشارة تلقائياً
-    function isLightColor(color) {
-      return ['#ffd700','#ffaa00','#ffffff','#ffcc00','#ffff00'].includes(color?.toLowerCase());
-    }
-
-    /* ===== SOUND EFFECTS ===== */
-    function playSound(type){
+    /* ===== Sound Effects ===== */
+    function playSound(type) {
       const enabled = localStorage.getItem('sounds_enabled') !== 'false';
-      if(!enabled) return;
-      
-      const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-      const oscillator = audioContext.createOscillator();
-      const gainNode = audioContext.createGain();
-      
-      oscillator.connect(gainNode);
-      gainNode.connect(audioContext.destination);
-      
-      switch(type){
-        case 'click':
-          oscillator.frequency.value = 800;
-          gainNode.gain.value = 0.1;
-          oscillator.start();
-          oscillator.stop(audioContext.currentTime + 0.05);
-          break;
-        case 'success':
-          oscillator.frequency.value = 1200;
-          gainNode.gain.value = 0.15;
-          oscillator.start();
-          oscillator.stop(audioContext.currentTime + 0.15);
-          setTimeout(()=>{
-            const osc2 = audioContext.createOscillator();
-            const gain2 = audioContext.createGain();
-            osc2.connect(gain2);
-            gain2.connect(audioContext.destination);
-            osc2.frequency.value = 1600;
-            gain2.gain.value = 0.15;
-            osc2.start();
-            osc2.stop(audioContext.currentTime + 0.15);
-          }, 100);
-          break;
-        case 'error':
-          oscillator.frequency.value = 400;
-          gainNode.gain.value = 0.15;
-          oscillator.start();
-          oscillator.stop(audioContext.currentTime + 0.2);
-          break;
-        case 'delete':
-          oscillator.frequency.value = 300;
-          gainNode.gain.value = 0.2;
-          oscillator.start();
-          oscillator.stop(audioContext.currentTime + 0.3);
-          break;
-      }
-    }
-
-    /* ===== DARK/LIGHT MODE ===== */
-    function initMode(){
-      const saved = localStorage.getItem('onx_mode') || 'dark';
-      document.documentElement.setAttribute('data-mode', saved);
-      $('#modeToggle').checked = saved === 'light';
-    }
-
-    $('#modeToggle')?.addEventListener('change', (e)=>{
-      const mode = e.target.checked ? 'light' : 'dark';
-      document.documentElement.setAttribute('data-mode', mode);
-      localStorage.setItem('onx_mode', mode);
-      playSound('click');
-      showToast(`تم التبديل للوضع ${mode === 'light' ? 'النهاري ☀️' : 'الليلي 🌙'}`, 'success');
-    });
-
-    /* ===== SOUNDS TOGGLE ===== */
-    function initSounds(){
-      const enabled = localStorage.getItem('sounds_enabled') !== 'false';
-      $('#soundsToggle').checked = enabled;
-    }
-
-    $('#soundsToggle')?.addEventListener('change', (e)=>{
-      localStorage.setItem('sounds_enabled', e.target.checked);
-      playSound('click');
-      showToast(e.target.checked ? 'تم تفعيل الأصوات 🔊' : 'تم كتم الأصوات 🔇', 'info');
-    });
-
-    function showToast(msg, type='success'){
-      const t = $('#toast'), icon = $('#toast-icon'), text = $('#toast-text');
-      icon.textContent = type==='success'?'✅':type==='error'?'❌':'ℹ️';
-      text.textContent = msg;
-      t.classList.add('show');
-      clearTimeout(t._timer);
-      t._timer = setTimeout(()=> t.classList.remove('show'), 2600);
-    }
-
-    function setMsg(text, type='info'){
-      const m = $('#msg'); if(!m) return;
-      m.textContent = text; m.className = 'show '+type;
-      clearTimeout(m._t); m._t = setTimeout(()=>{ m.className=''; }, 4200);
-    }
-
-    function formatDate(ts){
-      if(!ts) return '';
-      const d = new Date(ts);
-      const hh = String(d.getHours()).padStart(2,'0'), mm = String(d.getMinutes()).padStart(2,'0'), ss = String(d.getSeconds()).padStart(2,'0');
-      return `${hh}:${mm}:${ss} (${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()})`;
-    }
-
-    /* ===== FANCY CLOCK ===== */
-    function initFancyClock(){
-      const DAYS_AR = ['الأحد','الاثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];
-      const MONTHS_AR = ['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'];
-      const HIJRI_MONTHS = ['محرم','صفر','ربيع الأول','ربيع الثاني','جمادى الأولى','جمادى الآخرة','رجب','شعبان','رمضان','شوال','ذو القعدة','ذو الحجة'];
-      
-      function updateClock(){
-        const now = new Date();
-        let h = now.getHours();
-        const period = h >= 12 ? 'PM' : 'AM';
-        h = h % 12; h = h ? h : 12;
-        const hStr = String(h).padStart(2,'0');
-        const m = String(now.getMinutes()).padStart(2,'0');
-        const s = String(now.getSeconds()).padStart(2,'0');
-        $('#clockTime').textContent = `${hStr}:${m}:${s}`;
-        $('#clockPeriod').textContent = period;
+      if (!enabled) return;
+      try {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.connect(gain); gain.connect(ctx.destination);
         
-        const dayName = DAYS_AR[now.getDay()];
-        const day = now.getDate();
-        const month = MONTHS_AR[now.getMonth()];
-        const year = now.getFullYear();
-        $('#clockMiladi').textContent = `${dayName} ${day} ${month} ${year}`;
-        
-        const hijriYear = year - 579;
-        const hijriMonth = HIJRI_MONTHS[now.getMonth()];
-        const hijriDay = Math.floor(day * 0.97) + 1;
-        $('#clockHijri').textContent = `${hijriDay} ${hijriMonth} ${hijriYear}هـ`;
-      }
-      updateClock();
-      setInterval(updateClock, 1000);
-    }
-    initFancyClock();
-
-    /* ===== FANCY RIGHTS ABOVE CLOCK ANIMATION ===== */
-    function initFancyRights(){
-      const container = $('#fancyRightsAbove');
-      const colors = ['#f5c518', '#00d4ff', '#7b2fff', '#e94560', '#00ff88', '#ff9a5c', '#4dd0e1', '#c9a0ff'];
-      
-      setInterval(()=>{
-        for(let i=0; i<5; i++){
-          const sparkle = document.createElement('span');
-          sparkle.className = 'rights-sparkle';
-          const angle = Math.random() * Math.PI * 2;
-          const distance = 20 + Math.random() * 40;
-          sparkle.style.setProperty('--tx', `${Math.cos(angle) * distance}px`);
-          sparkle.style.setProperty('--ty', `${Math.sin(angle) * distance - 30}px`);
-          sparkle.style.left = `${45 + Math.random()*10}%`;
-          sparkle.style.top = '50%';
-          sparkle.style.background = colors[Math.floor(Math.random()*colors.length)];
-          container.appendChild(sparkle);
-          setTimeout(()=> sparkle.remove(), 1800);
+        if (type === 'click') {
+          osc.frequency.value = 800; gain.gain.value = 0.1;
+          osc.start(); osc.stop(ctx.currentTime + 0.05);
+        } else if (type === 'success') {
+          osc.frequency.value = 1200; gain.gain.value = 0.15;
+          osc.start(); osc.stop(ctx.currentTime + 0.15);
+        } else if (type === 'error') {
+          osc.frequency.value = 400; gain.gain.value = 0.15;
+          osc.start(); osc.stop(ctx.currentTime + 0.2);
         }
-      }, 2800);
-    }
-    initFancyRights();
-
-    /* ===== MODAL ===== */
-    function showModal({ icon='✏️', title='', msg='', inputPlaceholder='', withInput=false, isTextarea=false, confirmText='تأكيد', cancelText='إلغاء' }){
-      return new Promise(resolve=>{
-        $('#modal-icon').textContent = icon; $('#modal-title').textContent = title; $('#modal-msg').textContent = msg;
-        const inp = $('#modal-input'), ta = $('#modal-textarea');
-        inp.style.display='none'; ta.style.display='none';
-        let active = null;
-        if(withInput){ active = isTextarea ? ta : inp; active.style.display='block'; active.placeholder = inputPlaceholder || ''; active.value = ''; setTimeout(()=> active.focus(), 60); }
-        const btns = $('#modal-btns');
-        btns.innerHTML = `<button class="mCancel">${cancelText}</button><button class="mOk">${confirmText}</button>`;
-        const overlay = $('#modal-overlay'); overlay.classList.add('active');
-        btns.querySelector('.mOk').onclick = ()=>{ overlay.classList.remove('active'); resolve(withInput ? (active?.value ?? '') : true); };
-        btns.querySelector('.mCancel').onclick = ()=>{ overlay.classList.remove('active'); resolve(null); };
-      });
+      } catch (e) {}
     }
 
-    /* ===== PREVIEW MODAL ===== */
-    let pendingDownload = null;
-    
-    function showPreviewModal(content){
-      $('#previewText').textContent = content;
-      $('#previewModal').classList.add('active');
+    /* ===== Toast ===== */
+    function showToast(msg, type = 'success') {
+      const toast = $('#toast'), icon = $('#toastIcon'), text = $('#toastText');
+      icon.textContent = type === 'success' ? '✅' : type === 'error' ? '❌' : 'ℹ️';
+      text.textContent = msg;
+      toast.style.transform = 'translateX(-50%) translateY(0)';
+      clearTimeout(toast._timer);
+      toast._timer = setTimeout(() => {
+        toast.style.transform = 'translateX(-50%) translateY(100px)';
+      }, 3000);
+    }
+    function setMsg(text, type = 'info') {
+      const m = $('#msg');
+      if (!m) return;
+      m.textContent = text;
+      m.className = `msg-box ${type} show`;
+      clearTimeout(m._t);
+      m._t = setTimeout(() => { m.className = ''; }, 4000);
     }
 
-    $('#previewCancel')?.addEventListener('click', ()=>{
-      $('#previewModal').classList.remove('active');
-      pendingDownload = null;
-      playSound('click');
-    });
-
-    $('#previewDownload')?.addEventListener('click', ()=>{
-      if(pendingDownload){
-        downloadFancy(pendingDownload.format, true);
-        $('#previewModal').classList.remove('active');
-      }
-    });
-
-    /* ===== PARTICLES ===== */
-    (function(){
-      const container = document.getElementById('particles');
-      const colors = ['#00d4ff','#7b2fff','#e94560','#f5c518','#00ff88'];
-      for(let i=0;i<20;i++){
-        const p = document.createElement('div'); p.className = 'particle';
-        const size = Math.random()*3+2;
-        p.style.cssText = `width:${size}px;height:${size}px;left:${Math.random()*100}%;background:${colors[Math.floor(Math.random()*colors.length)]};animation-duration:${Math.random()*15+10}s;animation-delay:${Math.random()*10}s;box-shadow:0 0 ${size*3}px currentColor;`;
-        container.appendChild(p);
-      }
-    })();
-
-    /* ===== LOADING SCREEN ===== */
-    function initLoadingScreen(){
-      const loader = $('#loadingScreen');
-      loader.classList.add('active');
-      setTimeout(()=>{
-        loader.classList.remove('active');
-        setTimeout(()=>{ if(!loader.classList.contains('active')) loader.style.display = 'none'; }, 600);
-      }, 2200);
+    function formatDate(ts) {
+      if (!ts) return '—';
+      const d = new Date(ts);
+      return d.toLocaleDateString('ar-EG') + ' ' + d.toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit' });
     }
 
-    /* ===== THEME SYSTEM ===== */
-    const THEMES = [
-      {id:0,name:'كلاسيكي ذهبي'}, {id:1,name:'ليلي أزرق'}, {id:2,name:'ربيعي أخضر'},
-      {id:3,name:'وردي ناعم'}, {id:4,name:'نيون ساطع'}, {id:5,name:'حلمي بنفسجي'},
-      {id:6,name:'غروب برتقالي 🔥'}, {id:7,name:'محيط أزرق 🌊'}, {id:8,name:'فضي كلاسيك ⚪'}, {id:9,name:'كوني مظلم 🌌'}
-    ];
-
-    function applyTheme(n, showToastMsg=true){
-      document.documentElement.setAttribute('data-theme', String(n));
-      localStorage.setItem('onx_theme', String(n));
-      $$('.themeOption').forEach(opt=> opt.classList.toggle('active', parseInt(opt.dataset.theme)===n));
-      if(showToastMsg){
-        const theme = THEMES.find(t=>t.id===n);
-        showToast(`تم تطبيق ثيم "${theme?.name||n}" ✨`, 'success');
-        $('#currentThemeName').textContent = theme?.name || '';
-        playSound('success');
-      }
+    /* ===== Device Fingerprint ===== */
+    async function sha256(str) {
+      const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+      return [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2, '0')).join('');
     }
 
-    function initTheme(){
-      const saved = localStorage.getItem('onx_theme') || '0';
-      document.documentElement.setAttribute('data-theme', saved);
-      $$('.themeOption').forEach(opt=> opt.classList.toggle('active', parseInt(opt.dataset.theme)===parseInt(saved)));
-      const theme = THEMES.find(t=>t.id===parseInt(saved));
-      if(theme) $('#currentThemeName').textContent = theme.name;
+    function getDeviceCode() {
+      const parts = [
+        navigator.userAgent,
+        navigator.platform || '',
+        navigator.language || '',
+        Intl.DateTimeFormat().resolvedOptions().timeZone || '',
+        `${screen.width}x${screen.height}x${screen.colorDepth}`,
+        navigator.hardwareConcurrency || '',
+        navigator.deviceMemory || ''
+      ].join('||');
+      return sha256(parts).then(hash => hash.slice(0, 28));
     }
-    initTheme();
 
-    /* ===== TABS SYSTEM ===== */
+    let DEVICE_CODE = null;
+    const DEVICE_CODE_PROMISE = getDeviceCode().then(code => { DEVICE_CODE = code; return code; });
+
+    /* ===== Tabs System ===== */
     $$('.tab-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         playSound('click');
@@ -1956,599 +582,426 @@ const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZ
         $$('.tab-content').forEach(c => c.classList.remove('active'));
         btn.classList.add('active');
         $('#tab-' + btn.dataset.tab).classList.add('active');
-        if(btn.dataset.tab === 'all') showAll().catch(()=>{});
-        if(btn.dataset.tab === 'myinfo') showMyInfo().catch(()=>{});
-        if(btn.dataset.tab === 'comments') loadComments().catch(()=>{});
+        
+        if (btn.dataset.tab === 'titles') loadAllTitles();
+        if (btn.dataset.tab === 'myinfo') loadMyInfo();
       });
     });
-
-    /* ===== DEVICE FINGERPRINT ===== */
-    async function sha256(str){
-      const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
-      return [...new Uint8Array(buf)].map(b=>b.toString(16).padStart(2,'0')).join('');
-    }
-    function canvasFp(){
-      try{
-        const c = document.createElement('canvas'); c.width=260; c.height=80;
-        const x = c.getContext('2d');
-        x.textBaseline='top'; x.font='16px Arial';
-        x.fillStyle='#f5c842'; x.fillRect(10,10,80,30);
-        x.fillStyle='#7dd3fc'; x.fillText('ONX-TAQE|Fingerprint',12,14);
-        x.fillStyle='rgba(255,255,255,0.6)'; x.fillText(navigator.userAgent,12,38);
-        return c.toDataURL();
-      } catch { return 'no-canvas'; }
-    }
-    function webglFp(){
-      try{
-        const c = document.createElement('canvas'), gl = c.getContext('webgl') || c.getContext('experimental-webgl');
-        if(!gl) return 'no-webgl';
-        const dbg = gl.getExtension('WEBGL_debug_renderer_info');
-        return (dbg ? gl.getParameter(dbg.UNMASKED_VENDOR_WEBGL) : 'v?') + '|' + (dbg ? gl.getParameter(dbg.UNMASKED_RENDERER_WEBGL) : 'r?');
-      } catch { return 'no-webgl'; }
-    }
-    
-    // ✅ كود الجهاز مع الكاش لضمان الاتساق
-    let DEVICE_CODE_CACHE = null;
-    const DEVICE_CODE_PROMISE = (async ()=>{
-      if (DEVICE_CODE_CACHE) return DEVICE_CODE_CACHE;
-      const parts = [navigator.userAgent, navigator.platform||'', navigator.language||'', Intl.DateTimeFormat().resolvedOptions().timeZone||'', `${screen.width}x${screen.height}x${screen.colorDepth}`, navigator.hardwareConcurrency||'', navigator.deviceMemory||'', canvasFp(), webglFp()].join('||');
-      DEVICE_CODE_CACHE = (await sha256(parts)).slice(0, 28);
-      return DEVICE_CODE_CACHE;
-    })();
-
-    /* ===== SITE STATUS & CONTROL ===== */
-    let countdownInterval = null;
-    function startCountdown(targetDate){
-      const el = $('#deadlineCountdown');
-      function update(){
-        const diff = targetDate - new Date();
-        if(diff <= 0){ el.textContent = '⚠️ انتهى الموعد!'; el.style.color = '#ff5c5c'; clearInterval(countdownInterval); return; }
-        const days = Math.floor(diff / 86400000), hours = Math.floor((diff % 86400000) / 3600000), mins = Math.floor((diff % 3600000) / 60000), secs = Math.floor((diff % 60000) / 1000);
-        let str = ''; if(days>0) str += `${days} يوم `; str += `${String(hours).padStart(2,'0')}:${String(mins).padStart(2,'0')}:${String(secs).padStart(2,'0')}`;
-        el.textContent = str; const urgent = diff < 3600000; el.style.color = urgent ? '#ff5c5c' : 'rgba(245,200,66,0.95)';
-      }
-      update(); countdownInterval = setInterval(update, 1000);
+    function setActiveTab(key) {
+      $$('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === key));
+      $$('.tab-content').forEach(c => c.classList.toggle('active', c.id === `tab-${key}`));
     }
 
-    async function loadSiteControlData(){
-      const { data, error } = await supabase.from('site_control').select('*').eq('id',1).single();
-      if(error || !data) return;
-      const banner = $('#notifBanner'), notifText = $('#notifText');
-      if(data.notification && data.notification.trim()){ notifText.textContent = data.notification.trim(); banner.classList.add('visible'); banner.style.display='flex'; }
-      else { banner.classList.remove('visible'); banner.style.display='none'; }
-      clearInterval(countdownInterval); const dp = $('#deadlinePanel');
-      if(data.deadline && data.deadline_active){
-        const dt = new Date(data.deadline);
-        $('#deadlineDateDisplay').textContent = dt.toLocaleDateString('ar-EG', { year:'numeric', month:'long', day:'numeric', hour:'2-digit', minute:'2-digit', hour12:true });
-        dp.style.display='block'; startCountdown(dt);
-      } else { dp.style.display='none'; }
-      
-      const gp = $('#guidelinesPanel'), gc = $('#guidelinesContent'), toggleBtn = $('#guidelinesToggleBtn');
-      if(data.usage_guidelines && data.usage_guidelines.trim()){
-        gc.textContent = data.usage_guidelines.trim(); gp.style.display='block';
-        gc.classList.add('expanded');
-        
-        if(toggleBtn){
-          toggleBtn.onclick = (e)=>{ 
-            e.stopPropagation(); 
-            playSound('click');
-            const isExpanded = gc.classList.contains('expanded');
-            gc.classList.toggle('expanded', !isExpanded);
-            toggleBtn.textContent = !isExpanded ? '📌 فتح' : '📌 طوي';
-            toggleBtn.classList.toggle('expanded', isExpanded);
-          };
-        }
-      } else { gp.style.display='none'; }
-      
-      const st = $('#siteStatusBadge');
-      if(!data.site_open){ st.innerHTML = 'الحالة: <strong style="color:#ff6b6b">مغلق</strong>'; }
-      else { st.innerHTML = 'الحالة: <strong style="color:#00ff88">مفتوح</strong>'; }
+    /* ===== Dark/Light Mode ===== */
+    function initMode() {
+      const saved = localStorage.getItem('onx_mode') || 'dark';
+      document.documentElement.setAttribute('data-mode', saved);
+      $('#modeToggle').checked = saved === 'light';
     }
 
-    async function checkSiteStatus(){
-      const { data, error } = await supabase.from('site_control').select('site_open').eq('id',1).single();
-      if(error || !data?.site_open){
-        document.body.innerHTML = `<div style="display:flex;align-items:center;justify-content:center;height:100vh;background:#000;color:#fff;font-family:'Cairo',sans-serif;font-size:32px">الموقع مغلق حالياً ❌</div>`;
-        return false;
-      }
-      return true;
-    }
-
-    /* ===== APP STATE ===== */
-    let ALL_CACHE = [], SEARCH_TIMER = 0;
-    
-    function updateStats(){
-      const total = ALL_CACHE.length;
-      const badged = ALL_CACHE.filter(d => d.badge && d.badge.trim()).length;
-      const alerts = ALL_CACHE.filter(d => d.alert_text && d.alert_text.trim()).length;
-      
-      $('#statsTotal').textContent = total;
-      $('#statsBadged').textContent = badged;
-      $('#statsAlerts').textContent = alerts;
-      
-      if(ALL_CACHE.length > 0){
-        const last = ALL_CACHE[ALL_CACHE.length-1];
-        const nameParts = (last.name||'').split(' ');
-        const shortName = nameParts.length >= 2 ? nameParts[0] : (last.name||'—');
-        $('#statsLastReport').textContent = shortName;
-      } else {
-        $('#statsLastReport').textContent = '—';
-      }
-    }
-    
-    function updateCounter(num){
-      const el = $('#counterNum'), old = parseInt(el.textContent) || 0;
-      if(old === num) return; el.textContent = num; el.classList.remove('pop'); void el.offsetWidth; el.classList.add('pop');
-      setTimeout(()=> el.classList.remove('pop'), 450);
-      updateStats();
-    }
-
-    /* ===== FANCY EXPORT FORMAT ===== */
-    function generateFancyContent(data, format){
-      const name = data.name || 'غير محدد';
-      const subject = data.subject || 'غير محدد';
-      const title = data.title || 'غير محدد';
-      const date = formatDate(data.date) || 'غير محدد';
-      
-      const fancyHeader = `❮𝗢𝗡𝗫_𝗧𝗔𝗤𝗘𝗦𝗧𝗨𝗗𝗘𝗡𝗧❯\n❮𝗥𝗘𝗣𝗢𝗥𝗧❯•.•.•.•.•.•.\n【☞ 𝗪𝗘𝗟𝗖𝗢𝗠𝗘 ☜】\n⊠⊠⊠⊠⊠⊠⊠⊠⊠⊠⊠⊠⊠⊠\n`;
-      const fancyBody = `𝙽𝙰𝙼𝙴 :${name}\n𝙼𝙰𝚃𝙴𝚁𝙸𝙰𝙻:${subject}\n𝚃𝙸𝚃𝙻𝙴 𝚁𝙴𝙿𝙾𝚁𝚃:${title}\n 𝙳𝙰𝚃𝙰:${date}\n`;
-      const fancyFooter = `⊠⊠⊠⊠⊠⊠⊠⊠⊠⊠⊠⊠⊠⊠\n𓆩الهـم صـلِ علـى محـمد وآل مـحمـد𓆪\n📮.Ᏼ𝚈➣@ONX44`;
-      
-      return fancyHeader + fancyBody + fancyFooter;
-    }
-
-    /* ===== PREVIEW BEFORE DOWNLOAD ===== */
-    async function previewBeforeDownload(format){
-      const code = await DEVICE_CODE_PROMISE;
-      const { data, error } = await supabase.from('student_reports').select('*').eq('code',code).single();
-      if(error || !data){ 
-        setMsg('⚠️ سجل بياناتك أولاً','error'); 
-        showToast('لا توجد بيانات','error'); 
-        playSound('error');
-        return; 
-      }
-      
-      const content = generateFancyContent(data, format);
-      pendingDownload = { format, data };
-      showPreviewModal(content);
+    $('#modeToggle')?.addEventListener('change', (e) => {
+      const mode = e.target.checked ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-mode', mode);
+      localStorage.setItem('onx_mode', mode);
       playSound('click');
-    }
-    window.previewBeforeDownload = previewBeforeDownload;
+      showToast(`تم التبديل للوضع ${mode === 'light' ? 'النهاري ☀️' : 'الليلي 🌙'}`, 'success');
+    });
 
-    async function downloadFancy(format, skipPreview = false){
-      const code = await DEVICE_CODE_PROMISE;
-      const { data, error } = await supabase.from('student_reports').select('*').eq('code',code).single();
-      if(error || !data){ 
-        setMsg('⚠️ سجل بياناتك أولاً','error'); 
-        showToast('لا توجد بيانات','error'); 
-        playSound('error');
-        return; 
-      }
-      
-      const content = generateFancyContent(data, format);
-      const safeName = (data.name||'student').replace(/[^\u0600-\u06FFa-zA-Z0-9_-]+/g,'_');
-      const filename = `ONX-TAQE_${safeName}_report.txt`;
-      
-      const blob = new Blob([content], {type: 'text/plain;charset=utf-8'});
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = filename;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
-      
-      showToast(`تم التحميل بصيغة TXT ✨`, 'success');
-      playSound('success');
+    /* ===== Sounds Toggle ===== */
+    function initSounds() {
+      const enabled = localStorage.getItem('sounds_enabled') !== 'false';
+      $('#soundsToggle').checked = enabled;
     }
-    window.downloadFancy = downloadFancy;
 
-    /* ===== DIRECT DOWNLOAD (جديد - زر التحميل المباشر) ===== */
-    async function directDownload(){
+    $('#soundsToggle')?.addEventListener('change', (e) => {
+      localStorage.setItem('sounds_enabled', e.target.checked);
       playSound('click');
-      const code = await DEVICE_CODE_PROMISE;
-      const { data, error } = await supabase.from('student_reports').select('*').eq('code',code).single();
-      
-      if(error || !data){ 
-        setMsg('⚠️ سجل بياناتك أولاً','error'); 
-        showToast('لا توجد بيانات','error'); 
-        playSound('error');
-        return; 
-      }
-      
-      const content = generateFancyContent(data, 'txt');
-      const safeName = (data.name||'student').replace(/[^\u0600-\u06FFa-zA-Z0-9_-]+/g,'_');
-      const filename = `ONX-TAQE_${safeName}_report.txt`;
-      
-      const blob = new Blob([content], {type: 'text/plain;charset=utf-8'});
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = filename;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
-      
-      showToast(`تم التحميل بصيغة TXT ✨`, 'success');
-      playSound('success');
-    }
+      showToast(e.target.checked ? 'تم تفعيل الأصوات 🔊' : 'تم كتم الأصوات 🔇', 'info');
+    });
 
-    /* ===== COMMENTS SYSTEM ===== */
-    async function loadComments(){
-      const code = await DEVICE_CODE_PROMISE;
-      const { data: comments, error } = await supabase.from('comments').select('*').order('created_at', { ascending: false }).limit(50);
-      
-      if(error || !comments){
-        $('#commentsList').innerHTML = `<div style="text-align:center;padding:30px;color:rgba(255,255,255,.4)"><div style="font-size:40px;margin-bottom:10px">⚠️</div><div>تعذر تحميل التعليقات</div></div>`;
-        return;
-      }
-      
-      $('#commentCount').textContent = comments.length;
-      
-      if(comments.length === 0){
-        $('#commentsList').innerHTML = `<div style="text-align:center;padding:30px;color:rgba(255,255,255,.4)"><div style="font-size:40px;margin-bottom:10px">💬</div><div>كن أول من يعلق!</div></div>`;
-        return;
-      }
-      
-      let html = '';
-      comments.forEach(comment => {
-        const timeAgo = getTimeAgo(comment.created_at);
-        const isMe = comment.code === code;
+    /* ===== Load Site Settings ===== */
+    async function loadSiteSettings() {
+      try {
+        const { data, error } = await supabase.from('site_control').select('*').eq('id', 1).single();
+        if (error || !data) return;
         
-        let repliesHtml = '';
-        if(comment.replies && comment.replies.length > 0){
-          repliesHtml = `<div class="comment-replies">`;
-          comment.replies.forEach(reply => {
-            repliesHtml += `
-              <div class="reply-item">
-                <div class="reply-author">${reply.author_name || 'طالب'}</div>
-                <div class="reply-text">${reply.text}</div>
-              </div>
-            `;
-          });
-          repliesHtml += `</div>`;
+        // Check site status
+        if (!data.site_open) {
+          document.body.innerHTML = `<div style="display:flex;align-items:center;justify-content:center;height:100vh;background:#000;color:#fff;font-family:'Cairo',sans-serif;font-size:24px;text-align:center;padding:20px">الموقع مغلق حالياً ❌<br><br>يرجى المحاولة لاحقاً</div>`;
+          return;
         }
         
-        html += `
-          <div class="comment-item" style="${isMe ? 'border-color: rgba(245,197,24,0.3);' : ''}">
-            <div class="comment-header">
-              <span class="comment-author">${isMe ? '👤 أنت' : comment.anonymous_name || 'طالب'}</span>
-              <span class="comment-time">${timeAgo}</span>
-            </div>
-            <div class="comment-text">${comment.text}</div>
-            <button class="reply-btn" onclick="showReplyInput('${comment.id}')">💭 رد</button>
-            ${repliesHtml}
-            <div id="reply-${comment.id}" style="display:none"></div>
-          </div>
-        `;
-      });
+        // Show notification if exists
+        if (data.notification?.trim()) {
+          const banner = document.createElement('div');
+          banner.innerHTML = `<span>📢</span> ${data.notification} <button style="margin-right:auto;background:none;border:none;color:inherit;cursor:pointer;font-size:18px">✕</button>`;
+          banner.style.cssText = 'display:flex;align-items:center;gap:10px;padding:12px 20px;background:rgba(245,197,24,0.15);border-bottom:1px solid rgba(245,197,24,0.3);color:#f5c518;font-size:0.9rem';          banner.querySelector('button').onclick = () => banner.remove();
+          document.body.insertBefore(banner, document.body.firstChild);
+        }
+        
+        // Show deadline if active
+        if (data.deadline && data.deadline_active) {
+          // Could add countdown display here
+        }
+        
+        // Show guidelines if exists
+        if (data.usage_guidelines?.trim()) {
+          // Could add guidelines display here
+        }
+      } catch (e) {
+        console.error('Error loading site settings:', e);
+      }
+    }
+
+    /* ===== Save Data ===== */
+    async function saveData() {
+      playSound('click');
+      const name = $('#studentName').value.trim();
+      const subject = $('#subjectName').value.trim();
+      const title = $('#reportTitle').value.trim();
       
-      $('#commentsList').innerHTML = html;
-    }
-
-    function getTimeAgo(timestamp){
-      const seconds = Math.floor((new Date() - new Date(timestamp)) / 1000);
-      if(seconds < 60) return 'الآن';
-      const minutes = Math.floor(seconds / 60);
-      if(minutes < 60) return `منذ ${minutes} دقيقة`;
-      const hours = Math.floor(minutes / 60);
-      if(hours < 24) return `منذ ${hours} ساعة`;
-      const days = Math.floor(hours / 24);
-      return `منذ ${days} يوم`;
-    }
-
-    async function submitComment(){
-      const input = $('#commentInput');
-      const text = input.value.trim();
-      if(!text){
-        showToast('اكتب تعليقاً أولاً','error');
+      // Validation
+      if (name.split(/\s+/).filter(w => w).length < 2) {
+        setMsg('⚠️ الاسم يجب أن يكون ثنائياً على الأقل', 'error');
+        showToast('الاسم غير صحيح', 'error');
+        playSound('error');
+        return;
+      }
+      if (!name || !subject || !title) {
+        setMsg('⚠️ يرجى ملء جميع الحقول', 'error');
+        showToast('املأ جميع الحقول', 'error');
         playSound('error');
         return;
       }
       
       const code = await DEVICE_CODE_PROMISE;
-      const { data: me } = await supabase.from('student_reports').select('name').eq('code',code).single();
       
-      const { error } = await supabase.from('comments').insert([{
-        text,
+      // Check if already registered
+      const { data: existing, error: checkError } = await supabase
+        .from('student_reports')
+        .select('id')
+        .eq('code', code)
+        .limit(1);
+      
+      if (checkError) {
+        setMsg('❌ خطأ في الاتصال', 'error');        playSound('error');
+        return;
+      }
+      if (existing?.length > 0) {
+        setMsg('⛔ لديك بيانات محفوظة مسبقاً', 'error');
+        showToast('لا يمكن التسجيل مرتين', 'error');
+        playSound('error');
+        setActiveTab('myinfo');
+        loadMyInfo();
+        return;
+      }
+      
+      // Check for duplicate name or title
+      const [{ data: nameExists }, { data: titleExists }] = await Promise.all([
+        supabase.from('student_reports').select('id').eq('name', name).limit(1),
+        supabase.from('student_reports').select('id').eq('title', title).limit(1)
+      ]);
+      
+      if (nameExists?.length > 0 || titleExists?.length > 0) {
+        setMsg('❌ الاسم أو العنوان مستخدم مسبقاً', 'error');
+        showToast('مكرر - اختر اسماً/عنواناً آخر', 'error');
+        playSound('error');
+        return;
+      }
+      
+      // Insert new record
+      const { error } = await supabase.from('student_reports').insert([{
+        name, subject, title,
         code,
-        anonymous_name: me?.name ? me.name.split(' ')[0] : 'طالب',
-        created_at: new Date().toISOString(),
-        replies: []
+        date: new Date().toISOString(),
+        badge: null, badge_color: null,
+        color: null,
+        alert_text: null, alert_color: null, alert_type: null,
+        banned: false, banned_at: null, ban_reason: null
       }]);
       
-      if(error){
-        showToast('فشل إرسال التعليق','error');
+      if (error) {
+        console.error('Insert error:', error);
+        setMsg('❌ فشل الحفظ: ' + error.message, 'error');
         playSound('error');
         return;
       }
       
-      input.value = '';
-      showToast('تم إرسال التعليق ✨','success');
+      setMsg('✅ تم الحفظ بنجاح!', 'success');
+      showToast('تم حفظ بياناتك ✨', 'success');
       playSound('success');
-      loadComments();
+      
+      // Clear inputs and show my info
+      $('#studentName').value = '';
+      $('#subjectName').value = '';      $('#reportTitle').value = '';
+      
+      setTimeout(() => {
+        setActiveTab('myinfo');
+        loadMyInfo();
+      }, 1500);
     }
 
-    window.showReplyInput = function(commentId){
-      const replyDiv = $(`#reply-${commentId}`);
-      if(replyDiv.style.display === 'none'){
-        replyDiv.style.display = 'block';
-        replyDiv.innerHTML = `
-          <input class="reply-input" placeholder="اكتب ردك..." id="replyInput-${commentId}" />
-          <button class="comment-submit" style="margin-top:8px;width:100%" onclick="submitReply('${commentId}')">إرسال الرد</button>
-        `;
-      } else {
-        replyDiv.style.display = 'none';
-      }
+    /* ===== Change Title ===== */
+    async function changeTitle() {
       playSound('click');
-    };
-
-    window.submitReply = async function(commentId){
-      const input = $(`#replyInput-${commentId}`);
-      const text = input.value.trim();
-      if(!text){
-        showToast('اكتب ردك أولاً','error');
-        playSound('error');
-        return;
-      }
-      
       const code = await DEVICE_CODE_PROMISE;
-      const { data: me } = await supabase.from('student_reports').select('name').eq('code',code).single();
-      const replyAuthor = me?.name ? me.name.split(' ')[0] : 'طالب';
       
-      const { data: comment, error: fetchError } = await supabase.from('comments').select('replies').eq('id', commentId).single();
-      if(fetchError){
-        showToast('فشل جلب التعليق','error');
-        playSound('error');
-        return;
-      }
-      
-      const existingReplies = comment?.replies || [];
-      const newReplies = [...existingReplies, {
-        text,
-        author_name: replyAuthor,
-        code,
-        created_at: new Date().toISOString()
-      }];
-      
-      const { error } = await supabase.from('comments').update({
-        replies: newReplies
-      }).eq('id', commentId);
-      
-      if(error){
-        showToast('فشل إرسال الرد','error');
-        playSound('error');
-        return;
-      }
-      
-      showToast('تم إرسال الرد ✨','success');
-      playSound('success');
-      input.value = '';
-      $(`#reply-${commentId}`).style.display = 'none';
-      loadComments();
-    };
-
-    $('#commentSubmit')?.addEventListener('click', ()=>{
-      submitComment();
-    });
-
-    $('#commentInput')?.addEventListener('keypress', (e)=>{
-      if(e.key === 'Enter') submitComment();
-    });
-
-    /* ===== CORE ACTIONS (✅ معالجة الأخطاء مضافة) ===== */
-    
-    // ✅ دالة مساعدة موحدة للتحقق من وجود بيانات الطالب
-    async function getUserByCode() {
-      const code = await DEVICE_CODE_PROMISE;
-      const { data, error } = await supabase
+      // Get user data
+      const { data: user, error } = await supabase
         .from('student_reports')
         .select('*')
         .eq('code', code)
         .single();
       
-      if (error || !data) {
-        console.error('خطأ في جلب بيانات المستخدم:', error);
-        return null;
-      }
-      return data;
-    }
-
-    async function saveData(){
-      playSound('click');
-      const name = $('#studentName').value.trim(), title = $('#reportTitle').value.trim(), subject = $('#subjectName').value.trim(), code = await DEVICE_CODE_PROMISE;
-      if(name.split(/\s+/).length < 2){ setMsg('⚠️ الاسم لازم يكون ثنائي على الأقل','error'); showToast('الاسم ثنائي مطلوب','error'); playSound('error'); return; }
-      if(!name || !title || !subject){ setMsg('⚠️ املا كل الحقول','error'); showToast('املأ جميع الحقول','error'); playSound('error'); return; }
-      
-      const { data: already, error: checkError } = await supabase.from('student_reports').select('id').eq('code',code).limit(1);
-      if(checkError){ console.error('خطأ في التحقق:', checkError); setMsg('❌ خطأ في الاتصال','error'); playSound('error'); return; }
-      if(already?.length){ setMsg('⛔ لديك بيانات محفوظة','error'); showToast('لا يمكن التسجيل مرتين','error'); playSound('error'); await showMyInfo(); setActiveTab('myinfo'); return; }
-      
-      const [{ data: nameUsed, error: nameErr }, { data: titleUsed, error: titleErr }] = await Promise.all([
-        supabase.from('student_reports').select('id').eq('name',name).limit(1),
-        supabase.from('student_reports').select('id').eq('title',title).limit(1)
-      ]);
-      if(nameErr || titleErr){ console.error('خطأ في التحقق من التكرار:', nameErr || titleErr); setMsg('❌ خطأ في التحقق','error'); playSound('error'); return; }
-      if((nameUsed?.length)||(titleUsed?.length)){ setMsg('❌ الاسم أو العنوان مستخدم','error'); showToast('مكرر مسبقاً','error'); playSound('error'); return; }
-      
-      const { error } = await supabase.from('student_reports').insert([{ name, title, subject, date:new Date().toISOString(), code }]);
-      if(error){ console.log(error); setMsg('❌ فشل الحفظ','error'); showToast('خطأ في الحفظ','error'); playSound('error'); return; }
-      setMsg('✅ تم التسجيل بنجاح','success'); showToast('تم الحفظ ✨','success'); playSound('success'); await showMyInfo(); await showAll(); setActiveTab('myinfo');
-    }
-
-    async function changeTitle(){
-      playSound('click');
-      // ✅ استخدام الدالة الموحدة للتحقق
-      const user = await getUserByCode();
-      if(!user){ 
-        setMsg('⚠️ لا توجد بيانات لك','error'); 
-        showToast('سجل أولاً','error'); 
-        playSound('error'); 
-        return; 
+      if (error || !user) {
+        setMsg('⚠️ لا توجد بيانات لك', 'error');
+        showToast('سجّل بياناتك أولاً', 'error');
+        playSound('error');
+        return;
       }
       
-      const newTitle = await showModal({ icon:'✏️', title:'تغيير العنوان', msg:'اكتب العنوان الجديد (فريد)', withInput:true, inputPlaceholder:'العنوان الجديد...', confirmText:'تغيير', cancelText:'إلغاء' });
-      if(!newTitle) return; const clean = newTitle.trim(); if(!clean){ setMsg('⚠️ العنوان فاضي','error'); playSound('error'); return; }
+      // Show modal for new title
+      const newTitle = prompt('أدخل العنوان الجديد:', user.title);
+      if (!newTitle || !newTitle.trim()) {
+        showToast('العنوان مطلوب', 'error');
+        playSound('error');
+        return;
+      }
       
-      const { data: titleUsed, error: checkErr } = await supabase.from('student_reports').select('id').eq('title',clean).limit(1);
-      if(checkErr){ console.error('خطأ في التحقق:', checkErr); setMsg('❌ خطأ في التحقق','error'); playSound('error'); return; }
-      if(titleUsed?.length){ setMsg('❌ العنوان مستخدم','error'); playSound('error'); return; }
+      // Check for duplicate
+      const { data: exists } = await supabase
+        .from('student_reports')
+        .select('id')
+        .eq('title', newTitle.trim())
+        .neq('id', user.id)
+        .limit(1);
       
-      const { error } = await supabase.from('student_reports').update({ title:clean, date:new Date().toISOString() }).eq('code', user.code);
-      if(error){ setMsg('❌ فشل التحديث','error'); playSound('error'); return; }
-      setMsg('✅ تم التغيير','success'); showToast('تم التحديث ✨','success'); playSound('success'); await showMyInfo(); await showAll(); setActiveTab('myinfo');
+      if (exists?.length > 0) {
+        setMsg('❌ العنوان مستخدم مسبقاً', 'error');
+        playSound('error');
+        return;
+      }
+      
+      // Update      const { error: updateError } = await supabase
+        .from('student_reports')
+        .update({ 
+          title: newTitle.trim(),
+          date: new Date().toISOString()
+        })
+        .eq('code', code);
+      
+      if (updateError) {
+        setMsg('❌ فشل التعديل', 'error');
+        playSound('error');
+        return;
+      }
+      
+      setMsg('✅ تم التعديل بنجاح', 'success');
+      showToast('تم تحديث العنوان ✨', 'success');
+      playSound('success');
+      loadMyInfo();
     }
 
-    async function showMyInfo(){
-      // ✅ استخدام الدالة الموحدة
-      const user = await getUserByCode();
+    /* ===== Load My Info ===== */
+    async function loadMyInfo() {
+      const code = await DEVICE_CODE_PROMISE;
       const infoBox = $('#infoBox');
+      const noDataMsg = $('#noDataMsg');
       
-      if(!user){ 
-        infoBox.style.display='none'; 
-        infoBox.innerHTML=''; 
-        setMsg('⚠️ لا توجد بيانات لك','error'); 
-        return; 
+      const { data: user, error } = await supabase
+        .from('student_reports')
+        .select('*')
+        .eq('code', code)
+        .single();
+      
+      if (error || !user) {
+        infoBox.style.display = 'none';
+        noDataMsg.style.display = 'block';
+        return;
       }
       
-      const nameColor = user.color || 'rgba(255,255,255,0.92)';
+      // Show data
+      $('#infoName').textContent = user.name;
+      $('#infoSubject').textContent = user.subject;
+      $('#infoTitle').textContent = user.title;
+      $('#infoDate').textContent = formatDate(user.date);
       
-      const badgeHTML = user.badge && user.badge.trim() ? 
-        `<span class="student-badge" style="background: ${user.badge_color || '#ffd700'} !important; color: ${isLightColor(user.badge_color) ? '#000' : '#fff'} !important;" title="شارة تميز">${user.badge}</span>` : '';
+      infoBox.style.display = 'flex';
+      noDataMsg.style.display = 'none';
       
-      let alertHtml = '';
-      if(user.alert_text){
-        const ac = user.alert_color || '#ff4444', typeLabel = user.alert_type === 'public' ? '🌐 عام' : '🔒 خاص';
-        alertHtml = `<div class="alert" style="--ac:${ac}"><div style="font-size:18px">⚠️</div><div style="flex:1;line-height:1.5"><div style="font-weight:700">${user.alert_text}</div><div style="opacity:.7;font-size:10px;margin-top:3px">تنبيه (${typeLabel})</div></div><small>${typeLabel}</small></div>`;
-      }
-      infoBox.style.display='flex'; infoBox.style.flexDirection='column'; infoBox.style.gap='8px';
-      infoBox.innerHTML = `${alertHtml}<div class="kv"><strong>👤 الاسم</strong><span style="color:${nameColor};font-weight:800">${badgeHTML}${user.name}</span></div><div class="kv"><strong>📄 العنوان</strong><span style="color:${nameColor}">${user.title}</span></div><div class="kv"><strong>📚 المادة</strong><span style="color:${nameColor}">${user.subject}</span></div><div class="kv"><strong>🕐 آخر تحديث</strong><span class="muted">${formatDate(user.date)}</span></div>`;
-      showToast('تم تحميل بياناتك','success');
+      showToast('تم تحميل بياناتك', 'success');
     }
-
-    async function showAll(){
-      const allTitles = $('#allTitles'); allTitles.innerHTML = `<div style="text-align:center;padding:22px;color:rgba(255,255,255,.45)">جارٍ التحميل…</div>`;
-      const { data, error } = await supabase.from('student_reports').select('id,name,title,subject,date,code,badge,color,alert_text,alert_color,alert_type').order('id', { ascending:true });
-      if(error){ allTitles.innerHTML = `<div style="text-align:center;padding:22px;color:#ff5c5c">❌ فشل التحميل</div>`; return; }
-      ALL_CACHE = data || []; 
-      updateCounter(ALL_CACHE.length); 
-      updateStats();
-      renderAllList();
-    }
-
-    function renderAllList(){
-      const allTitles = $('#allTitles'), q = ($('#searchInput')?.value || '').trim().toLowerCase();
-      const filtered = !q ? ALL_CACHE : ALL_CACHE.filter(d => (`${d.name} ${d.title} ${d.subject}`).toLowerCase().includes(q));
-      DEVICE_CODE_PROMISE.then(myCode=>{
-        if(filtered.length === 0){ allTitles.innerHTML = `<div style="text-align:center;padding:30px;color:rgba(255,255,255,.38)"><div style="font-size:30px;margin-bottom:6px">🔍</div><div style="font-size:12px">لا توجد نتائج</div></div>`; return; }
-        let rows = '';
-        filtered.forEach((d,i)=>{
-          const isMe = d.code === myCode, rowClass = isMe ? 'mine' : '', nameColor = d.color || 'rgba(255,255,255,0.92)';
-          
-          const badgeHTML = d.badge && d.badge.trim() ? 
-            `<span class="student-badge" style="background: ${d.badge_color || '#ffd700'} !important; color: ${isLightColor(d.badge_color) ? '#000' : '#fff'} !important;" title="شارة تميز">${d.badge}</span>` : '';
-          const displayName = `${badgeHTML}<span style="color:${nameColor};font-weight:700">${d.name}</span>`;
-          
-          const subjectHtml = `<span class="badgeSub" style="color:${nameColor};border-color:${nameColor}33;background:${nameColor}0d">${d.subject}</span>`;
-          let alertHtml = `<span style="color:rgba(255,255,255,.22);font-size:10px">—</span>`;
-          if(d.alert_text && d.alert_type === 'public'){ const ac = d.alert_color || '#ff4444'; alertHtml = `<span class="miniAlert" style="--ac:${ac}">⚠️ <span style="position:relative;z-index:1">${d.alert_text.slice(0,15)}${d.alert_text.length>15?'…':''}</span></span>`; }
-          rows += `<tr class="${rowClass}"><td style="width:45px"><span class="row-num">${i+1}</span></td><td style="width:18%"><div style="display:flex;flex-direction:column;align-items:center;gap:3px">${displayName}${isMe ? `<span class="meBadge">أنت</span>` : ''}</div></td><td style="text-align:right;padding-right:12px;color:${nameColor};width:32%;font-size:0.9rem">${d.title}</td><td style="width:15%">${subjectHtml}</td><td class="date-cell" style="width:15%">${formatDate(d.date)}</td><td style="width:10%">${alertHtml}</td></tr>`;
-        });
-        allTitles.innerHTML = `<table><thead><tr><th style="width:45px">#</th><th style="width:18%">الاسم</th><th style="width:32%">عنوان التقرير</th><th style="width:15%">المادة</th><th style="width:15%">آخر تحديث</th><th style="width:10%">تنبيه</th></tr></thead><tbody>${rows}</tbody></table>`;
-      });
-    }
-
-    // ✅ تم إصلاح دالة الحذف باستخدام الدالة الموحدة
-    async function deleteMyData(){
-      playSound('click');
-      // ✅ استخدام الدالة الموحدة للتحقق
-      const user = await getUserByCode();
-      if(!user){ 
-        setMsg('⚠️ لا توجد بيانات','error'); 
-        playSound('error'); 
-        return; 
+    /* ===== Load All Titles ===== */
+    async function loadAllTitles() {
+      const table = $('#titlesTable');
+      table.innerHTML = `<tr><td colspan="5"><div class="loading"><div class="loader"></div>جارٍ التحميل...</div></td></tr>`;
+      
+      const { data, error } = await supabase
+        .from('student_reports')
+        .select('id, name, title, subject, date, code')
+        .order('date', { ascending: false });
+      
+      if (error) {
+        table.innerHTML = `<tr><td colspan="5" style="color:#ff6b6b;text-align:center;padding:20px">❌ فشل التحميل</td></tr>`;
+        return;
       }
       
-      // ✅ إظهار نافذة التأكيد
-      const confirmed = await showModal({ 
-        icon:'🗑️', 
-        title:'تأكيد الحذف', 
-        msg:'هل أنت متأكد؟\nالإجراء نهائي ولا يمكن التراجع.', 
-        withInput:false, 
-        confirmText:'حذف', 
-        cancelText:'إلغاء' 
+      if (!data || data.length === 0) {
+        table.innerHTML = `<tr><td colspan="5" style="text-align:center;padding:30px;color:rgba(255,255,255,0.4)">لا توجد تقارير مسجلة بعد</td></tr>`;
+        return;
+      }
+      
+      const myCode = await DEVICE_CODE_PROMISE;
+      let rows = '';
+      
+      data.forEach((item, i) => {
+        const isMe = item.code === myCode;
+        rows += `<tr class="${isMe ? 'mine' : ''}">
+          <td>${i + 1}</td>
+          <td style="font-weight:700;color:${isMe ? 'var(--gold)' : 'inherit'}">${item.name}${isMe ? ' <span style="font-size:0.7rem;background:rgba(245,197,24,0.2);padding:2px 8px;border-radius:10px;margin-right:5px">أنت</span>' : ''}</td>
+          <td style="text-align:right;padding-right:10px">${item.title}</td>
+          <td><span style="background:rgba(0,212,255,0.15);padding:4px 10px;border-radius:15px;font-size:0.8rem;color:#00d4ff">${item.subject}</span></td>
+          <td class="date-cell">${formatDate(item.date)}</td>
+        </tr>`;
       });
       
-      if(!confirmed) return;
-      
-      const { error } = await supabase.from('student_reports').delete().eq('code', user.code);
-      if(error){ setMsg('❌ فشل الحذف','error'); playSound('error'); return; }
-      
-      $('#infoBox').style.display='none'; 
-      $('#infoBox').innerHTML=''; 
-      setMsg('✅ تم الحذف','success'); 
-      showToast('تم حذف البيانات','success'); 
-      playSound('delete'); 
-      await showAll(); 
-      setActiveTab('register');
+      table.innerHTML = rows;
     }
 
-    async function reportProblem(){
-      playSound('click');
-      const user = await getUserByCode();
+    /* ===== Send Problem via Telegram ===== */
+    async function sendProblem() {
+      const text = $('#problemText').value.trim();
+      if (!text) {
+        showToast('اكتب مشكلتك أولاً', 'error');
+        playSound('error');
+        return;
+      }
+      
+      const code = await DEVICE_CODE_PROMISE;
+      const { data: user } = await supabase
+        .from('student_reports')
+        .select('name')        .eq('code', code)
+        .single();
+      
       const studentName = user?.name || 'طالب غير مسجل';
-      const result = await showModal({ icon:'🆘', title:'أرسل مشكلتك', msg:'اكتب مشكلتك بالتفصيل:\nوسيتم إرسالها للمشرف مباشرة', withInput:true, isTextarea:true, inputPlaceholder:'اكتب مشكلتك هنا…', confirmText:'📤 إرسال', cancelText:'إلغاء' });
-      if(!result || !result.trim()) return;
-      const msgText = `🆘 <b>مشكلة من طالب — ONX-TAQE</b>\n\n👤 <b>الاسم:</b> ${studentName}\n📝 <b>المشكلة:</b>\n${result.trim()}\n\n🕐 <b>الوقت:</b> ${new Date().toLocaleString('ar-EG')}`;
-      try{
-        const res = await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ chat_id: TELEGRAM_CHAT_ID, text: msgText, parse_mode:'HTML' }) });
-        const json = await res.json(); if(json.ok){ setMsg('✅ تم الإرسال للمشرف','success'); showToast('تم الإرسال ✨','success'); playSound('success'); } else { throw new Error(json.description || 'Telegram error'); }
-      }catch(e){ console.error('Telegram:', e); setMsg('❌ فشل الإرسال','error'); showToast('حاول لاحقاً','error'); playSound('error'); }
+      const message = `🆘 <b>مشكلة من طالب</b>\n\n👤 <b>الاسم:</b> ${studentName}\n📝 <b>المشكلة:</b>\n${text}\n\n🕐 <b>الوقت:</b> ${new Date().toLocaleString('ar-EG')}`;
+      
+      try {
+        const res = await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            chat_id: TELEGRAM_CHAT_ID,
+            text: message,
+            parse_mode: 'HTML'
+          })
+        });
+        
+        const json = await res.json();
+        if (json.ok) {
+          showToast('✅ تم إرسال مشكلتك!', 'success');
+          playSound('success');
+          $('#problemModal').classList.remove('active');
+          $('#problemText').value = '';
+        } else {
+          throw new Error(json.description || 'Telegram error');
+        }
+      } catch (e) {
+        console.error('Telegram error:', e);
+        showToast('❌ فشل الإرسال، حاول لاحقاً', 'error');
+        playSound('error');
+      }
     }
 
-    /* ===== BIND UI ===== */
-    $('#btnSave')?.addEventListener('click', (e)=>{e.stopPropagation();saveData();});
-    $('#btnChange')?.addEventListener('click', (e)=>{e.stopPropagation();changeTitle();});
-    $('#btnShow')?.addEventListener('click', (e)=>{e.stopPropagation();setActiveTab('myinfo');showMyInfo().catch(()=>{});});
-    $('#btnDelete')?.addEventListener('click', (e)=>{e.stopPropagation();deleteMyData();});
-    $('#btnDelete2')?.addEventListener('click', (e)=>{e.stopPropagation();deleteMyData();});
-    $('#btnProblem')?.addEventListener('click', (e)=>{e.stopPropagation();reportProblem();});
-    $('#btnProblem2')?.addEventListener('click', (e)=>{e.stopPropagation();reportProblem();});
-    $('#btnDownload')?.addEventListener('click', (e)=>{e.stopPropagation(); directDownload();});
-    $('#importantBtn')?.addEventListener('click', (e)=>{ e.stopPropagation(); playSound('click'); const gc = $('#guidelinesContent'), toggleBtn = $('#guidelinesToggleBtn'); if(gc && toggleBtn){ const isExpanded = gc.classList.contains('expanded'); gc.classList.toggle('expanded', !isExpanded); toggleBtn.innerHTML = '🔽 عرض التفاصيل'; toggleBtn.classList.toggle('expanded', isExpanded); } });
-    $('#panelRefreshBtn')?.addEventListener('click', (e)=>{e.stopPropagation();showAll(); showToast('تم التحديث ✨','success'); playSound('success');});
-    $('#notifCloseBtn')?.addEventListener('click', (e)=>{e.stopPropagation(); playSound('click'); const b = $('#notifBanner'); b.classList.remove('visible'); b.style.display='none';});
-    $('#searchInput')?.addEventListener('input', (e)=>{ e.stopPropagation(); clearTimeout(SEARCH_TIMER); SEARCH_TIMER = setTimeout(renderAllList, 90); });
-    $$('.themeOption')?.forEach(opt=>{ opt.addEventListener('click', (e)=>{ e.stopPropagation(); applyTheme(parseInt(opt.dataset.theme)); }); });
+    /* ===== Modal Controls ===== */
+    $('#btnProblem')?.addEventListener('click', () => {
+      playSound('click');
+      $('#problemModal').classList.add('active');
+    });
+    
+    $('#modalCancel')?.addEventListener('click', () => {
+      playSound('click');
+      $('#problemModal').classList.remove('active');
+      $('#problemText').value = '';
+    });
+    
+    $('#modalSend')?.addEventListener('click', sendProblem);
+    
+    // Close modal on outside click
+    $('#problemModal')?.addEventListener('click', (e) => {
+      if (e.target === $('#problemModal')) {        $('#problemModal').classList.remove('active');
+        $('#problemText').value = '';
+      }
+    });
 
-    function setActiveTab(key){
-      $$('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab===key));
-      $$('.tab-content').forEach(c => c.classList.toggle('active', c.id===`tab-${key}`));
+    /* ===== Search Filter ===== */
+    let searchTimer;
+    $('#searchInput')?.addEventListener('input', (e) => {
+      clearTimeout(searchTimer);
+      searchTimer = setTimeout(() => {
+        const q = e.target.value.toLowerCase().trim();
+        const rows = $$('#titlesTable tr');
+        
+        rows.forEach(row => {
+          const text = row.textContent.toLowerCase();
+          row.style.display = text.includes(q) ? '' : 'none';
+        });
+      }, 300);
+    });
+
+    /* ===== Bind Buttons ===== */
+    $('#btnSave')?.addEventListener('click', saveData);
+    $('#btnChange')?.addEventListener('click', changeTitle);
+    $('#btnGoInfo')?.addEventListener('click', () => {
+      playSound('click');
+      setActiveTab('myinfo');
+      loadMyInfo();
+    });
+    $('#btnRefresh')?.addEventListener('click', () => {
+      playSound('click');
+      loadAllTitles();
+      showToast('تم التحديث ✨', 'success');
+    });
+
+    /* ===== Realtime Updates ===== */
+    function setupRealtime() {
+      // Listen for student_reports changes
+      supabase.channel('student_updates')
+        .on('postgres_changes', 
+          { event: '*', schema: 'public', table: 'student_reports' },
+          () => {
+            if ($('#tab-titles').classList.contains('active')) loadAllTitles();
+            if ($('#tab-myinfo').classList.contains('active')) loadMyInfo();
+          }
+        )
+        .subscribe();
+      
+      // Listen for site_control changes
+      supabase.channel('site_updates')
+        .on('postgres_changes',          { event: '*', schema: 'public', table: 'site_control' },
+          () => loadSiteSettings()
+        )
+        .subscribe();
     }
 
-    /* ===== REALTIME ===== */
-    function setupRealtime(){
-      supabase.channel('site_ctrl_student').on('postgres_changes', { event:'*', schema:'public', table:'site_control' }, ()=>{ loadSiteControlData(); }).subscribe();
-      supabase.channel('reports_student').on('postgres_changes', { event:'*', schema:'public', table:'student_reports' }, async ()=>{ showMyInfo().catch(()=>{}); const allVisible = $('#tab-all')?.classList.contains('active'); if(allVisible){ const { data, error } = await supabase.from('student_reports').select('id,name,title,subject,date,code,badge,color,alert_text,alert_color,alert_type').order('id', { ascending:true }); if(!error && data){ ALL_CACHE = data; updateCounter(data.length); updateStats(); renderAllList(); } } }).subscribe();
-      supabase.channel('comments_student').on('postgres_changes', { event:'*', schema:'public', table:'comments' }, ()=>{ if($('#tab-comments')?.classList.contains('active')) loadComments(); }).subscribe();
-    }
-
-    /* ===== BOOT ===== */
-    (async function boot(){
-      initLoadingScreen();
+    /* ===== Init ===== */
+    async function init() {
       initMode();
       initSounds();
-      const open = await checkSiteStatus(); if(!open) return;
-      loadSiteControlData().catch(()=>{}); setupRealtime();
-      setActiveTab('register');
-      setTimeout(()=> showMyInfo().catch(()=>{}), 700);
-      setTimeout(() => { $('#entranceOverlay').style.display = 'none'; }, 2500);
-    })();
+      
+      // Wait for device code then load data
+      await DEVICE_CODE_PROMISE;
+      
+      await loadSiteSettings();
+      setupRealtime();
+      
+      // Load initial data
+      loadMyInfo();
+      loadAllTitles();
+    }
+
+    // Start app
+    init();
   </script>
-  <script defer src="https://static.cloudflareinsights.com/beacon.min.js/v8c78df7c7c0f484497ecbca7046644da1771523124516" crossorigin="anonymous"></script>
 </body>
 </html>
-
-
